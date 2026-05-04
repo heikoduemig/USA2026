@@ -6,14 +6,14 @@
 <title>Route 66 Music Trip · Karte, Tagesguide und Fahrplan</title>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css">
 <style>
-html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:#111;color:#f5f5f5}
+html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:#111;color:#f5f5f5;scroll-behavior:smooth}html{scroll-padding-top:190px}
 header{padding:16px 18px;background:#1b1b1b;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
 h1{margin:0 0 6px 0;font-size:22px} p{margin:0;color:#cfcfcf;font-size:14px;line-height:1.45}
 #map{height:72vh;min-height:520px}
 .legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}.filters{display:flex;flex-wrap:wrap;gap:8px}.filter-btn,.quick-links a{display:inline-block;padding:8px 10px;border-radius:10px;border:1px solid #35545a;background:#16282d;color:#dff7fb;text-decoration:none;font-size:13px;cursor:pointer}.filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{background:#1d1d1d;border-color:#333;color:#f1f1f1}
 .mapboxgl-popup-content{color:#111 !important;background:#fff !important;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.4}.mapboxgl-popup-content strong{color:#000 !important}.mapboxgl-popup-tip{border-top-color:#fff !important;border-bottom-color:#fff !important}
 #fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9}
-main{max-width:1450px;margin:0 auto;padding:18px}
+main{max-width:1450px;margin:0 auto;padding:18px}.plan,.day{scroll-margin-top:190px}
 .intro{margin-bottom:18px;color:#d7d7d7}
 .day,.plan{background:#181818;border:1px solid #2b2b2b;border-radius:14px;padding:16px;margin-bottom:16px}
 .day h2,.plan h2{margin:0 0 6px 0;font-size:22px}.meta{color:#9fd1d8;font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
@@ -40,13 +40,17 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 <div class="toolbar">
 <div class="quick-links">
 <a href="#plan">Fahrplan</a>
+<a href="#hotels">Hotels</a>
 <a href="#day-chicago-arrival">14.05. · Chicago</a>
 <a href="#day-chicago">15.05. · Chicago</a>
 <a href="#day-stl-drive">16.05. · St. Louis</a>
+<a href="#day-stl-drive">16.05. · Route 66 Stops (Chicago → St. Louis)</a>
 <a href="#day-stl">17.05. · St. Louis</a>
 <a href="#day-tulsa-drive">18.05. · Tulsa</a>
+<a href="#day-tulsa-drive">18.05. · Route 66 Stops (St. Louis → Tulsa)</a>
 <a href="#day-tulsa">19.05. · Tulsa</a>
 <a href="#day-lawton">20.05. · Wichita Falls / Lawton</a>
+<a href="#day-lawton">20.05. · Route Stops (Tulsa → Lawton)</a>
 <a href="#day-austin-drive">21.05. · Austin</a>
 <a href="#day-austin">22.05. · Austin</a>
 </div>
@@ -72,7 +76,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 <tr><td>19.05.2026 · Tulsa</td><td>Tulsa Stadttag</td><td>Start ca. 10:00, Abend offen</td><td>lokal</td><td>Cyrus Avery Plaza, Philbrook, Woody Guthrie Center, Mercury Lounge, Red Fork Distillery.</td></tr>
 <tr><td>20.05.2026 · Wichita Falls / Lawton</td><td>Tulsa → Wichita Falls / Lawton (Hotel)</td><td>Empfohlen ab 09:00, Ankunft ca. 14:30–15:30</td><td>ca. 340 km bis Wichita Falls, ca. 430 km bis Lawton/Hotel</td><td>Höchstens kurzer Stopp bei Wichita Falls, danach weiter zum Hotel in Lawton.</td></tr>
 <tr><td>21.05.2026 · Austin</td><td>Lawton (Hotel) → Austin</td><td>Früher Start ca. 07:30, Ankunft ca. 18:30–20:00</td><td>ca. 900+ km je nach Startpunkt</td><td>Fokus auf Fahrstrecke; nur wenige Pausen. In Austin abends South Congress oder kurzer Musikabend.</td></tr>
-<tr><td>22.05.2027 · Austin</td><td>Austin Zusatztag</td><td>Flexibel</td><td>lokal / optional Hill Country</td><td>Still Austin, Treaty Oak, Waterloo Records, Lieblings-Spots von 2026 wiederholen.</td></tr>
+<tr><td>22.05.2027 · Austin</td><td>Austin Zusatztag</td><td>Flexibel</td><td>lokal / optional Hill Country</td><td>Samstag: The Range at Austin; dazu Still Austin, Treaty Oak, Waterloo Records, Lieblings-Spots von 2026 wiederholen.</td></tr>
 </tbody>
 </table>
 <div class="note">Hinweis: Optionaler kurzer Stopp nur im Raum Wichita Falls; das Hotel liegt in Lawton. Der 21.05. bleibt dadurch eine lange, aber klarere Etappe ab Lawton Richtung Austin.</div>
@@ -140,7 +144,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 <div class="card"><h3>Planungstipp</h3><ul><li>Wegen der folgenden langen Südetappe früh zurück und gut vorbereiten.</li><li>Nur 2 bis 4 Programmpunkte wählen.</li></ul></div>
 </div>
 </section>
-<section class="day">
+<section class="day" id="day-austin-drive">
 <div class="meta">21.05.2026 · Austin · citizenM Downtown</div>
 <h2>Langer Reisetag und entspannter Austin-Abend</h2>
 <div class="grid">
@@ -149,13 +153,24 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 <div class="card"><h3>Food & Musik</h3><ul><li>Franklin Barbecue nur, wenn es logistisch passt; sonst flexibler bleiben.</li><li>South Austin Music oder Waterloo Records eher am Folgetag bzw. Zusatztag vertiefen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Franklin+Barbecue+Austin" target="_blank" rel="noopener noreferrer">Franklin Barbecue</a><a href="https://www.google.com/maps/search/?api=1&query=Waterloo+Records+Austin" target="_blank" rel="noopener noreferrer">Waterloo Records</a></div></div>
 </div>
 </section>
-<section class="day">
+<section class="day" id="day-austin">
 <div class="meta">22.05.2027 · Austin</div>
 <h2>Perfekter Zusatztag für Vertiefung</h2>
 <div class="grid">
 <div class="card"><h3>Highlights</h3><ul><li>Texas State Capitol.</li><li>Barton Springs und Zilker Park.</li><li>Mount Bonnell oder Laguna Gloria.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Texas+State+Capitol+Austin" target="_blank" rel="noopener noreferrer">Capitol</a><a href="https://www.google.com/maps/search/?api=1&query=Barton+Springs+Pool+Austin" target="_blank" rel="noopener noreferrer">Barton Springs</a><a href="https://www.google.com/maps/search/?api=1&query=Mount+Bonnell+Austin" target="_blank" rel="noopener noreferrer">Mount Bonnell</a></div></div>
-<div class="card"><h3>Musik, Food & Musiker</h3><ul><li>Waterloo Records und South Austin Music.</li><li>Continental Club, Antone’s oder Broken-Spoke-Logik erneut aufnehmen.</li><li>BBQ ohne Zeitdruck planen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=South+Austin+Music" target="_blank" rel="noopener noreferrer">South Austin Music</a><a href="https://www.google.com/maps/search/?api=1&query=Antone%27s+Nightclub+Austin" target="_blank" rel="noopener noreferrer">Antone’s</a></div></div>
+<div class="card"><h3>Musik, Food & Samstag</h3><ul><li>Waterloo Records und South Austin Music.</li><li>Continental Club, Antone’s oder Broken-Spoke-Logik erneut aufnehmen.</li><li>Samstag: The Range at Austin als besonderes Highlight.</li><li>BBQ ohne Zeitdruck planen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=South+Austin+Music" target="_blank" rel="noopener noreferrer">South Austin Music</a><a href="https://www.google.com/maps/search/?api=1&query=The+Range+at+Austin" target="_blank" rel="noopener noreferrer">The Range at Austin</a><a href="https://www.google.com/maps/search/?api=1&query=Antone%27s+Nightclub+Austin" target="_blank" rel="noopener noreferrer">Antone’s</a></div></div>
 <div class="card"><h3>Distillery-Optionen</h3><ul><li>Still Austin Whiskey Co. direkt in der Stadt.</li><li>Treaty Oak Distilling als einfacher Außentrip.</li><li>Andalusia Whiskey Co. im Hill Country, wenn du bewusst rausfahren willst.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Still+Austin+Whiskey+Co" target="_blank" rel="noopener noreferrer">Still Austin</a><a href="https://www.google.com/maps/search/?api=1&query=Treaty+Oak+Distilling+Driftwood+Texas" target="_blank" rel="noopener noreferrer">Treaty Oak</a><a href="https://www.google.com/maps/search/?api=1&query=Andalusia+Whiskey+Company+Blanco+Texas" target="_blank" rel="noopener noreferrer">Andalusia</a></div></div>
+</div>
+</section>
+<section class="day" id="hotels">
+<div class="meta">Hotels der Reise</div>
+<h2>Übernachtungen auf einen Blick</h2>
+<div class="grid">
+<div class="card"><h3>Chicago</h3><ul><li>citizenM Chicago Downtown.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=citizenM+Chicago+Downtown" target="_blank" rel="noopener noreferrer">citizenM Chicago Downtown</a></div></div>
+<div class="card"><h3>St. Louis</h3><ul><li>Hotel Lumière at the Arch.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Hotel+Lumi%C3%A8re+at+the+Arch+St+Louis" target="_blank" rel="noopener noreferrer">Hotel Lumière at the Arch</a></div></div>
+<div class="card"><h3>Tulsa</h3><ul><li>The Mayo Hotel.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=The+Mayo+Hotel+Tulsa" target="_blank" rel="noopener noreferrer">The Mayo Hotel</a></div></div>
+<div class="card"><h3>Lawton</h3><ul><li>Apache Casino Hotel (oder Hotelbereich Lawton).</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Apache Casino Hotel</a></div></div>
+<div class="card"><h3>Austin</h3><ul><li>citizenM Austin Downtown (oder vergleichbare Downtown-Lage).</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=citizenM+Austin+Downtown" target="_blank" rel="noopener noreferrer">citizenM Austin Downtown</a></div></div>
 </div>
 </section>
 </main>
@@ -261,6 +276,7 @@ const points = [
 {name:'East Austin',type:'must',coords:[-97.7186,30.2640],text:'Austin Highlight'},
 {name:'Blanton Museum of Art',type:'must',coords:[-97.7378,30.2808],text:'Austin Highlight'},
 {name:'Congress Avenue Bridge Bats',type:'must',coords:[-97.7431,30.2607],text:'Austin Highlight'},
+{name:'The Range at Austin',type:'must',coords:[-97.7440,30.1700],text:'Highlight · The Range at Austin'},
 {name:'South Congress Hotel Area',type:'hidden',coords:[-97.7495,30.2496],text:'Austin Hidden Spot'},
 {name:'Cosmic Coffee',type:'hidden',coords:[-97.7696,30.2296],text:'Austin Hidden Spot'},
 {name:'Secret Beach',type:'hidden',coords:[-97.7049,30.2444],text:'Austin Hidden Spot'},
