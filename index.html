@@ -10,7 +10,7 @@ html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:#111;color:
 header{padding:16px 18px;background:#1b1b1b;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
 h1{margin:0 0 6px 0;font-size:22px} p{margin:0;color:#cfcfcf;font-size:14px;line-height:1.45}
 #map{height:72vh;min-height:520px}
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}.filters{display:flex;flex-wrap:wrap;gap:8px}.filter-btn,.quick-links a{display:inline-block;padding:8px 10px;border-radius:10px;border:1px solid #35545a;background:#16282d;color:#dff7fb;text-decoration:none;font-size:13px;cursor:pointer}.filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.filter-btn:not(.active){opacity:.55}.mapboxgl-popup-content .popup-link{display:block !important;margin-top:10px !important;padding:8px 10px !important;border-radius:8px !important;background:#22343a !important;color:#dff7fb !important;text-decoration:none !important;font-size:12px !important;font-weight:700 !important}.mapboxgl-popup-content .popup-link:hover{background:#2e4c54 !important}.mapboxgl-popup-content .popup-meta{margin-top:8px !important;font-size:11px !important;color:#4b5563 !important}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{background:#1d1d1d;border-color:#333;color:#f1f1f1}.map-filter-panel{position:absolute;top:14px;left:14px;z-index:5;display:flex;flex-wrap:wrap;gap:8px;max-width:min(92vw,760px);padding:10px;border-radius:12px;background:rgba(17,17,17,.86);backdrop-filter:blur(8px);border:1px solid #2f2f2f}.map-filter-btn{padding:8px 10px;border-radius:999px;border:1px solid #35545a;background:#16282d;color:#dff7fb;font-size:13px;cursor:pointer}.map-filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.map-filter-btn:not(.active){opacity:.58}.map-wrap{position:relative}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}.filters{display:flex;flex-wrap:wrap;gap:8px}.filter-btn,.quick-links a{display:inline-block;padding:8px 10px;border-radius:10px;border:1px solid #35545a;background:#16282d;color:#dff7fb;text-decoration:none;font-size:13px;cursor:pointer}.filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{background:#1d1d1d;border-color:#333;color:#f1f1f1}
 .mapboxgl-popup-content{color:#111 !important;background:#fff !important;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.4}.mapboxgl-popup-content strong{color:#000 !important}.mapboxgl-popup-tip{border-top-color:#fff !important;border-bottom-color:#fff !important}
 #fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9}
 main{max-width:1450px;margin:0 auto;padding:18px}
@@ -52,7 +52,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 </div>
 </div>
 </header>
-<div class="map-wrap"><div class="map-filter-panel" id="map-filter-panel"><button class="map-filter-btn active" data-map-filter="all">Alle</button><button class="map-filter-btn" data-map-filter="must">Highlights</button><button class="map-filter-btn" data-map-filter="music">Musik</button><button class="map-filter-btn" data-map-filter="food">Food</button><button class="map-filter-btn" data-map-filter="hidden">Hidden / On the way</button><button class="map-filter-btn" data-map-filter="distillery">Distilleries</button><button class="map-filter-btn" data-map-filter="hotel">Hotels</button></div><div id="map"></div></div>
+<div id="map"></div>
 <div id="fallback">Die Karte konnte in dieser Ansicht nicht geladen werden. Bitte die HTML-Datei direkt in einem normalen Browser öffnen.</div>
 <main>
 <p class="intro">Die Zeiten im Fahrplan sind als realistische Reiseplanung mit Puffer gedacht, nicht als starre Verpflichtung. Bei den langen Etappen sind die empfohlenen Route-66-Stopps so gesetzt, dass sie machbar bleiben.</p>
@@ -136,7 +136,7 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 <h2>Kompakter Übergangstag mit Fokus auf Kernstopps</h2>
 <div class="grid">
 <div class="card"><h3>Fahrplan & Stadt</h3><ul><li>Abfahrt Tulsa ca. 09:00.</li><li>Kurzer Stopp bei Wichita Falls möglich; Ankunft im Hotel in Lawton später am Nachmittag/Abend.</li><li>Kurzes, konzentriertes Programm sinnvoller als ein voller Stadttag.</li></ul></div>
-<div class="card"><h3>Stopps unterwegs</h3><ul><li>Optional kurzer Halt in Wichita Falls, z. B. für Pause, Snack oder einen kleinen Downtown-Abstecher.</li><li>Danach Weiterfahrt zum Hotel in Lawton.</li><li>Keinen eigenen zusätzlichen Stadtblock einplanen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Wichita+Falls+TX+downtown" target="_blank" rel="noopener noreferrer">Wichita Falls</a><a href="https://www.google.com/maps/search/?api=1&query=Lawton+OK" target="_blank" rel="noopener noreferrer">Lawton</a><a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Hotel</a></div></div>
+<div class="card"><h3>Stopps unterwegs</h3><ul><li>Optional kurzer Halt in Wichita Falls, z. B. für Pause, Snack oder einen kleinen Downtown-Abstecher.</li><li>Danach Weiterfahrt zum Hotel in Lawton.</li><li>Als Natur-Highlight bei Zeit: Wichita Mountains Wildlife Refuge.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Wichita+Falls+TX+downtown" target="_blank" rel="noopener noreferrer">Wichita Falls</a><a href="https://www.google.com/maps/search/?api=1&query=Lawton+OK" target="_blank" rel="noopener noreferrer">Lawton</a><a href="https://www.google.com/maps/search/?api=1&query=Wichita+Mountains+Wildlife+Refuge" target="_blank" rel="noopener noreferrer">Wildlife Refuge</a><a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Hotel</a></div></div>
 <div class="card"><h3>Planungstipp</h3><ul><li>Wegen der folgenden langen Südetappe früh zurück und gut vorbereiten.</li><li>Nur 2 bis 4 Programmpunkte wählen.</li></ul></div>
 </div>
 </section>
@@ -237,6 +237,7 @@ const points = [
 {name:'Red Fork Distillery',type:'distillery',coords:[-96.0320,36.1453],text:'Distillery Tulsa'},
 {name:'Wichita Falls (optional stop)',type:'must',coords:[-98.4934,33.9137],text:'Optional short stop only'},
 {name:'Lawton',type:'must',coords:[-98.3903,34.6087],text:'Overnight area'},
+{name:'Wichita Mountains Wildlife Refuge',type:'must',coords:[-98.7000,34.7670],text:'Highlight nahe Lawton (Wichita Mountains Wildlife Refuge)'},
 
 
 
@@ -314,72 +315,4 @@ window.addEventListener('resize', function(){ map.resize(); });
 window.onload = startMap;
 </script>
 </body>
-</htmlconst markerDefs = [];
-const allTypes = ['must','music','food','hidden','distillery','hotel'];
-let activeFilter = 'all';
-function placeLink(place){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place.name); }
-function buildPopupNode(place){
-  const wrap = document.createElement('div');
-  wrap.style.minWidth = '190px';
-  const title = document.createElement('strong');
-  title.textContent = place.name;
-  const text = document.createElement('div');
-  text.textContent = place.text;
-  text.style.marginTop = '4px';
-  const link = document.createElement('a');
-  link.className = 'popup-link';
-  link.href = placeLink(place);
-  link.target = '_blank';
-  link.rel = 'noopener noreferrer';
-  link.textContent = 'In Google Maps öffnen';
-  link.style.display = 'block';
-  link.style.marginTop = '10px';
-  link.style.padding = '8px 10px';
-  link.style.borderRadius = '8px';
-  link.style.background = '#22343a';
-  link.style.color = '#dff7fb';
-  link.style.textDecoration = 'none';
-  const meta = document.createElement('div');
-  meta.className = 'popup-meta';
-  meta.textContent = 'Öffnet in neuer Seite';
-  wrap.appendChild(title);
-  wrap.appendChild(text);
-  wrap.appendChild(link);
-  wrap.appendChild(meta);
-  return wrap;
-}
-function createMarker(place){
-  const el = document.createElement('button');
-  el.type = 'button';
-  el.setAttribute('aria-label', place.name);
-  el.style.width = '14px';
-  el.style.height = '14px';
-  el.style.borderRadius = '50%';
-  el.style.border = '2px solid #111';
-  el.style.boxShadow = '0 0 0 1px rgba(255,255,255,.2)';
-  el.style.background = colors[place.type] || '#ccc';
-  const marker = new mapboxgl.Marker({element: el}).setLngLat(place.coords).setPopup(new mapboxgl.Popup({offset:16, closeButton:true}).setDOMContent(buildPopupNode(place))).addTo(map);
-  markerDefs.push({marker, type: place.type});
-}
-function refreshMarkers(){
-  markerDefs.forEach(({marker, type}) => {
-    const show = activeFilter === 'all' ? true : type === activeFilter;
-    marker.getElement().style.display = show ? 'block' : 'none';
-  });
-}
-function syncMapButtons(){
-  document.querySelectorAll('.map-filter-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mapFilter === activeFilter);
-  });
-}
-document.querySelectorAll('.map-filter-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    activeFilter = btn.dataset.mapFilter || 'all';
-    syncMapButtons();
-    refreshMarkers();
-  });
-});
-places.forEach(createMarker);
-syncMapButtons();
-refreshMarkers();
->
+</html>
