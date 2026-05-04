@@ -2,7 +2,7 @@ const CACHE_NAME = 'route66-pwa-v2';
 const URLS = [
   './',
   './index.html',
-  './manifest-2.webmanifest',
+  './manifest.webmanifest',
   './assets/icon-192.png',
   './assets/icon-512.png'
 ];
