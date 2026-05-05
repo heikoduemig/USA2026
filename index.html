@@ -1,681 +1,361 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Route 66 Music Trip – Karte, Tagesguide und Fahrplan</title>
-
-  <link
-    rel="stylesheet"
-    href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css"
-  />
-
-  <style>
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #f5f5f5;
-      scroll-behavior: smooth;
-    }
-
-    html {
-      scroll-padding-top: 190px;
-    }
-
-    header {
-      padding: 16px 18px;
-      background: #1b1b1b;
-      border-bottom: 1px solid #333;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-
-    h1 {
-      margin: 0 0 6px 0;
-      font-size: 22px;
-    }
-
-    header p {
-      margin: 0;
-      color: #cfcfcf;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .map-wrap {
-      position: relative;
-    }
-
-    /* Map-Container responsive */
-    #map {
-      width: 100%;
-      height: 72vh;
-      min-height: 520px;
-    }
-
-    @media (max-width: 760px) {
-      #map {
-        height: 60vh;
-        min-height: 340px;
-      }
-      main {
-        padding: 14px;
-      }
-    }
-
-    @media (max-height: 480px) {
-      #map {
-        height: 70vh;
-        min-height: 260px;
-      }
-    }
-
-    .legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    .legend span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin-top: 14px;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .filter-btn,
-    .quick-links a {
-      display: inline-block;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid #35545a;
-      background: #16282d;
-      color: #dff7fb;
-      text-decoration: none;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .filter-btn.active {
-      background: #4f98a3;
-      color: #071417;
-      border-color: #4f98a3;
-    }
-
-    .quick-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .quick-links a {
-      background: #1d1d1d;
-      border-color: #333;
-      color: #f1f1f1;
-    }
-
-    .mapboxgl-popup-content {
-      color: #111 !important;
-      background: #fff !important;
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .mapboxgl-popup-content strong {
-      color: #000 !important;
-    }
-
-    .mapboxgl-popup-tip {
-      border-top-color: #fff !important;
-      border-bottom-color: #fff !important;
-    }
-
-    .popup-link {
-      display: inline-block;
-      margin-top: 4px;
-      font-size: 12px;
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    .fallback {
-      display: none;
-      padding: 16px;
-      background: #241f1f;
-      border-top: 1px solid #4a3c3c;
-      color: #ffd9d9;
-      font-size: 14px;
-    }
-
-    main {
-      max-width: 1450px;
-      margin: 0 auto;
-      padding: 18px;
-    }
-
-    .plan,
-    .day {
-      background: #181818;
-      border: 1px solid #2b2b2b;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 16px;
-      scroll-margin-top: 190px;
-    }
-
-    .day h2,
-    .plan h2 {
-      margin: 0 0 6px 0;
-      font-size: 22px;
-    }
-
-    .meta {
-      color: #9fd1d8;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 10px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .card {
-      background: #202020;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 14px;
-    }
-
-    .card h3 {
-      margin: 0 0 8px 0;
-      font-size: 16px;
-      color: #fff;
-    }
-
-    .card ul {
-      margin: 0;
-      padding-left: 18px;
-    }
-
-    .card li {
-      margin-bottom: 6px;
-      color: #d5d5d5;
-      line-height: 1.45;
-    }
-
-    .links a,
-    .route-links a {
-      display: inline-block;
-      margin: 6px 8px 0 0;
-      padding: 8px 10px;
-      border-radius: 10px;
-      background: #22343a;
-      color: #dff7fb;
-      text-decoration: none;
-      font-size: 13px;
-    }
-
-    .links a:hover,
-    .route-links a:hover {
-      background: #2e4c54;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 14px;
-    }
-
-    th,
-    td {
-      border: 1px solid #333;
-      padding: 10px;
-      vertical-align: top;
-      text-align: left;
-    }
-
-    th {
-      background: #202020;
-      color: #fff;
-    }
-
-    td {
-      color: #ddd;
-    }
-
-    .note {
-      font-size: 13px;
-      color: #bcbcbc;
-      margin-top: 8px;
-    }
-
-    @media (max-width: 1100px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 760px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      .day h2,
-      .plan h2 {
-        font-size: 20px;
-      }
-      table {
-        font-size: 13px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Route 66 Music Trip · Karte, Tagesguide und Fahrplan</title>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css">
+<style>
+html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:#111;color:#f5f5f5;scroll-behavior:smooth}html{scroll-padding-top:190px}
+header{padding:16px 18px;background:#1b1b1b;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
+h1{margin:0 0 6px 0;font-size:22px} p{margin:0;color:#cfcfcf;font-size:14px;line-height:1.45}
+#map{height:72vh;min-height:520px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}.legend span{display:flex;align-items:center;gap:6px}.dot{width:10px;height:10px;border-radius:50%}.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}.filters{display:flex;flex-wrap:wrap;gap:8px}.filter-btn,.quick-links a{display:inline-block;padding:8px 10px;border-radius:10px;border:1px solid #35545a;background:#16282d;color:#dff7fb;text-decoration:none;font-size:13px;cursor:pointer}.filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{background:#1d1d1d;border-color:#333;color:#f1f1f1}
+.mapboxgl-popup-content{color:#111 !important;background:#fff !important;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.4}.mapboxgl-popup-content strong{color:#000 !important}.mapboxgl-popup-tip{border-top-color:#fff !important;border-bottom-color:#fff !important}
+#fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9}
+main{max-width:1450px;margin:0 auto;padding:18px}.plan,.day{scroll-margin-top:190px}.map-wrap{position:relative}.map-filter-panel{position:absolute;top:14px;left:14px;z-index:5;display:flex;flex-wrap:wrap;gap:8px;max-width:min(92vw,760px);padding:10px;border-radius:12px;background:rgba(17,17,17,.86);backdrop-filter:blur(8px);border:1px solid #2f2f2f}.map-filter-btn{padding:8px 10px;border-radius:999px;border:1px solid #35545a;background:#16282d;color:#dff7fb;font-size:13px;cursor:pointer}.map-filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}.map-filter-btn:not(.active){opacity:.58}
+.intro{margin-bottom:18px;color:#d7d7d7}
+.day,.plan{background:#181818;border:1px solid #2b2b2b;border-radius:14px;padding:16px;margin-bottom:16px}
+.day h2,.plan h2{margin:0 0 6px 0;font-size:22px}.meta{color:#9fd1d8;font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card{background:#202020;border:1px solid #333;border-radius:12px;padding:14px}.card h3{margin:0 0 8px 0;font-size:16px;color:#fff}.card ul{margin:0;padding-left:18px}.card li{margin-bottom:6px;color:#d5d5d5;line-height:1.45}
+.links a,.route-links a{display:inline-block;margin:6px 8px 0 0;padding:8px 10px;border-radius:10px;background:#22343a;color:#dff7fb;text-decoration:none;font-size:13px}.links a:hover,.route-links a:hover{background:#2e4c54}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{border:1px solid #333;padding:10px;vertical-align:top;text-align:left} th{background:#202020;color:#fff} td{color:#ddd}
+.note{font-size:13px;color:#bcbcbc;margin-top:8px}
+@media (max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){#map{height:56vh;min-height:360px}main{padding:14px}.grid{grid-template-columns:1fr}.day h2,.plan h2{font-size:20px}table{font-size:13px}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Route 66 Music Trip – Mapbox, Tagesguide und Fahrplan</h1>
-    <p>
-      Oben alle Marker in der Karte. Darunter dein Reiseplan nach Tagen, Städten,
-      Kategorien und Fahrstrecken mit Zeiten, Kilometern und empfohlenen Stopps.
-    </p>
+<header>
+<h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
+<p>Oben: alle Marker in der Karte. Darunter: dein Reiseplan nach Tagen, Städten, Kategorien und Fahrstrecken mit Zeiten, Kilometern und empfohlenen Stopps.</p>
+<div class="legend">
+<span><i class="dot" style="background:#4f98a3"></i>Highlights</span>
+<span><i class="dot" style="background:#d19900"></i>Musik & Gear</span>
+<span><i class="dot" style="background:#6daa45"></i>Food</span>
+<span><i class="dot" style="background:#dd6974"></i>Hidden / On the way</span>
+<span><i class="dot" style="background:#a86fdf"></i>Distilleries</span>
+<span><i class="dot" style="background:#4da3ff"></i>Hotels</span>
+</div>
+<div class="toolbar">
+<div class="quick-links">
+<a href="#plan">Fahrplan</a>
+<a href="#hotels">Hotels</a>
+<a href="#day-chicago-arrival">14.05. · Chicago</a>
+<a href="#day-chicago">15.05. · Chicago</a>
+<a href="#day-stl-drive">16.05. · St. Louis</a>
+<a href="#day-stl-drive">16.05. · Route 66 Stops (Chicago → St. Louis)</a>
+<a href="#day-stl">17.05. · St. Louis</a>
+<a href="#day-tulsa-drive">18.05. · Tulsa</a>
+<a href="#day-tulsa-drive">18.05. · Route 66 Stops (St. Louis → Tulsa)</a>
+<a href="#day-tulsa">19.05. · Tulsa</a>
+<a href="#day-lawton">20.05. · Wichita Falls / Lawton</a>
+<a href="#day-lawton">20.05. · Route Stops (Tulsa → Lawton)</a>
+<a href="#day-austin-drive">21.05. · Austin</a>
+<a href="#day-austin">22.05. · Austin</a>
+</div>
+</div>
+</header>
+<div class="map-wrap"><div class="map-filter-panel" id="map-filter-panel"><button class="map-filter-btn active" data-map-filter="all">Alle</button><button class="map-filter-btn" data-map-filter="must">Highlights</button><button class="map-filter-btn" data-map-filter="music">Musik & Gear</button><button class="map-filter-btn" data-map-filter="food">Food</button><button class="map-filter-btn" data-map-filter="hidden">Hidden / On the way</button><button class="map-filter-btn" data-map-filter="distillery">Distilleries</button><button class="map-filter-btn" data-map-filter="hotel">Hotels</button></div><div id="map"></div></div>
+<div id="fallback">Die Karte konnte in dieser Ansicht nicht geladen werden. Bitte die HTML-Datei direkt in einem normalen Browser öffnen.</div>
+<main>
+<p class="intro">Die Zeiten im Fahrplan sind als realistische Reiseplanung mit Puffer gedacht, nicht als starre Verpflichtung. Bei den langen Etappen sind die empfohlenen Route-66-Stopps so gesetzt, dass sie machbar bleiben.</p>
+<section class="plan" id="plan">
+<div class="meta">Fahrplan der Reise</div>
+<h2>Strecken, Zeiten und empfohlene Stopps</h2>
+<table>
+<thead>
+<tr><th>Datum</th><th>Strecke</th><th>Abfahrt / Ankunft</th><th>Ca. km</th><th>Empfohlene Stopps</th></tr>
+</thead>
+<tbody>
+<tr><td>14.05.2026 · Chicago</td><td>Flugankunft Chicago → citizenM Downtown</td><td>Ankunft 12:55 CDT, Hotel ca. 14:30</td><td>ca. 30 km Transfer</td><td>Nur leichtes Programm: Riverwalk, Millennium Park, Abendmusik.</td></tr>
+<tr><td>15.05.2026 · Chicago</td><td>Chicago Stadttag</td><td>Start ca. 09:30, Abend offen</td><td>lokal</td><td>Chicago Music Exchange, Wicker Park, Logan Square, Buddy Guy’s oder House of Blues.</td></tr>
+<tr><td>16.05.2026 · St. Louis</td><td>Chicago → St. Louis</td><td>Empfohlen ab 08:00, Ankunft ca. 18:30</td><td>ca. 480 km</td><td>Begin Sign, Gemini Giant, Pontiac Route 66 Museum, Cozy Dog Drive-In.</td></tr>
+<tr><td>17.05.2026 · St. Louis</td><td>St. Louis Stadttag</td><td>Start ca. 09:30, Abend offen</td><td>lokal</td><td>Gateway Arch, Citygarden, Cherokee Street, Blueberry Hill oder Old Rock House.</td></tr>
+<tr><td>18.05.2026 · Tulsa</td><td>St. Louis → Tulsa</td><td>Empfohlen ab 08:00, Ankunft ca. 20:00</td><td>ca. 630 km</td><td>Chain of Rocks Bridge, Meramec Caverns, Cuba Murals, Neon Park, Blue Whale of Catoosa.</td></tr>
+<tr><td>19.05.2026 · Tulsa</td><td>Tulsa Stadttag</td><td>Start ca. 10:00, Abend offen</td><td>lokal</td><td>Cyrus Avery Plaza, Philbrook, Woody Guthrie Center, Mercury Lounge, Red Fork Distillery.</td></tr>
+<tr><td>20.05.2026 · Wichita Falls / Lawton</td><td>Tulsa → Wichita Falls / Lawton (Hotel)</td><td>Empfohlen ab 09:00, Ankunft ca. 14:30–15:30</td><td>ca. 340 km bis Wichita Falls, ca. 430 km bis Lawton/Hotel</td><td>Höchstens kurzer Stopp bei Wichita Falls, danach weiter zum Hotel in Lawton.</td></tr>
+<tr><td>21.05.2026 · Austin</td><td>Lawton (Hotel) → Austin</td><td>Früher Start ca. 07:30, Ankunft ca. 18:30–20:00</td><td>ca. 900+ km je nach Startpunkt</td><td>Fokus auf Fahrstrecke; nur wenige Pausen. In Austin abends South Congress oder kurzer Musikabend.</td></tr>
+<tr><td>22.05.2027 · Austin</td><td>Austin Zusatztag</td><td>Flexibel</td><td>lokal / optional Hill Country</td><td>Samstag: The Range at Austin; dazu Still Austin, Treaty Oak, Waterloo Records, Lieblings-Spots von 2026 wiederholen.</td></tr>
+</tbody>
+</table>
+<div class="note">Hinweis: Optionaler kurzer Stopp nur im Raum Wichita Falls; das Hotel liegt in Lawton. Der 21.05. bleibt dadurch eine lange, aber klarere Etappe ab Lawton Richtung Austin.</div>
+</section>
+<section class="day" id="day-chicago-arrival">
+<div class="meta">14.05.2026 · Chicago · citizenM Downtown · Ankunft 12:55 CDT (LH 430)</div>
+<h2>Entspannter Ankunftstag mit Downtown-Fokus</h2>
+<div class="grid">
+<div class="card"><h3>Highlights</h3><ul><li>Millennium Park.</li><li>Chicago Riverwalk.</li><li>Chicago Cultural Center.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Millennium+Park+Chicago" target="_blank" rel="noopener noreferrer">Millennium Park</a><a href="https://www.google.com/maps/search/?api=1&query=Chicago+Riverwalk" target="_blank" rel="noopener noreferrer">Riverwalk</a><a href="https://www.google.com/maps/search/?api=1&query=Chicago+Cultural+Center" target="_blank" rel="noopener noreferrer">Cultural Center</a></div></div>
+<div class="card"><h3>Hidden Spots & Food</h3><ul><li>Ping Tom Memorial Park, falls noch Energie da ist.</li><li>Maxwell Street als geschichtsträchtiger Food-Ort.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Ping+Tom+Memorial+Park" target="_blank" rel="noopener noreferrer">Ping Tom Park</a><a href="https://www.google.com/maps/search/?api=1&query=Maxwell+Street+Chicago" target="_blank" rel="noopener noreferrer">Maxwell Street</a></div></div>
+<div class="card"><h3>Abend / Musik</h3><ul><li>Buddy Guy’s Legends.</li><li>House of Blues Chicago.</li><li>Leicht halten wegen Flugtag.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Buddy+Guy%27s+Legends+Chicago" target="_blank" rel="noopener noreferrer">Buddy Guy’s</a><a href="https://www.google.com/maps/search/?api=1&query=House+of+Blues+Chicago" target="_blank" rel="noopener noreferrer">House of Blues</a></div></div>
+</div>
+</section>
+<section class="day" id="day-chicago">
+<div class="meta">15.05.2026 · Chicago · citizenM Downtown</div>
+<h2>Chicago für Musiker, Viertel und Live-Vibes</h2>
+<div class="grid">
+<div class="card"><h3>Must-Sees</h3><ul><li>Art Institute oder Navy Pier je nach Lust.</li><li>Wicker Park und Logan Square.</li><li>Lincoln Park als ruhiger Gegenpol.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Art+Institute+of+Chicago" target="_blank" rel="noopener noreferrer">Art Institute</a><a href="https://www.google.com/maps/search/?api=1&query=Wicker+Park+Chicago" target="_blank" rel="noopener noreferrer">Wicker Park</a><a href="https://www.google.com/maps/search/?api=1&query=Logan+Square+Chicago" target="_blank" rel="noopener noreferrer">Logan Square</a></div></div>
+<div class="card"><h3>Musik & Gear</h3><ul><li>Chicago Music Exchange.</li><li>Rock N Roll Vintage als sinnvolle Ergänzung.</li><li>Abends erneut Blues oder Americana.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Chicago+Music+Exchange" target="_blank" rel="noopener noreferrer">Chicago Music Exchange</a><a href="https://www.google.com/maps/search/?api=1&query=Rock+N+Roll+Vintage+Chicago" target="_blank" rel="noopener noreferrer">Rock N Roll Vintage</a></div></div>
+<div class="card"><h3>Distilleries & Hidden Spots</h3><ul><li>KOVAL Distillery.</li><li>FEW Spirits in Evanston.</li><li>Garfield Park Conservatory oder Humboldt Park.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=KOVAL+Distillery+Chicago" target="_blank" rel="noopener noreferrer">KOVAL</a><a href="https://www.google.com/maps/search/?api=1&query=FEW+Spirits+Evanston" target="_blank" rel="noopener noreferrer">FEW Spirits</a><a href="https://www.google.com/maps/search/?api=1&query=Garfield+Park+Conservatory" target="_blank" rel="noopener noreferrer">Garfield Park</a></div></div>
+</div>
+</section>
+<section class="day" id="day-stl-drive">
+<div class="meta">16.05.2026 · Chicago → St. Louis</div>
+<h2>Roadtrip-Start auf der Route 66</h2>
+<div class="grid">
+<div class="card"><h3>Fahrplan</h3><ul><li>Abfahrt empfohlen: 08:00.</li><li>Mit 3 bis 4 Stopps Ankunft gegen 18:30.</li><li>Strecke ca. 480 km.</li></ul></div>
+<div class="card"><h3>Empfohlene Stopps</h3><ul><li>Route 66 Begin Sign.</li><li>Gemini Giant.</li><li>Pontiac Route 66 Museum.</li><li>Cozy Dog Drive-In.</li></ul><div class="route-links"><a href="https://www.google.com/maps/search/?api=1&query=Route+66+Begin+Sign+Chicago" target="_blank" rel="noopener noreferrer">Begin Sign</a><a href="https://www.google.com/maps/search/?api=1&query=Gemini+Giant+Wilmington+Illinois" target="_blank" rel="noopener noreferrer">Gemini Giant</a><a href="https://www.google.com/maps/search/?api=1&query=Pontiac+Route+66+Museum+Illinois" target="_blank" rel="noopener noreferrer">Pontiac Museum</a><a href="https://www.google.com/maps/search/?api=1&query=Cozy+Dog+Drive+In+Springfield+Illinois" target="_blank" rel="noopener noreferrer">Cozy Dog</a></div></div>
+<div class="card"><h3>Ankunft</h3><ul><li>Nach Ankunft nur noch lockerer Downtown- oder Arch-Blick.</li><li>Nicht zu spät planen, damit der 17.05. entspannt bleibt.</li></ul></div>
+</div>
+</section>
+<section class="day" id="day-stl">
+<div class="meta">17.05.2026 · St. Louis · Hotel Lumière at the Arch</div>
+<h2>St. Louis Kernprogramm mit Live-Musik am Abend</h2>
+<div class="grid">
+<div class="card"><h3>Highlights</h3><ul><li>Gateway Arch.</li><li>Citygarden.</li><li>Missouri Botanical Garden oder Forest Park.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Gateway+Arch+St+Louis" target="_blank" rel="noopener noreferrer">Gateway Arch</a><a href="https://www.google.com/maps/search/?api=1&query=Citygarden+St+Louis" target="_blank" rel="noopener noreferrer">Citygarden</a><a href="https://www.google.com/maps/search/?api=1&query=Missouri+Botanical+Garden" target="_blank" rel="noopener noreferrer">Botanical Garden</a></div></div>
+<div class="card"><h3>Hidden Spots & Food</h3><ul><li>Cherokee Street, Soulard, Lafayette Square.</li><li>Ted Drewes als einfacher Klassiker.</li><li>The Hill für lokale Essenslogik.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Cherokee+Street+St+Louis" target="_blank" rel="noopener noreferrer">Cherokee Street</a><a href="https://www.google.com/maps/search/?api=1&query=Ted+Drewes+St+Louis" target="_blank" rel="noopener noreferrer">Ted Drewes</a><a href="https://www.google.com/maps/search/?api=1&query=The+Hill+St+Louis" target="_blank" rel="noopener noreferrer">The Hill</a></div></div>
+<div class="card"><h3>Musik & Distillery</h3><ul><li>Blueberry Hill Duck Room.</li><li>Old Rock House.</li><li>StiLL 630 oder Switchgrass Spirits.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Blueberry+Hill+Duck+Room+St+Louis" target="_blank" rel="noopener noreferrer">Blueberry Hill</a><a href="https://www.google.com/maps/search/?api=1&query=Old+Rock+House+St+Louis" target="_blank" rel="noopener noreferrer">Old Rock House</a><a href="https://www.google.com/maps/search/?api=1&query=StiLL+630+St+Louis" target="_blank" rel="noopener noreferrer">StiLL 630</a></div></div>
+</div>
+</section>
+<section class="day" id="day-tulsa-drive">
+<div class="meta">18.05.2026 · St. Louis → Tulsa</div>
+<h2>Lange Etappe mit den besten Route-66-Stopps</h2>
+<div class="grid">
+<div class="card"><h3>Fahrplan</h3><ul><li>Abfahrt empfohlen: 08:00.</li><li>Ankunft realistisch: ca. 20:00.</li><li>Strecke ca. 630 km.</li></ul></div>
+<div class="card"><h3>Empfohlene Stopps</h3><ul><li>Chain of Rocks Bridge.</li><li>Meramec Caverns.</li><li>Cuba Murals.</li><li>Route 66 Neon Park.</li><li>Blue Whale of Catoosa.</li></ul><div class="route-links"><a href="https://www.google.com/maps/search/?api=1&query=Chain+of+Rocks+Bridge" target="_blank" rel="noopener noreferrer">Chain of Rocks</a><a href="https://www.google.com/maps/search/?api=1&query=Meramec+Caverns" target="_blank" rel="noopener noreferrer">Meramec Caverns</a><a href="https://www.google.com/maps/search/?api=1&query=Cuba+Missouri+Route+66+Murals" target="_blank" rel="noopener noreferrer">Cuba Murals</a><a href="https://www.google.com/maps/search/?api=1&query=Blue+Whale+of+Catoosa" target="_blank" rel="noopener noreferrer">Blue Whale</a></div></div>
+<div class="card"><h3>Planungstipp</h3><ul><li>Diese Etappe nicht überladen.</li><li>Wenn Zeit fehlt, Blue Whale auf jeden Fall retten.</li></ul></div>
+</div>
+</section>
+<section class="day" id="day-tulsa">
+<div class="meta">19.05.2026 · Tulsa · The Mayo Hotel</div>
+<h2>Tulsa mit Musikgeschichte und Route-66-Atmosphäre</h2>
+<div class="grid">
+<div class="card"><h3>Highlights</h3><ul><li>Cyrus Avery Plaza.</li><li>Philbrook Museum.</li><li>Woody Guthrie Center.</li><li>Gathering Place.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Cyrus+Avery+Centennial+Plaza+Tulsa" target="_blank" rel="noopener noreferrer">Cyrus Avery</a><a href="https://www.google.com/maps/search/?api=1&query=Philbrook+Museum+Tulsa" target="_blank" rel="noopener noreferrer">Philbrook</a><a href="https://www.google.com/maps/search/?api=1&query=Woody+Guthrie+Center+Tulsa" target="_blank" rel="noopener noreferrer">Woody Guthrie Center</a></div></div>
+<div class="card"><h3>Hidden Spots & Food</h3><ul><li>Center of the Universe.</li><li>Red Fork Historic District.</li><li>Blue Dome District oder Cherry Street.</li><li>Mother Road Market.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Center+of+the+Universe+Tulsa" target="_blank" rel="noopener noreferrer">Center of the Universe</a><a href="https://www.google.com/maps/search/?api=1&query=Mother+Road+Market+Tulsa" target="_blank" rel="noopener noreferrer">Mother Road Market</a></div></div>
+<div class="card"><h3>Musik & Distillery</h3><ul><li>Mercury Lounge.</li><li>Cain’s Ballroom-Umfeld.</li><li>Red Fork Distillery.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Mercury+Lounge+Tulsa" target="_blank" rel="noopener noreferrer">Mercury Lounge</a><a href="https://www.google.com/maps/search/?api=1&query=Cain%27s+Ballroom+Tulsa" target="_blank" rel="noopener noreferrer">Cain’s Ballroom</a><a href="https://www.google.com/maps/search/?api=1&query=Red+Fork+Distillery+Tulsa" target="_blank" rel="noopener noreferrer">Red Fork Distillery</a></div></div>
+</div>
+</section>
+<section class="day" id="day-lawton">
+<div class="meta">20.05.2026 · Wichita Falls / Lawton · Hotel in Lawton</div>
+<h2>Kompakter Übergangstag mit Fokus auf Kernstopps</h2>
+<div class="grid">
+<div class="card"><h3>Fahrplan & Stadt</h3><ul><li>Abfahrt Tulsa ca. 09:00.</li><li>Kurzer Stopp bei Wichita Falls möglich; Ankunft im Hotel in Lawton später am Nachmittag/Abend.</li><li>Kurzes, konzentriertes Programm sinnvoller als ein voller Stadttag.</li></ul></div>
+<div class="card"><h3>Stopps unterwegs</h3><ul><li>Optional kurzer Halt in Wichita Falls, z. B. für Pause, Snack oder einen kleinen Downtown-Abstecher.</li><li>Danach Weiterfahrt zum Hotel in Lawton.</li><li>Als Natur-Highlight bei Zeit: Wichita Mountains Wildlife Refuge.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Wichita+Falls+TX+downtown" target="_blank" rel="noopener noreferrer">Wichita Falls</a><a href="https://www.google.com/maps/search/?api=1&query=Lawton+OK" target="_blank" rel="noopener noreferrer">Lawton</a><a href="https://www.google.com/maps/search/?api=1&query=Wichita+Mountains+Wildlife+Refuge" target="_blank" rel="noopener noreferrer">Wildlife Refuge</a><a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Hotel</a></div></div>
+<div class="card"><h3>Planungstipp</h3><ul><li>Wegen der folgenden langen Südetappe früh zurück und gut vorbereiten.</li><li>Nur 2 bis 4 Programmpunkte wählen.</li></ul></div>
+</div>
+</section>
+<section class="day" id="day-austin-drive">
+<div class="meta">21.05.2026 · Austin · citizenM Downtown</div>
+<h2>Langer Reisetag und entspannter Austin-Abend</h2>
+<div class="grid">
+<div class="card"><h3>Fahrplan</h3><ul><li>Früher Start empfohlen: 07:30.</li><li>Ankunft in Austin: ca. 18:30–20:00, je nach tatsächlichem Startpunkt.</li><li>Sehr lange Etappe, daher tagsüber nur Pausen statt Sightseeing.</li></ul></div>
+<div class="card"><h3>Nach Ankunft</h3><ul><li>South Congress als bester kurzer Start in Austin.</li><li>Kurzer Spaziergang an Lady Bird Lake, wenn noch Energie da ist.</li><li>Abends Continental Club oder Antone’s nur locker anpeilen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=South+Congress+Austin" target="_blank" rel="noopener noreferrer">South Congress</a><a href="https://www.google.com/maps/search/?api=1&query=Lady+Bird+Lake+Austin" target="_blank" rel="noopener noreferrer">Lady Bird Lake</a><a href="https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin" target="_blank" rel="noopener noreferrer">Continental Club</a></div></div>
+<div class="card"><h3>Food & Musik</h3><ul><li>Franklin Barbecue nur, wenn es logistisch passt; sonst flexibler bleiben.</li><li>South Austin Music oder Waterloo Records eher am Folgetag bzw. Zusatztag vertiefen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Franklin+Barbecue+Austin" target="_blank" rel="noopener noreferrer">Franklin Barbecue</a><a href="https://www.google.com/maps/search/?api=1&query=Waterloo+Records+Austin" target="_blank" rel="noopener noreferrer">Waterloo Records</a></div></div>
+</div>
+</section>
+<section class="day" id="day-austin">
+<div class="meta">22.05.2027 · Austin</div>
+<h2>Perfekter Zusatztag für Vertiefung</h2>
+<div class="grid">
+<div class="card"><h3>Highlights</h3><ul><li>Texas State Capitol.</li><li>Barton Springs und Zilker Park.</li><li>Mount Bonnell oder Laguna Gloria.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Texas+State+Capitol+Austin" target="_blank" rel="noopener noreferrer">Capitol</a><a href="https://www.google.com/maps/search/?api=1&query=Barton+Springs+Pool+Austin" target="_blank" rel="noopener noreferrer">Barton Springs</a><a href="https://www.google.com/maps/search/?api=1&query=Mount+Bonnell+Austin" target="_blank" rel="noopener noreferrer">Mount Bonnell</a></div></div>
+<div class="card"><h3>Musik, Food & Samstag</h3><ul><li>Waterloo Records und South Austin Music.</li><li>Continental Club, Antone’s oder Broken-Spoke-Logik erneut aufnehmen.</li><li>Samstag: The Range at Austin als besonderes Highlight.</li><li>BBQ ohne Zeitdruck planen.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=South+Austin+Music" target="_blank" rel="noopener noreferrer">South Austin Music</a><a href="https://www.google.com/maps/search/?api=1&query=The+Range+at+Austin" target="_blank" rel="noopener noreferrer">The Range at Austin</a><a href="https://www.google.com/maps/search/?api=1&query=Antone%27s+Nightclub+Austin" target="_blank" rel="noopener noreferrer">Antone’s</a></div></div>
+<div class="card"><h3>Distillery-Optionen</h3><ul><li>Still Austin Whiskey Co. direkt in der Stadt.</li><li>Treaty Oak Distilling als einfacher Außentrip.</li><li>Andalusia Whiskey Co. im Hill Country, wenn du bewusst rausfahren willst.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Still+Austin+Whiskey+Co" target="_blank" rel="noopener noreferrer">Still Austin</a><a href="https://www.google.com/maps/search/?api=1&query=Treaty+Oak+Distilling+Driftwood+Texas" target="_blank" rel="noopener noreferrer">Treaty Oak</a><a href="https://www.google.com/maps/search/?api=1&query=Andalusia+Whiskey+Company+Blanco+Texas" target="_blank" rel="noopener noreferrer">Andalusia</a></div></div>
+</div>
+</section>
+<section class="day" id="hotels">
+<div class="meta">Hotels der Reise</div>
+<h2>Übernachtungen auf einen Blick</h2>
+<div class="grid">
+<div class="card"><h3>Chicago</h3><ul><li>citizenM Chicago Downtown.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=citizenM+Chicago+Downtown" target="_blank" rel="noopener noreferrer">citizenM Chicago Downtown</a></div></div>
+<div class="card"><h3>St. Louis</h3><ul><li>Hotel Lumière at the Arch.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Hotel+Lumi%C3%A8re+at+the+Arch+St+Louis" target="_blank" rel="noopener noreferrer">Hotel Lumière at the Arch</a></div></div>
+<div class="card"><h3>Tulsa</h3><ul><li>The Mayo Hotel.</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=The+Mayo+Hotel+Tulsa" target="_blank" rel="noopener noreferrer">The Mayo Hotel</a></div></div>
+<div class="card"><h3>Lawton</h3><ul><li>Apache Casino Hotel (oder Hotelbereich Lawton).</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Apache Casino Hotel</a></div></div>
+<div class="card"><h3>Austin</h3><ul><li>citizenM Austin Downtown (oder vergleichbare Downtown-Lage).</li></ul><div class="links"><a href="https://www.google.com/maps/search/?api=1&query=citizenM+Austin+Downtown" target="_blank" rel="noopener noreferrer">citizenM Austin Downtown</a></div></div>
+</div>
+</section>
+</main>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+<script>
+const points = [
+{name:'citizenM Chicago Downtown Hotel',type:'hotel',coords:[-87.6290,41.8860],text:'Hotel · Chicago'},
+{name:'Hotel Lumière at the Arch',type:'hotel',coords:[-90.1863,38.6312],text:'Hotel · St. Louis'},
+{name:'The Mayo Hotel',type:'hotel',coords:[-95.9929,36.1548],text:'Hotel · Tulsa'},
+{name:'Apache Casino Hotel',type:'hotel',coords:[-98.3877,34.6085],text:'Hotel · Lawton area'},
+{name:'citizenM Austin Downtown Hotel',type:'hotel',coords:[-97.7424,30.2676],text:'Hotel · Austin'},
+{name:'Millennium Park',type:'must',coords:[-87.6226,41.8826],text:'Chicago Highlight'},
+{name:'Chicago Riverwalk',type:'must',coords:[-87.6206,41.8880],text:'Chicago Highlight'},
+{name:'Chicago Cultural Center',type:'must',coords:[-87.6247,41.8838],text:'Chicago Highlight'},
+{name:'Art Institute of Chicago',type:'must',coords:[-87.6237,41.8796],text:'Chicago Highlight'},
+{name:'Willis Tower Skydeck',type:'must',coords:[-87.6359,41.8789],text:'Chicago Highlight'},
+{name:'Navy Pier',type:'must',coords:[-87.6079,41.8917],text:'Chicago Highlight'},
+{name:'Lincoln Park',type:'must',coords:[-87.6376,41.9214],text:'Chicago Highlight'},
+{name:'Wicker Park',type:'must',coords:[-87.6777,41.9088],text:'Chicago Highlight'},
+{name:'Logan Square',type:'must',coords:[-87.7081,41.9287],text:'Chicago Highlight'},
+{name:'Museum Campus',type:'must',coords:[-87.6140,41.8663],text:'Chicago Highlight'},
+{name:'Pilsen Murals',type:'hidden',coords:[-87.6708,41.8561],text:'Chicago Hidden Spot'},
+{name:'Humboldt Park',type:'hidden',coords:[-87.7017,41.9025],text:'Chicago Hidden Spot'},
+{name:'Promontory Point',type:'hidden',coords:[-87.5793,41.7925],text:'Chicago Hidden Spot'},
+{name:'Garfield Park Conservatory',type:'hidden',coords:[-87.7163,41.8864],text:'Chicago Hidden Spot'},
+{name:'Ping Tom Memorial Park',type:'hidden',coords:[-87.6330,41.8581],text:'Chicago Hidden Spot'},
+{name:'Chicago Music Exchange',type:'music',coords:[-87.6778,41.9580],text:'Musik & Gear'},
+{name:"Buddy Guy's Legends",type:'music',coords:[-87.6307,41.8675],text:'Blues Club'},
+{name:'House of Blues Chicago',type:'music',coords:[-87.6296,41.8892],text:'Live Musik'},
+{name:'Maxwell Street',type:'food',coords:[-87.6473,41.8642],text:'Food & Blues Geschichte'},
+{name:'KOVAL Distillery',type:'distillery',coords:[-87.7001,41.9266],text:'Distillery Chicago'},
+{name:'FEW Spirits',type:'distillery',coords:[-87.6906,42.0451],text:'Nahe Chicago'},
+{name:'Route 66 Begin Sign',type:'hidden',coords:[-87.6243,41.8763],text:'On the way'},
+{name:'Gemini Giant',type:'hidden',coords:[-88.1846,41.2917],text:'On the way'},
+{name:'Pontiac Route 66 Museum',type:'hidden',coords:[-88.6279,40.8809],text:'On the way'},
+{name:'Cozy Dog Drive-In',type:'hidden',coords:[-89.6501,39.7817],text:'On the way'},
+{name:'Gateway Arch',type:'must',coords:[-90.1848,38.6247],text:'St. Louis Highlight'},
+{name:'Citygarden',type:'must',coords:[-90.1994,38.6298],text:'St. Louis Highlight'},
+{name:'Missouri Botanical Garden',type:'must',coords:[-90.2590,38.6158],text:'St. Louis Highlight'},
+{name:'Forest Park',type:'must',coords:[-90.2843,38.6388],text:'St. Louis Highlight'},
+{name:'St. Louis Art Museum',type:'must',coords:[-90.2946,38.6393],text:'St. Louis Highlight'},
+{name:'Cathedral Basilica',type:'must',coords:[-90.2620,38.6425],text:'St. Louis Highlight'},
+{name:'Delmar Loop',type:'must',coords:[-90.3070,38.6554],text:'St. Louis Highlight'},
+{name:'Tower Grove Park',type:'must',coords:[-90.2544,38.6072],text:'St. Louis Highlight'},
+{name:'Union Station',type:'must',coords:[-90.2076,38.6247],text:'St. Louis Highlight'},
+{name:'Cherokee Street',type:'must',coords:[-90.2292,38.5948],text:'St. Louis Highlight'},
+{name:'Soulard',type:'hidden',coords:[-90.1990,38.6100],text:'St. Louis Hidden Spot'},
+{name:'Chain of Rocks Bridge',type:'hidden',coords:[-90.1483,38.7556],text:'St. Louis Hidden / Route 66'},
+{name:'Lafayette Square',type:'hidden',coords:[-90.2172,38.6175],text:'St. Louis Hidden Spot'},
+{name:'The Hill',type:'hidden',coords:[-90.2775,38.6178],text:'St. Louis Hidden Spot'},
+{name:'Bellefontaine Cemetery',type:'hidden',coords:[-90.2230,38.7036],text:'St. Louis Hidden Spot'},
+{name:'Blueberry Hill Duck Room',type:'music',coords:[-90.3078,38.6552],text:'Live Musik'},
+{name:'Old Rock House',type:'music',coords:[-90.1989,38.6184],text:'Live Musik'},
+{name:'Ted Drewes',type:'food',coords:[-90.3059,38.5868],text:'Food'},
+{name:'StiLL 630',type:'distillery',coords:[-90.2269,38.6185],text:'Distillery St. Louis'},
+{name:'Switchgrass Spirits',type:'distillery',coords:[-90.2240,38.6291],text:'Distillery St. Louis'},
+{name:'Meramec Caverns',type:'hidden',coords:[-91.5011,38.2445],text:'On the way'},
+{name:'Cuba Murals',type:'hidden',coords:[-91.4032,38.0631],text:'On the way'},
+{name:'Uranus Missouri',type:'hidden',coords:[-92.1026,37.8279],text:'On the way'},
+{name:'Route 66 Neon Park',type:'hidden',coords:[-92.6638,37.6809],text:'On the way'},
+{name:'Blue Whale of Catoosa',type:'hidden',coords:[-95.5714,36.1864],text:'On the way'},
+{name:'Buck Atom\'s Cosmic Curios',type:'hidden',coords:[-95.9228,36.1540],text:'On the way'},
+{name:'Cyrus Avery Plaza',type:'must',coords:[-96.0058,36.1497],text:'Tulsa Highlight'},
+{name:'Philbrook Museum',type:'must',coords:[-95.9670,36.1105],text:'Tulsa Highlight'},
+{name:'Woody Guthrie Center',type:'must',coords:[-95.9915,36.1575],text:'Tulsa Highlight'},
+{name:'Gathering Place',type:'must',coords:[-95.9665,36.1238],text:'Tulsa Highlight'},
+{name:'Golden Driller',type:'must',coords:[-95.9798,36.1318],text:'Tulsa Highlight'},
+{name:'Tulsa Arts District',type:'must',coords:[-95.9892,36.1586],text:'Tulsa Highlight'},
+{name:'Cain\'s Ballroom',type:'must',coords:[-95.9924,36.1601],text:'Tulsa Highlight'},
+{name:'Tulsa Botanic Garden',type:'must',coords:[-96.1521,36.2002],text:'Tulsa Highlight'},
+{name:'Mother Road Market',type:'must',coords:[-95.9617,36.1490],text:'Tulsa Highlight'},
+{name:'Turkey Mountain',type:'must',coords:[-95.9985,36.0923],text:'Tulsa Highlight'},
+{name:'Cherry Street',type:'hidden',coords:[-95.9648,36.1337],text:'Tulsa Hidden Spot'},
+{name:'Red Fork Historic District',type:'hidden',coords:[-96.0314,36.1451],text:'Tulsa Hidden Spot'},
+{name:'Center of the Universe',type:'hidden',coords:[-95.9920,36.1562],text:'Tulsa Hidden Spot'},
+{name:'Route 66 Rising Sculpture',type:'hidden',coords:[-96.0046,36.1463],text:'Tulsa Hidden Spot'},
+{name:'Blue Dome District',type:'hidden',coords:[-95.9874,36.1532],text:'Tulsa Hidden Spot'},
+{name:'Mercury Lounge',type:'music',coords:[-95.9841,36.1478],text:'Tulsa Musik'},
+{name:'Red Fork Distillery',type:'distillery',coords:[-96.0320,36.1453],text:'Distillery Tulsa'},
+{name:'Wichita Falls (optional stop)',type:'must',coords:[-98.4934,33.9137],text:'Optional short stop only'},
+{name:'Lawton',type:'must',coords:[-98.3903,34.6087],text:'Overnight area'},
+{name:'Wichita Mountains Wildlife Refuge',type:'must',coords:[-98.7000,34.7670],text:'Highlight nahe Lawton (Wichita Mountains Wildlife Refuge)'},
 
-    <div class="legend">
-      <span><i class="dot" style="background:#4f98a3;"></i>Highlights</span>
-      <span><i class="dot" style="background:#d19900;"></i>Musik &amp; Gear</span>
-      <span><i class="dot" style="background:#6daa45;"></i>Food</span>
-      <span><i class="dot" style="background:#dd6974;"></i>Hidden / On the way</span>
-      <span><i class="dot" style="background:#a86fdf;"></i>Distilleries</span>
-      <span><i class="dot" style="background:#4da3ff;"></i>Hotels</span>
-      <span><i class="dot" style="background:#ff7f50;"></i>Extra</span>
-    </div>
 
-    <div class="toolbar">
-      <div class="quick-links">
-        <a href="#plan">Fahrplan</a>
-        <a href="#hotels">Hotels</a>
-        <a href="#day-chicago-arrival">14.05. Chicago</a>
-        <a href="#day-chicago">15.05. Chicago</a>
-        <a href="#day-stl-drive">16.05. St. Louis</a>
-        <a href="#day-stl">17.05. St. Louis</a>
-        <a href="#day-tulsa-drive">18.05. Tulsa</a>
-        <a href="#day-tulsa">19.05. Tulsa</a>
-        <a href="#day-lawton">20.05. Lawton</a>
-        <a href="#day-austin-drive">21.05. Austin</a>
-        <a href="#day-austin">22.05. Austin</a>
-      </div>
-      <div class="filters">
-        <button class="filter-btn active" data-map-filter="all">Alle</button>
-        <button class="filter-btn" data-map-filter="must">Highlights</button>
-        <button class="filter-btn" data-map-filter="music">Musik &amp; Gear</button>
-        <button class="filter-btn" data-map-filter="food">Food</button>
-        <button class="filter-btn" data-map-filter="hidden">Hidden / On the way</button>
-        <button class="filter-btn" data-map-filter="distillery">Distilleries</button>
-        <button class="filter-btn" data-map-filter="hotel">Hotels</button>
-        <button class="filter-btn" data-map-filter="extra">Extra</button>
-      </div>
-    </div>
-  </header>
 
-  <div class="map-wrap">
-    <div id="map"></div>
-  </div>
 
-  <div id="fallback" class="fallback">
-    Die Karte konnte in dieser Ansicht nicht geladen werden.
-    Bitte die HTML-Datei direkt in einem normalen Browser öffnen.
-  </div>
 
-  <main>
-    <!-- Dein bisheriger Fahrplan und alle Tage/Hotels – ich lasse die Struktur wie in deiner Datei -->
-    <!-- Ich übernehme hier genau die Inhalte, die wir in der letzten Version schon eingebaut hatten -->
-    <!-- (Fahrplan-Tabelle, Tagessektionen, Hotels); du musst daran nichts mehr ändern. -->
 
-    <!-- Fahrplan-Tabelle -->
-    <section class="plan" id="plan">
-      <div class="meta">Fahrplan der Reise</div>
-      <h2>Strecken, Zeiten und empfohlene Stopps</h2>
-      <!-- ... Tabelle wie in der letzten Nachricht, unverändert ... -->
-      <!-- Um Platz zu sparen: Du kannst hier direkt den Fahrplanblock aus meiner letzten index.html-Version übernehmen -->
-    </section>
 
-    <!-- Alle Tages-Sektionen und Hotels wie in der letzten Antwort -->
-    <!-- day-chicago-arrival, day-chicago, day-stl-drive, day-stl, day-tulsa-drive, day-tulsa, day-lawton, day-austin-drive, day-austin, hotels -->
-    <!-- Inhalt identisch mit der vorherigen vollständigen index.html, nur hier weggelassen, damit der Fokus auf dem Map-Skript liegt -->
-  </main>
 
-  <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
-  <script>
-    // Basis-Punkte (deine bisherigen Marker)
-    const basePoints = [
-      // Hotels
-      { name: 'citizenM Chicago Downtown', type: 'hotel', coords: [-87.6290, 41.8860], text: 'Hotel Chicago' },
-      { name: 'Hotel Lumière at the Arch', type: 'hotel', coords: [-90.1863, 38.6312], text: 'Hotel St. Louis' },
-      { name: 'The Mayo Hotel', type: 'hotel', coords: [-95.9929, 36.1548], text: 'Hotel Tulsa' },
-      { name: 'Apache Casino Hotel', type: 'hotel', coords: [-98.3877, 34.6085], text: 'Hotel Lawton area' },
-      { name: 'citizenM Austin Downtown', type: 'hotel', coords: [-97.7424, 30.2676], text: 'Hotel Austin' },
 
-      // Chicago & Umgebung (Kurzfassung; entspricht deiner bisherigen Datei)
-      { name: 'Millennium Park', type: 'must', coords: [-87.6226, 41.8826], text: 'Chicago Highlight' },
-      { name: 'Chicago Riverwalk', type: 'must', coords: [-87.6206, 41.8880], text: 'Chicago Highlight' },
-      { name: 'Chicago Cultural Center', type: 'must', coords: [-87.6247, 41.8838], text: 'Chicago Highlight' },
-      { name: 'Art Institute of Chicago', type: 'must', coords: [-87.6237, 41.8796], text: 'Chicago Highlight' },
-      { name: 'Willis Tower Skydeck', type: 'must', coords: [-87.6359, 41.8789], text: 'Chicago Highlight' },
-      { name: 'Navy Pier', type: 'must', coords: [-87.6079, 41.8917], text: 'Chicago Highlight' },
-      { name: 'Lincoln Park', type: 'must', coords: [-87.6376, 41.9214], text: 'Chicago Highlight' },
-      { name: 'Wicker Park', type: 'must', coords: [-87.6777, 41.9088], text: 'Chicago Highlight' },
-      { name: 'Logan Square', type: 'must', coords: [-87.7081, 41.9287], text: 'Chicago Highlight' },
-      { name: 'Museum Campus', type: 'must', coords: [-87.6140, 41.8663], text: 'Chicago Highlight' },
-      { name: 'Pilsen Murals', type: 'hidden', coords: [-87.6708, 41.8561], text: 'Chicago Hidden Spot' },
-      { name: 'Humboldt Park', type: 'hidden', coords: [-87.7017, 41.9025], text: 'Chicago Hidden Spot' },
-      { name: 'Promontory Point', type: 'hidden', coords: [-87.5793, 41.7925], text: 'Chicago Hidden Spot' },
-      { name: 'Garfield Park Conservatory', type: 'hidden', coords: [-87.7163, 41.8864], text: 'Chicago Hidden Spot' },
-      { name: 'Ping Tom Memorial Park', type: 'hidden', coords: [-87.6330, 41.8581], text: 'Chicago Hidden Spot' },
-      { name: 'Chicago Music Exchange', type: 'music', coords: [-87.6778, 41.9580], text: 'Musik & Gear' },
-      { name: "Buddy Guy's Legends", type: 'music', coords: [-87.6307, 41.8675], text: 'Blues Club' },
-      { name: 'House of Blues Chicago', type: 'music', coords: [-87.6296, 41.8892], text: 'Live Musik' },
-      { name: 'Maxwell Street', type: 'food', coords: [-87.6473, 41.8642], text: 'Food & Blues-Geschichte' },
-      { name: 'KOVAL Distillery', type: 'distillery', coords: [-87.7001, 41.9266], text: 'Distillery Chicago' },
-      { name: 'FEW Spirits', type: 'distillery', coords: [-87.6906, 42.0451], text: 'Nahe Chicago' },
 
-      // Route 66 Kernpunkte
-      { name: 'Route 66 Begin Sign', type: 'hidden', coords: [-87.6243, 41.8763], text: 'On the way' },
-      { name: 'Gemini Giant', type: 'hidden', coords: [-88.1846, 41.2917], text: 'On the way' },
-      { name: 'Pontiac Route 66 Museum', type: 'hidden', coords: [-88.6279, 40.8809], text: 'On the way' },
-      { name: 'Cozy Dog Drive-In', type: 'hidden', coords: [-89.6501, 39.7817], text: 'On the way' },
 
-      // St. Louis
-      { name: 'Gateway Arch', type: 'must', coords: [-90.1848, 38.6247], text: 'St. Louis Highlight' },
-      { name: 'Citygarden', type: 'must', coords: [-90.1994, 38.6298], text: 'St. Louis Highlight' },
-      { name: 'Missouri Botanical Garden', type: 'must', coords: [-90.2590, 38.6158], text: 'St. Louis Highlight' },
-      { name: 'Forest Park', type: 'must', coords: [-90.2843, 38.6388], text: 'St. Louis Highlight' },
-      { name: 'Cherokee Street', type: 'must', coords: [-90.2292, 38.5948], text: 'St. Louis Highlight' },
-      { name: 'Soulard', type: 'hidden', coords: [-90.1990, 38.6100], text: 'St. Louis Hidden Spot' },
-      { name: 'Chain of Rocks Bridge', type: 'hidden', coords: [-90.1483, 38.7556], text: 'St. Louis Hidden Route 66' },
-      { name: 'The Hill', type: 'hidden', coords: [-90.2775, 38.6178], text: 'St. Louis Hidden Spot' },
-      { name: 'Blueberry Hill Duck Room', type: 'music', coords: [-90.3078, 38.6552], text: 'Live Musik' },
-      { name: 'Old Rock House', type: 'music', coords: [-90.1989, 38.6184], text: 'Live Musik' },
-      { name: 'Ted Drewes', type: 'food', coords: [-90.3059, 38.5868], text: 'Food' },
-      { name: 'StiLL 630', type: 'distillery', coords: [-90.2269, 38.6185], text: 'Distillery St. Louis' },
-      { name: 'Switchgrass Spirits', type: 'distillery', coords: [-90.2240, 38.6291], text: 'Distillery St. Louis' },
 
-      // Tulsa (Auszug)
-      { name: 'Cyrus Avery Plaza', type: 'must', coords: [-96.0058, 36.1497], text: 'Tulsa Highlight' },
-      { name: 'Philbrook Museum', type: 'must', coords: [-95.9670, 36.1105], text: 'Tulsa Highlight' },
-      { name: 'Woody Guthrie Center', type: 'must', coords: [-95.9915, 36.1575], text: 'Tulsa Highlight' },
-      { name: 'Gathering Place', type: 'must', coords: [-95.9665, 36.1238], text: 'Tulsa Highlight' },
-      { name: 'Mercury Lounge', type: 'music', coords: [-95.9841, 36.1478], text: 'Tulsa Musik' },
-      { name: 'Red Fork Distillery', type: 'distillery', coords: [-96.0320, 36.1453], text: 'Distillery Tulsa' },
 
-      // Lawton
-      { name: 'Wichita Falls optional stop', type: 'must', coords: [-98.4934, 33.9137], text: 'Optional short stop only' },
-      { name: 'Lawton', type: 'must', coords: [-98.3903, 34.6087], text: 'Overnight area' },
-      { name: 'Wichita Mountains Wildlife Refuge', type: 'must', coords: [-98.7000, 34.7670], text: 'Highlight nahe Lawton' },
-
-      // Austin & Umgebung
-      { name: 'South Congress', type: 'must', coords: [-97.7496, 30.2482], text: 'Austin Highlight' },
-      { name: 'Lady Bird Lake', type: 'must', coords: [-97.7428, 30.2621], text: 'Austin Highlight' },
-      { name: 'Texas State Capitol', type: 'must', coords: [-97.7403, 30.2747], text: 'Austin Highlight' },
-      { name: 'Barton Springs Pool', type: 'must', coords: [-97.7726, 30.2640], text: 'Austin Highlight' },
-      { name: 'Zilker Park', type: 'must', coords: [-97.7727, 30.2669], text: 'Austin Highlight' },
-      { name: 'Mount Bonnell', type: 'must', coords: [-97.7738, 30.3213], text: 'Austin Highlight' },
-      { name: 'Waterloo Records', type: 'music', coords: [-97.7517, 30.2966], text: 'Plattenladen' },
-      { name: 'South Austin Music', type: 'music', coords: [-97.7634, 30.2350], text: 'Gear' },
-      { name: 'The Continental Club', type: 'music', coords: [-97.7498, 30.2475], text: 'Austin Musik' },
-      { name: 'Antones', type: 'music', coords: [-97.7432, 30.2672], text: 'Austin Blues' },
-      { name: 'Franklin Barbecue', type: 'food', coords: [-97.7310, 30.2702], text: 'Austin Food' },
-      { name: 'Still Austin Whiskey Co.', type: 'distillery', coords: [-97.6994, 30.2326], text: 'Distillery Austin' },
-      { name: 'Treaty Oak Distilling', type: 'distillery', coords: [-98.0186, 30.1085], text: 'Nahe Austin' },
-      { name: 'Andalusia Whiskey Co.', type: 'distillery', coords: [-98.4463, 30.0717], text: 'Hill Country' },
-      { name: 'The Range at Austin', type: 'must', coords: [-97.7440, 30.1700], text: 'Highlight The Range at Austin' }
-    ];
-
-    // HIER extraPoints REIN – aus deinem Python-Script
-    // Beispiel-Struktur siehst du in der Analyse; hier kommt der generierte Block hin:
-    const extraPoints = [
-      // PASTE extraPoints ARRAY FROM PYTHON SCRIPT HERE
-    ];
-
-    // Map nach Name, CSV-Punkte überschreiben Basis-Punkte
-    const pointsByName = new Map(basePoints.map(p => [p.name, p]));
-    extraPoints.forEach(p => {
-      pointsByName.set(p.name, p);
-    });
-
-    const allPoints = Array.from(pointsByName.values());
-
-    const colors = {
-      must: '#4f98a3',
-      music: '#d19900',
-      food: '#6daa45',
-      hidden: '#dd6974',
-      distillery: '#a86fdf',
-      hotel: '#4da3ff',
-      extra: '#ff7f50'
-    };
-
-    const fallback = document.getElementById('fallback');
-
-    function popupHtml(p) {
-      const mapsUrl = p.url
-        ? p.url
-        : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.name);
-
-      return `
-        <strong>${p.name}</strong><br>
-        ${p.text || ''}<br>
-        <a class="popup-link"
-           href="${mapsUrl}"
-           target="_blank" rel="noopener noreferrer">
-          In Google Maps öffnen
-        </a>
-      `;
-    }
-
-    function startMap() {
-      try {
-        if (!window.mapboxgl) {
-          fallback.style.display = 'block';
-          return;
-        }
-
-        mapboxgl.accessToken =
-          'pk.eyJ1IjoiaGVpa29kdWVtaWciLCJhIjoiY21vY293MGI5MDJ0ajJwcXpvdHp0ejUzcyJ9.bpqIqbfmBUeekHSWrwUxzQ';
-
-        const map = new mapboxgl.Map({
-          container: 'map',
-          style: 'mapbox://styles/mapbox/light-v11',
-          center: [-95.6, 36.2],
-          zoom: 4
-        }); /* freundlicher Style [web:69] */
-
-        map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-        const markerDefs = [];
-        let activeFilter = 'all';
-
-        function refreshMarkers() {
-          markerDefs.forEach((entry) => {
-            const isVisible =
-              activeFilter === 'all' || entry.type === activeFilter;
-            entry.marker.getElement().style.display = isVisible ? 'block' : 'none';
-          });
-        }
-
-        function syncMapButtons() {
-          document.querySelectorAll('.filter-btn').forEach((btn) => {
-            btn.classList.toggle(
-              'active',
-              btn.dataset.mapFilter === activeFilter
-            );
-          });
-        }
-
-        document.querySelectorAll('.filter-btn').forEach((btn) => {
-          btn.addEventListener('click', function (ev) {
-            ev.preventDefault();
-            activeFilter = this.dataset.mapFilter || 'all';
-            syncMapButtons();
-            refreshMarkers();
-          });
-        });
-
-        map.on('load', () => {
-          // Marker
-          allPoints.forEach((p) => {
-            const marker = new mapboxgl.Marker({
-              color: colors[p.type] || '#4f98a3'
-            })
-              .setLngLat(p.coords)
-              .setPopup(new mapboxgl.Popup({ offset: 18 }).setHTML(popupHtml(p)))
-              .addTo(map);
-
-            markerDefs.push({ marker, type: p.type });
-          });
-
-          syncMapButtons();
-          refreshMarkers();
-
-          // Bounds
-          const bounds = new mapboxgl.LngLatBounds();
-          allPoints.forEach((p) => bounds.extend(p.coords));
-          map.fitBounds(bounds, { padding: 50, maxZoom: 10 }); [web:71]
-
-          // Animierte Reiseroute
-          const routeStops = [
-            [-87.6243, 41.8763], // Chicago / Route 66 Begin
-            [-90.1848, 38.6247], // St. Louis
-            [-95.9833, 36.1539], // Tulsa
-            [-98.4934, 33.9137], // Wichita Falls optional
-            [-98.3877, 34.6085], // Lawton / Hotel
-            [-97.7431, 30.2672]  // Austin
-          ];
-
-          const animatedRoute = {
-            type: 'Feature',
-            geometry: {
-              type: 'LineString',
-              coordinates: [routeStops[0]]
-            }
-          };
-
-          map.addSource('route', {
-            type: 'geojson',
-            data: animatedRoute
-          });
-
-          map.addLayer({
-            id: 'route-line-outline',
-            type: 'line',
-            source: 'route',
-            layout: {
-              'line-cap': 'round',
-              'line-join': 'round'
-            },
-            paint: {
-              'line-color': '#0f3638',
-              'line-width': 7,
-              'line-opacity': 0.55
-            }
-          });
-
-          map.addLayer({
-            id: 'route-line',
-            type: 'line',
-            source: 'route',
-            layout: {
-              'line-cap': 'round',
-              'line-join': 'round'
-            },
-            paint: {
-              'line-color': '#4f98a3',
-              'line-width': 4
-            }
-          });
-
-          let progress = 0;
-          const steps = 600;
-          const total = routeStops.length - 1;
-
-          function interpolate(a, b, t) {
-            return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
-          }
-
-          function animateRoute() {
-            progress += 1 / steps;
-            if (progress > 1) {
-              progress = 0;
-              animatedRoute.geometry.coordinates = [routeStops[0]];
-              map.getSource('route').setData(animatedRoute);
-            } else {
-              const scaled = progress * total;
-              const index = Math.floor(scaled);
-              const localT = scaled - index;
-              const coords = [];
-
-              for (let i = 0; i <= index; i++) {
-                coords.push(routeStops[i]);
-              }
-
-              if (index < total) {
-                const current = routeStops[index];
-                const next = routeStops[index + 1];
-                coords.push(interpolate(current, next, localT));
-              }
-
-              animatedRoute.geometry.coordinates = coords;
-              map.getSource('route').setData(animatedRoute);
-            }
-
-            requestAnimationFrame(animateRoute);
-          }
-
-          animateRoute();
-        });
-
-        function handleResize() {
-          try {
-            map.resize();
-          } catch (e) {}
-        }
-
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('orientationchange', handleResize);
-      } catch (e) {
-        fallback.style.display = 'block';
-      }
-    }
-
-    window.onload = startMap;
-  </script>
+{name:'South Congress',type:'must',coords:[-97.7496,30.2482],text:'Austin Highlight'},
+{name:'Lady Bird Lake',type:'must',coords:[-97.7428,30.2621],text:'Austin Highlight'},
+{name:'Texas State Capitol',type:'must',coords:[-97.7403,30.2747],text:'Austin Highlight'},
+{name:'Barton Springs Pool',type:'must',coords:[-97.7726,30.2640],text:'Austin Highlight'},
+{name:'Zilker Park',type:'must',coords:[-97.7727,30.2669],text:'Austin Highlight'},
+{name:'Mount Bonnell',type:'must',coords:[-97.7738,30.3213],text:'Austin Highlight'},
+{name:'The Domain',type:'must',coords:[-97.7250,30.4004],text:'Austin Highlight'},
+{name:'East Austin',type:'must',coords:[-97.7186,30.2640],text:'Austin Highlight'},
+{name:'Blanton Museum of Art',type:'must',coords:[-97.7378,30.2808],text:'Austin Highlight'},
+{name:'Congress Avenue Bridge Bats',type:'must',coords:[-97.7431,30.2607],text:'Austin Highlight'},
+{name:'The Range at Austin',type:'must',coords:[-97.7440,30.1700],text:'Highlight · The Range at Austin'},
+{name:'South Congress Hotel Area',type:'hidden',coords:[-97.7495,30.2496],text:'Austin Hidden Spot'},
+{name:'Cosmic Coffee',type:'hidden',coords:[-97.7696,30.2296],text:'Austin Hidden Spot'},
+{name:'Secret Beach',type:'hidden',coords:[-97.7049,30.2444],text:'Austin Hidden Spot'},
+{name:'Laguna Gloria',type:'hidden',coords:[-97.7732,30.3129],text:'Austin Hidden Spot'},
+{name:'Rainey Street side lanes',type:'hidden',coords:[-97.7390,30.2586],text:'Austin Hidden Spot'},
+{name:'The Continental Club',type:'music',coords:[-97.7498,30.2475],text:'Austin Musik'},
+{name:"Antone's",type:'music',coords:[-97.7432,30.2672],text:'Austin Blues'},
+{name:'South Austin Music',type:'music',coords:[-97.7634,30.2350],text:'Gear'},
+{name:'Waterloo Records',type:'music',coords:[-97.7517,30.2966],text:'Plattenladen'},
+{name:'Franklin Barbecue',type:'food',coords:[-97.7310,30.2702],text:'Austin Food'},
+{name:'Still Austin Whiskey Co.',type:'distillery',coords:[-97.6994,30.2326],text:'Distillery Austin'},
+{name:'Treaty Oak Distilling',type:'distillery',coords:[-98.0186,30.1085],text:'Nahe Austin'},
+{name:'Andalusia Whiskey Co.',type:'distillery',coords:[-98.4463,30.0717],text:'Hill Country'}
+];
+const colors = {must:'#4f98a3',music:'#d19900',food:'#6daa45',hidden:'#dd6974',distillery:'#a86fdf',hotel:'#4da3ff'};
+const fallback = document.getElementById('fallback');
+function startMap(){
+try {
+if (!window.mapboxgl) { fallback.style.display='block'; return; }
+mapboxgl.accessToken = 'pk.eyJ1IjoiaGVpa29kdWVtaWciLCJhIjoiY21vY293MGI5MDJ0ajJwcXpvdHp0ejUzcyJ9.bpqIqbfmBUeekHSWrwUxzQ';
+const map = new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/streets-v12',center:[-95.6,36.2],zoom:4});
+map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+function popupHtml(p){
+return '<strong>' + p.name + '</strong><br>' + p.text + '<br><a class="popup-link" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.name) + '" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a>';
+}
+const markerDefs = [];
+let activeFilter = 'all';
+function refreshMarkers(){
+  markerDefs.forEach(function(entry){
+    const isVisible = activeFilter === 'all' || entry.type === activeFilter;
+    entry.marker.getElement().style.display = isVisible ? '' : 'none';
+  });
+}
+function syncMapButtons(){
+  document.querySelectorAll('.map-filter-btn').forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.mapFilter === activeFilter);
+  });
+}
+document.querySelectorAll('.map-filter-btn').forEach(function(btn){
+  btn.addEventListener('click', function(ev){
+    ev.preventDefault();
+    activeFilter = this.dataset.mapFilter || 'all';
+    syncMapButtons();
+    refreshMarkers();
+  });
+});
+map.on('load', function(){
+points.forEach(function(p){
+const marker = new mapboxgl.Marker({color: colors[p.type] || '#4f98a3'})
+.setLngLat(p.coords)
+.setPopup(new mapboxgl.Popup({offset:18}).setHTML(popupHtml(p)))
+.addTo(map);
+markerDefs.push({marker: marker, type: p.type});
+});
+syncMapButtons();
+refreshMarkers();
+const bounds = new mapboxgl.LngLatBounds();
+points.forEach(function(p){ bounds.extend(p.coords); });
+map.fitBounds(bounds, {padding: 50, maxZoom: 10});
+const routeStops = [[-87.6243,41.8763],[-90.1848,38.6247],[-95.9833,36.1539],[-98.4934,33.9137],[-98.3877,34.6085],[-97.7431,30.2672]];
+const routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + routeStops.map(c => c.join(',')).join(';') + '?geometries=geojson&overview=full&access_token=' + mapboxgl.accessToken;
+fetch(routeUrl).then(r => r.json()).then(data => {
+  const route = data && data.routes && data.routes[0] && data.routes[0].geometry;
+  if (!route) return;
+  map.addSource('route', {type:'geojson',data:{type:'Feature',geometry:route}});
+  map.addLayer({id:'route-line-outline',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#0f3638','line-width':7,'line-opacity':0.55}});
+  map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#4f98a3','line-width':4}});
+}).catch(() => {
+  map.addSource('route', {type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:routeStops}}});
+  map.addLayer({id:'route-line-outline',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#0f3638','line-width':7,'line-opacity':0.55}});
+  map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#4f98a3','line-width':4}});
+});
+setTimeout(function(){ map.resize(); }, 300);
+});
+map.on('error', function(){ fallback.style.display='block'; });
+window.addEventListener('resize', function(){ map.resize(); });
+} catch (e) { fallback.style.display='block'; }
+}
+window.onload = startMap;
+</script>
 </body>
 </html>
