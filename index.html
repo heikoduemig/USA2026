@@ -109,7 +109,6 @@ td{color:#ddd}
   <section class="plan" id="plan">
     <div class="meta">Fahrplan der Reise</div>
     <h2>Strecken, Zeiten und empfohlene Stopps</h2>
-    <!-- Aus deiner bestehenden Datei übernommen -->
     <p>Die Zeiten im Fahrplan sind als realistische Reiseplanung mit Puffer gedacht, nicht als starre Verpflichtung. Bei den langen Etappen sind die empfohlenen Route-66-Stopps so gesetzt, dass sie machbar bleiben.</p>
     <table>
       <thead>
@@ -190,38 +189,7 @@ td{color:#ddd}
     <p class="note">Hinweis: Optionaler kurzer Stopp nur im Raum Wichita Falls; das Hotel liegt in Lawton. Der 21.05. bleibt dadurch eine lange, aber klarere Etappe ab Lawton Richtung Austin.</p>
   </section>
 
-  <!-- Ab hier deine vorhandenen Text-Sektionen (gekürzt, aber Struktur bleibt) -->
-  <section class="day" id="day-chicago-arrival">
-    <div class="meta">14.05. · Chicago</div>
-    <h2>Entspannter Ankunftstag mit Downtown-Fokus</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Highlights</h3>
-        <ul>
-          <li>Millennium Park.</li>
-          <li>Chicago Riverwalk.</li>
-          <li>Chicago Cultural Center.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Hidden Spots &amp; Food</h3>
-        <ul>
-          <li>Ping Tom Memorial Park, falls noch Energie da ist.</li>
-          <li>Maxwell Street als geschichtsträchtiger Food-Ort.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Abend / Musik</h3>
-        <ul>
-          <li>Buddy Guy’s Legends.</li>
-          <li>House of Blues Chicago.</li>
-          <li>Leicht halten wegen Flugtag.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- (die übrigen day- und hotels-Blöcke aus deiner existierenden Datei kannst du so lassen) -->
+  <!-- Deine restlichen Tages- und Hotel-Sektionen kannst du so lassen wie in deiner Datei -->
 </main>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
@@ -310,7 +278,7 @@ const basePoints = [
   { name: 'The Range at Austin', type: 'must', coords: [-97.7440, 30.1700], text: 'Highlight The Range at Austin' }
 ];
 
-// vorerst keine extraPoints, da keine Koordinaten verfügbar
+// Extra-Stops sind aktuell leer, weil noch keine Koordinaten vorhanden sind
 const extraPoints = [];
 
 const topMusicNames = new Set([
