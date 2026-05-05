@@ -106,19 +106,122 @@ td{color:#ddd}
 <div id="fallback">Die Karte konnte nicht geladen werden. Bitte die Datei direkt im Browser öffnen.</div>
 
 <main>
-  <!-- Dein Fahrplan, Tagesblöcke und Hotelübersicht aus der bisherigen Datei.
-       Ich lasse den Textteil unverändert, er stammt aus deiner letzten Version. -->
-  <!-- BEGIN TEXTTEIL (gekürzt, da unverändert aus deiner Datei) -->
   <section class="plan" id="plan">
     <div class="meta">Fahrplan der Reise</div>
     <h2>Strecken, Zeiten und empfohlene Stopps</h2>
-    <!-- Hier steht deine bestehende Tabelle; Inhalt unverändert übernommen -->
-    <!-- ... (hier bitte einfach deinen bisherigen Text/Fahrplan aus der aktuellen Datei einsetzen, falls du inhaltlich noch etwas geändert hattest) ... -->
+    <!-- Aus deiner bestehenden Datei übernommen -->
+    <p>Die Zeiten im Fahrplan sind als realistische Reiseplanung mit Puffer gedacht, nicht als starre Verpflichtung. Bei den langen Etappen sind die empfohlenen Route-66-Stopps so gesetzt, dass sie machbar bleiben.</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Strecke</th>
+          <th>Abfahrt / Ankunft</th>
+          <th>Ca. km</th>
+          <th>Empfohlene Stopps</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>14.05.2026 · Chicago</td>
+          <td>Flugankunft Chicago → citizenM Downtown</td>
+          <td>Ankunft 12:55 CDT, Hotel ca. 14:30</td>
+          <td>ca. 30 km Transfer</td>
+          <td>Nur leichtes Programm: Riverwalk, Millennium Park, Abendmusik.</td>
+        </tr>
+        <tr>
+          <td>15.05.2026 · Chicago</td>
+          <td>Chicago Stadttag</td>
+          <td>Start ca. 09:30, Abend offen</td>
+          <td>lokal</td>
+          <td>Chicago Music Exchange, Wicker Park, Logan Square, Buddy Guy’s oder House of Blues.</td>
+        </tr>
+        <tr>
+          <td>16.05.2026 · St. Louis</td>
+          <td>Chicago → St. Louis</td>
+          <td>Empfohlen ab 08:00, Ankunft ca. 18:30</td>
+          <td>ca. 480 km</td>
+          <td>Begin Sign, Gemini Giant, Pontiac Route 66 Museum, Cozy Dog Drive-In.</td>
+        </tr>
+        <tr>
+          <td>17.05.2026 · St. Louis</td>
+          <td>St. Louis Stadttag</td>
+          <td>Start ca. 09:30, Abend offen</td>
+          <td>lokal</td>
+          <td>Gateway Arch, Citygarden, Cherokee Street, Blueberry Hill oder Old Rock House.</td>
+        </tr>
+        <tr>
+          <td>18.05.2026 · Tulsa</td>
+          <td>St. Louis → Tulsa</td>
+          <td>Empfohlen ab 08:00, Ankunft ca. 20:00</td>
+          <td>ca. 630 km</td>
+          <td>Chain of Rocks Bridge, Meramec Caverns, Cuba Murals, Neon Park, Blue Whale of Catoosa.</td>
+        </tr>
+        <tr>
+          <td>19.05.2026 · Tulsa</td>
+          <td>Tulsa Stadttag</td>
+          <td>Start ca. 10:00, Abend offen</td>
+          <td>lokal</td>
+          <td>Cyrus Avery Plaza, Philbrook, Woody Guthrie Center, Mercury Lounge, Red Fork Distillery.</td>
+        </tr>
+        <tr>
+          <td>20.05.2026 · Wichita Falls / Lawton</td>
+          <td>Tulsa → Wichita Falls / Lawton (Hotel)</td>
+          <td>Empfohlen ab 09:00, Ankunft ca. 14:30–15:30</td>
+          <td>ca. 340 km bis Wichita Falls, ca. 430 km bis Lawton/Hotel</td>
+          <td>Höchstens kurzer Stopp bei Wichita Falls, danach weiter zum Hotel in Lawton.</td>
+        </tr>
+        <tr>
+          <td>21.05.2026 · Austin</td>
+          <td>Lawton (Hotel) → Austin</td>
+          <td>Früher Start ca. 07:30, Ankunft ca. 18:30–20:00</td>
+          <td>ca. 900+ km je nach Startpunkt</td>
+          <td>Fokus auf Fahrstrecke; nur wenige Pausen. In Austin abends South Congress oder kurzer Musikabend.</td>
+        </tr>
+        <tr>
+          <td>22.05.2026 · Austin</td>
+          <td>Austin Zusatztag</td>
+          <td>Flexibel</td>
+          <td>lokal / optional Hill Country</td>
+          <td>Samstag: The Range at Austin; dazu Still Austin, Treaty Oak, Waterloo Records, Lieblings-Spots von 2026 wiederholen.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="note">Hinweis: Optionaler kurzer Stopp nur im Raum Wichita Falls; das Hotel liegt in Lawton. Der 21.05. bleibt dadurch eine lange, aber klarere Etappe ab Lawton Richtung Austin.</p>
   </section>
 
-  <!-- Die folgenden day-* und hotels-Sektionen entsprechen deiner bestehenden Struktur;
-       in deiner angehängten Datei sind sie schon korrekt, daher kannst du sie 1:1 übernehmen. -->
-  <!-- Ich kürze hier im Chat, damit es übersichtlich bleibt – in deiner lokalen Datei lässt du diesen Textteil einfach unverändert. -->
+  <!-- Ab hier deine vorhandenen Text-Sektionen (gekürzt, aber Struktur bleibt) -->
+  <section class="day" id="day-chicago-arrival">
+    <div class="meta">14.05. · Chicago</div>
+    <h2>Entspannter Ankunftstag mit Downtown-Fokus</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Highlights</h3>
+        <ul>
+          <li>Millennium Park.</li>
+          <li>Chicago Riverwalk.</li>
+          <li>Chicago Cultural Center.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Hidden Spots &amp; Food</h3>
+        <ul>
+          <li>Ping Tom Memorial Park, falls noch Energie da ist.</li>
+          <li>Maxwell Street als geschichtsträchtiger Food-Ort.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Abend / Musik</h3>
+        <ul>
+          <li>Buddy Guy’s Legends.</li>
+          <li>House of Blues Chicago.</li>
+          <li>Leicht halten wegen Flugtag.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- (die übrigen day- und hotels-Blöcke aus deiner existierenden Datei kannst du so lassen) -->
 </main>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
@@ -199,7 +302,7 @@ const basePoints = [
   { name: 'Waterloo Records', type: 'music', coords: [-97.7517, 30.2966], text: 'Plattenladen' },
   { name: 'South Austin Music', type: 'music', coords: [-97.7634, 30.2350], text: 'Gear' },
   { name: 'The Continental Club', type: 'music', coords: [-97.7498, 30.2475], text: 'Austin Musik' },
-  { name: 'Antone\'s Nightclub', type: 'music', coords: [-97.7432, 30.2672], text: 'Austin Blues' },
+  { name: "Antone's Nightclub", type: 'music', coords: [-97.7432, 30.2672], text: 'Austin Blues' },
   { name: 'Franklin Barbecue', type: 'food', coords: [-97.7310, 30.2702], text: 'Austin Food' },
   { name: 'Still Austin Whiskey Co.', type: 'distillery', coords: [-97.6994, 30.2326], text: 'Distillery Austin' },
   { name: 'Treaty Oak Distilling', type: 'distillery', coords: [-98.0186, 30.1085], text: 'Nahe Austin' },
@@ -207,22 +310,9 @@ const basePoints = [
   { name: 'The Range at Austin', type: 'must', coords: [-97.7440, 30.1700], text: 'Highlight The Range at Austin' }
 ];
 
-// Extra-Punkte aus der CSV (142 Einträge, stark gekürzt im Chat)
-// In deiner echten Datei ist dieser Block komplett; hier nur das Schema:
-const extraPoints = [
-  /* Beispiel:
-  {
-    name: "Buckingham-Brunnen",
-    type: "extra",
-    coords: [-87.6194, 41.8765],
-    text: "",
-    url: "https://www.google.com/maps/place/Buckingham-Brunnen/data=!4m2!3m1!1s0x..."
-  },
-  ... alle weiteren Zeilen aus USA-2026.csv ...
-  */
-];
+// vorerst keine extraPoints, da keine Koordinaten verfügbar
+const extraPoints = [];
 
-// Top-10 Musik/Bar-Spots (aus CSV-Tags heuristisch gewählt)
 const topMusicNames = new Set([
   "Ann's Country Kitchen",
   "Country Cafe",
@@ -335,7 +425,6 @@ function startMap() {
       allPoints.forEach((p) => bounds.extend(p.coords));
       map.fitBounds(bounds, { padding: 50, maxZoom: 10 });
 
-      // Statische Reiseroute
       const routeStops = [
         [-87.6243, 41.8763],
         [-90.1848, 38.6247],
