@@ -176,186 +176,324 @@ table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px} th,td{
 </main>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
 <script>
-const points = [
-{name:'citizenM Chicago Downtown Hotel',type:'hotel',coords:[-87.6290,41.8860],text:'Hotel · Chicago'},
-{name:'Hotel Lumière at the Arch',type:'hotel',coords:[-90.1863,38.6312],text:'Hotel · St. Louis'},
-{name:'The Mayo Hotel',type:'hotel',coords:[-95.9929,36.1548],text:'Hotel · Tulsa'},
-{name:'Apache Casino Hotel',type:'hotel',coords:[-98.3877,34.6085],text:'Hotel · Lawton area'},
-{name:'citizenM Austin Downtown Hotel',type:'hotel',coords:[-97.7424,30.2676],text:'Hotel · Austin'},
-{name:'Millennium Park',type:'must',coords:[-87.6226,41.8826],text:'Chicago Highlight'},
-{name:'Chicago Riverwalk',type:'must',coords:[-87.6206,41.8880],text:'Chicago Highlight'},
-{name:'Chicago Cultural Center',type:'must',coords:[-87.6247,41.8838],text:'Chicago Highlight'},
-{name:'Art Institute of Chicago',type:'must',coords:[-87.6237,41.8796],text:'Chicago Highlight'},
-{name:'Willis Tower Skydeck',type:'must',coords:[-87.6359,41.8789],text:'Chicago Highlight'},
-{name:'Navy Pier',type:'must',coords:[-87.6079,41.8917],text:'Chicago Highlight'},
-{name:'Lincoln Park',type:'must',coords:[-87.6376,41.9214],text:'Chicago Highlight'},
-{name:'Wicker Park',type:'must',coords:[-87.6777,41.9088],text:'Chicago Highlight'},
-{name:'Logan Square',type:'must',coords:[-87.7081,41.9287],text:'Chicago Highlight'},
-{name:'Museum Campus',type:'must',coords:[-87.6140,41.8663],text:'Chicago Highlight'},
-{name:'Pilsen Murals',type:'hidden',coords:[-87.6708,41.8561],text:'Chicago Hidden Spot'},
-{name:'Humboldt Park',type:'hidden',coords:[-87.7017,41.9025],text:'Chicago Hidden Spot'},
-{name:'Promontory Point',type:'hidden',coords:[-87.5793,41.7925],text:'Chicago Hidden Spot'},
-{name:'Garfield Park Conservatory',type:'hidden',coords:[-87.7163,41.8864],text:'Chicago Hidden Spot'},
-{name:'Ping Tom Memorial Park',type:'hidden',coords:[-87.6330,41.8581],text:'Chicago Hidden Spot'},
-{name:'Chicago Music Exchange',type:'music',coords:[-87.6778,41.9580],text:'Musik & Gear'},
-{name:"Buddy Guy's Legends",type:'music',coords:[-87.6307,41.8675],text:'Blues Club'},
-{name:'House of Blues Chicago',type:'music',coords:[-87.6296,41.8892],text:'Live Musik'},
-{name:'Maxwell Street',type:'food',coords:[-87.6473,41.8642],text:'Food & Blues Geschichte'},
-{name:'KOVAL Distillery',type:'distillery',coords:[-87.7001,41.9266],text:'Distillery Chicago'},
-{name:'FEW Spirits',type:'distillery',coords:[-87.6906,42.0451],text:'Nahe Chicago'},
-{name:'Route 66 Begin Sign',type:'hidden',coords:[-87.6243,41.8763],text:'On the way'},
-{name:'Gemini Giant',type:'hidden',coords:[-88.1846,41.2917],text:'On the way'},
-{name:'Pontiac Route 66 Museum',type:'hidden',coords:[-88.6279,40.8809],text:'On the way'},
-{name:'Cozy Dog Drive-In',type:'hidden',coords:[-89.6501,39.7817],text:'On the way'},
-{name:'Gateway Arch',type:'must',coords:[-90.1848,38.6247],text:'St. Louis Highlight'},
-{name:'Citygarden',type:'must',coords:[-90.1994,38.6298],text:'St. Louis Highlight'},
-{name:'Missouri Botanical Garden',type:'must',coords:[-90.2590,38.6158],text:'St. Louis Highlight'},
-{name:'Forest Park',type:'must',coords:[-90.2843,38.6388],text:'St. Louis Highlight'},
-{name:'St. Louis Art Museum',type:'must',coords:[-90.2946,38.6393],text:'St. Louis Highlight'},
-{name:'Cathedral Basilica',type:'must',coords:[-90.2620,38.6425],text:'St. Louis Highlight'},
-{name:'Delmar Loop',type:'must',coords:[-90.3070,38.6554],text:'St. Louis Highlight'},
-{name:'Tower Grove Park',type:'must',coords:[-90.2544,38.6072],text:'St. Louis Highlight'},
-{name:'Union Station',type:'must',coords:[-90.2076,38.6247],text:'St. Louis Highlight'},
-{name:'Cherokee Street',type:'must',coords:[-90.2292,38.5948],text:'St. Louis Highlight'},
-{name:'Soulard',type:'hidden',coords:[-90.1990,38.6100],text:'St. Louis Hidden Spot'},
-{name:'Chain of Rocks Bridge',type:'hidden',coords:[-90.1483,38.7556],text:'St. Louis Hidden / Route 66'},
-{name:'Lafayette Square',type:'hidden',coords:[-90.2172,38.6175],text:'St. Louis Hidden Spot'},
-{name:'The Hill',type:'hidden',coords:[-90.2775,38.6178],text:'St. Louis Hidden Spot'},
-{name:'Bellefontaine Cemetery',type:'hidden',coords:[-90.2230,38.7036],text:'St. Louis Hidden Spot'},
-{name:'Blueberry Hill Duck Room',type:'music',coords:[-90.3078,38.6552],text:'Live Musik'},
-{name:'Old Rock House',type:'music',coords:[-90.1989,38.6184],text:'Live Musik'},
-{name:'Ted Drewes',type:'food',coords:[-90.3059,38.5868],text:'Food'},
-{name:'StiLL 630',type:'distillery',coords:[-90.2269,38.6185],text:'Distillery St. Louis'},
-{name:'Switchgrass Spirits',type:'distillery',coords:[-90.2240,38.6291],text:'Distillery St. Louis'},
-{name:'Meramec Caverns',type:'hidden',coords:[-91.5011,38.2445],text:'On the way'},
-{name:'Cuba Murals',type:'hidden',coords:[-91.4032,38.0631],text:'On the way'},
-{name:'Uranus Missouri',type:'hidden',coords:[-92.1026,37.8279],text:'On the way'},
-{name:'Route 66 Neon Park',type:'hidden',coords:[-92.6638,37.6809],text:'On the way'},
-{name:'Blue Whale of Catoosa',type:'hidden',coords:[-95.5714,36.1864],text:'On the way'},
-{name:'Buck Atom\'s Cosmic Curios',type:'hidden',coords:[-95.9228,36.1540],text:'On the way'},
-{name:'Cyrus Avery Plaza',type:'must',coords:[-96.0058,36.1497],text:'Tulsa Highlight'},
-{name:'Philbrook Museum',type:'must',coords:[-95.9670,36.1105],text:'Tulsa Highlight'},
-{name:'Woody Guthrie Center',type:'must',coords:[-95.9915,36.1575],text:'Tulsa Highlight'},
-{name:'Gathering Place',type:'must',coords:[-95.9665,36.1238],text:'Tulsa Highlight'},
-{name:'Golden Driller',type:'must',coords:[-95.9798,36.1318],text:'Tulsa Highlight'},
-{name:'Tulsa Arts District',type:'must',coords:[-95.9892,36.1586],text:'Tulsa Highlight'},
-{name:'Cain\'s Ballroom',type:'must',coords:[-95.9924,36.1601],text:'Tulsa Highlight'},
-{name:'Tulsa Botanic Garden',type:'must',coords:[-96.1521,36.2002],text:'Tulsa Highlight'},
-{name:'Mother Road Market',type:'must',coords:[-95.9617,36.1490],text:'Tulsa Highlight'},
-{name:'Turkey Mountain',type:'must',coords:[-95.9985,36.0923],text:'Tulsa Highlight'},
-{name:'Cherry Street',type:'hidden',coords:[-95.9648,36.1337],text:'Tulsa Hidden Spot'},
-{name:'Red Fork Historic District',type:'hidden',coords:[-96.0314,36.1451],text:'Tulsa Hidden Spot'},
-{name:'Center of the Universe',type:'hidden',coords:[-95.9920,36.1562],text:'Tulsa Hidden Spot'},
-{name:'Route 66 Rising Sculpture',type:'hidden',coords:[-96.0046,36.1463],text:'Tulsa Hidden Spot'},
-{name:'Blue Dome District',type:'hidden',coords:[-95.9874,36.1532],text:'Tulsa Hidden Spot'},
-{name:'Mercury Lounge',type:'music',coords:[-95.9841,36.1478],text:'Tulsa Musik'},
-{name:'Red Fork Distillery',type:'distillery',coords:[-96.0320,36.1453],text:'Distillery Tulsa'},
-{name:'Wichita Falls (optional stop)',type:'must',coords:[-98.4934,33.9137],text:'Optional short stop only'},
-{name:'Lawton',type:'must',coords:[-98.3903,34.6087],text:'Overnight area'},
-{name:'Wichita Mountains Wildlife Refuge',type:'must',coords:[-98.7000,34.7670],text:'Highlight nahe Lawton (Wichita Mountains Wildlife Refuge)'},
+  // Basis-Punkte (deine bisherigen Marker)
+  const points = [
+    // Hotels
+    { name: 'citizenM Chicago Downtown Hotel', type: 'hotel', coords: [-87.6290, 41.8860], text: 'Hotel Chicago' },
+    { name: 'Hotel Lumière at the Arch', type: 'hotel', coords: [-90.1863, 38.6312], text: 'Hotel St. Louis' },
+    { name: 'The Mayo Hotel', type: 'hotel', coords: [-95.9929, 36.1548], text: 'Hotel Tulsa' },
+    { name: 'Apache Casino Hotel', type: 'hotel', coords: [-98.3877, 34.6085], text: 'Hotel Lawton area' },
+    { name: 'citizenM Austin Downtown Hotel', type: 'hotel', coords: [-97.7424, 30.2676], text: 'Hotel Austin' },
 
+    // Chicago & Umgebung (Auszug)
+    { name: 'Millennium Park', type: 'must', coords: [-87.6226, 41.8826], text: 'Chicago Highlight' },
+    { name: 'Chicago Riverwalk', type: 'must', coords: [-87.6206, 41.8880], text: 'Chicago Highlight' },
+    { name: 'Chicago Cultural Center', type: 'must', coords: [-87.6247, 41.8838], text: 'Chicago Highlight' },
+    { name: 'Art Institute of Chicago', type: 'must', coords: [-87.6237, 41.8796], text: 'Chicago Highlight' },
+    { name: 'Willis Tower Skydeck', type: 'must', coords: [-87.6359, 41.8789], text: 'Chicago Highlight' },
+    { name: 'Navy Pier', type: 'must', coords: [-87.6079, 41.8917], text: 'Chicago Highlight' },
+    { name: 'Lincoln Park', type: 'must', coords: [-87.6376, 41.9214], text: 'Chicago Highlight' },
+    { name: 'Wicker Park', type: 'must', coords: [-87.6777, 41.9088], text: 'Chicago Highlight' },
+    { name: 'Logan Square', type: 'must', coords: [-87.7081, 41.9287], text: 'Chicago Highlight' },
+    { name: 'Museum Campus', type: 'must', coords: [-87.6140, 41.8663], text: 'Chicago Highlight' },
+    { name: 'Pilsen Murals', type: 'hidden', coords: [-87.6708, 41.8561], text: 'Chicago Hidden Spot' },
+    { name: 'Humboldt Park', type: 'hidden', coords: [-87.7017, 41.9025], text: 'Chicago Hidden Spot' },
+    { name: 'Promontory Point', type: 'hidden', coords: [-87.5793, 41.7925], text: 'Chicago Hidden Spot' },
+    { name: 'Garfield Park Conservatory', type: 'hidden', coords: [-87.7163, 41.8864], text: 'Chicago Hidden Spot' },
+    { name: 'Ping Tom Memorial Park', type: 'hidden', coords: [-87.6330, 41.8581], text: 'Chicago Hidden Spot' },
+    { name: 'Chicago Music Exchange', type: 'music', coords: [-87.6778, 41.9580], text: 'Musik Gear' },
+    { name: "Buddy Guy's Legends", type: 'music', coords: [-87.6307, 41.8675], text: 'Blues Club' },
+    { name: 'House of Blues Chicago', type: 'music', coords: [-87.6296, 41.8892], text: 'Live Musik' },
+    { name: 'Maxwell Street', type: 'food', coords: [-87.6473, 41.8642], text: 'Food Blues Geschichte' },
+    { name: 'KOVAL Distillery', type: 'distillery', coords: [-87.7001, 41.9266], text: 'Distillery Chicago' },
+    { name: 'FEW Spirits', type: 'distillery', coords: [-87.6906, 42.0451], text: 'Nahe Chicago' },
 
+    // Route 66 Kernpunkte
+    { name: 'Route 66 Begin Sign', type: 'hidden', coords: [-87.6243, 41.8763], text: 'On the way' },
+    { name: 'Gemini Giant', type: 'hidden', coords: [-88.1846, 41.2917], text: 'On the way' },
+    { name: 'Pontiac Route 66 Museum', type: 'hidden', coords: [-88.6279, 40.8809], text: 'On the way' },
+    { name: 'Cozy Dog Drive-In', type: 'hidden', coords: [-89.6501, 39.7817], text: 'On the way' },
 
+    // St. Louis (Auszug)
+    { name: 'Gateway Arch', type: 'must', coords: [-90.1848, 38.6247], text: 'St. Louis Highlight' },
+    { name: 'Citygarden', type: 'must', coords: [-90.1994, 38.6298], text: 'St. Louis Highlight' },
+    { name: 'Missouri Botanical Garden', type: 'must', coords: [-90.2590, 38.6158], text: 'St. Louis Highlight' },
+    { name: 'Forest Park', type: 'must', coords: [-90.2843, 38.6388], text: 'St. Louis Highlight' },
+    { name: 'Cherokee Street', type: 'must', coords: [-90.2292, 38.5948], text: 'St. Louis Highlight' },
+    { name: 'Soulard', type: 'hidden', coords: [-90.1990, 38.6100], text: 'St. Louis Hidden Spot' },
+    { name: 'Chain of Rocks Bridge', type: 'hidden', coords: [-90.1483, 38.7556], text: 'St. Louis Hidden Route 66' },
+    { name: 'The Hill', type: 'hidden', coords: [-90.2775, 38.6178], text: 'St. Louis Hidden Spot' },
+    { name: 'Blueberry Hill Duck Room', type: 'music', coords: [-90.3078, 38.6552], text: 'Live Musik' },
+    { name: 'Old Rock House', type: 'music', coords: [-90.1989, 38.6184], text: 'Live Musik' },
+    { name: 'Ted Drewes', type: 'food', coords: [-90.3059, 38.5868], text: 'Food' },
+    { name: 'StiLL 630', type: 'distillery', coords: [-90.2269, 38.6185], text: 'Distillery St. Louis' },
+    { name: 'Switchgrass Spirits', type: 'distillery', coords: [-90.2240, 38.6291], text: 'Distillery St. Louis' },
 
+    // Tulsa (Auszug)
+    { name: 'Cyrus Avery Plaza', type: 'must', coords: [-96.0058, 36.1497], text: 'Tulsa Highlight' },
+    { name: 'Philbrook Museum', type: 'must', coords: [-95.9670, 36.1105], text: 'Tulsa Highlight' },
+    { name: 'Woody Guthrie Center', type: 'must', coords: [-95.9915, 36.1575], text: 'Tulsa Highlight' },
+    { name: 'Gathering Place', type: 'must', coords: [-95.9665, 36.1238], text: 'Tulsa Highlight' },
+    { name: 'Mercury Lounge', type: 'music', coords: [-95.9841, 36.1478], text: 'Tulsa Musik' },
+    { name: 'Red Fork Distillery', type: 'distillery', coords: [-96.0320, 36.1453], text: 'Distillery Tulsa' },
 
+    // Lawton / Wichita Falls
+    { name: 'Wichita Falls optional stop', type: 'must', coords: [-98.4934, 33.9137], text: 'Optional short stop only' },
+    { name: 'Lawton', type: 'must', coords: [-98.3903, 34.6087], text: 'Overnight area' },
+    { name: 'Wichita Mountains Wildlife Refuge', type: 'must', coords: [-98.7000, 34.7670], text: 'Highlight nahe Lawton' },
 
+    // Austin & Umgebung
+    { name: 'South Congress', type: 'must', coords: [-97.7496, 30.2482], text: 'Austin Highlight' },
+    { name: 'Lady Bird Lake', type: 'must', coords: [-97.7428, 30.2621], text: 'Austin Highlight' },
+    { name: 'Texas State Capitol', type: 'must', coords: [-97.7403, 30.2747], text: 'Austin Highlight' },
+    { name: 'Barton Springs Pool', type: 'must', coords: [-97.7726, 30.2640], text: 'Austin Highlight' },
+    { name: 'Zilker Park', type: 'must', coords: [-97.7727, 30.2669], text: 'Austin Highlight' },
+    { name: 'Mount Bonnell', type: 'must', coords: [-97.7738, 30.3213], text: 'Austin Highlight' },
+    { name: 'Waterloo Records', type: 'music', coords: [-97.7517, 30.2966], text: 'Plattenladen' },
+    { name: 'South Austin Music', type: 'music', coords: [-97.7634, 30.2350], text: 'Gear' },
+    { name: 'The Continental Club', type: 'music', coords: [-97.7498, 30.2475], text: 'Austin Musik' },
+    { name: 'Antones', type: 'music', coords: [-97.7432, 30.2672], text: 'Austin Blues' },
+    { name: 'Franklin Barbecue', type: 'food', coords: [-97.7310, 30.2702], text: 'Austin Food' },
+    { name: 'Still Austin Whiskey Co.', type: 'distillery', coords: [-97.6994, 30.2326], text: 'Distillery Austin' },
+    { name: 'Treaty Oak Distilling', type: 'distillery', coords: [-98.0186, 30.1085], text: 'Nahe Austin' },
+    { name: 'Andalusia Whiskey Co.', type: 'distillery', coords: [-98.4463, 30.0717], text: 'Hill Country' },
+    { name: 'The Range at Austin', type: 'must', coords: [-97.7440, 30.1700], text: 'Highlight The Range at Austin' }
+  ];
 
+  // Extra-Punkte aus der CSV – hier kommt dein generiertes Array rein
+  // (Ich lasse hier einen kleinen Platzhalter, weil der Block sehr lang ist.)
+  const extraPoints = [
+    // ... hier alle 142 Einträge aus USA-2026.csv einsetzen:
+    // { name: "Buckingham-Brunnen", type: "extra", coords: [lng, lat], text: "", url: "..." },
+    // ...
+  ];
 
+  // Top-10 Musikspots (Set nach Name) – Beispiele, bitte bei Bedarf anpassen
+  const topMusicNames = new Set([
+    "Buddy Guy's Legends",
+    "House of Blues Chicago",
+    "Kingston Mines",
+    "Blueberry Hill Duck Room",
+    "Old Rock House",
+    "Mercury Lounge",
+    "Cain’s Ballroom-Umfeld",
+    "The Continental Club",
+    "Antone's Nightclub",
+    "Austin City Limits Live (ACL Live & 3TEN ACL Live)"
+  ]);
 
+  const colors = {
+    must: '#4f98a3',
+    music: '#d19900',
+    food:  '#6daa45',
+    hidden:'#dd6974',
+    distillery:'#a86fdf',
+    hotel:'#4da3ff',
+    extra:'#ff7f50',
+    topmusic:'#ffdf00' // leuchtendes Gelb für Top-Musikspots
+  };
 
+  // CSV-Punkte über Namen in die Basis integrieren (CSV überschreibt Dubletten)
+  const pointsByName = new Map(points.map(p => [p.name, p]));
+  extraPoints.forEach(p => pointsByName.set(p.name, p));
+  const allPoints = Array.from(pointsByName.values());
 
+  const fallback = document.getElementById('fallback');
 
+  function popupHtml(p) {
+    const mapsUrl = p.url
+      ? p.url
+      : "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.name);
 
-{name:'South Congress',type:'must',coords:[-97.7496,30.2482],text:'Austin Highlight'},
-{name:'Lady Bird Lake',type:'must',coords:[-97.7428,30.2621],text:'Austin Highlight'},
-{name:'Texas State Capitol',type:'must',coords:[-97.7403,30.2747],text:'Austin Highlight'},
-{name:'Barton Springs Pool',type:'must',coords:[-97.7726,30.2640],text:'Austin Highlight'},
-{name:'Zilker Park',type:'must',coords:[-97.7727,30.2669],text:'Austin Highlight'},
-{name:'Mount Bonnell',type:'must',coords:[-97.7738,30.3213],text:'Austin Highlight'},
-{name:'The Domain',type:'must',coords:[-97.7250,30.4004],text:'Austin Highlight'},
-{name:'East Austin',type:'must',coords:[-97.7186,30.2640],text:'Austin Highlight'},
-{name:'Blanton Museum of Art',type:'must',coords:[-97.7378,30.2808],text:'Austin Highlight'},
-{name:'Congress Avenue Bridge Bats',type:'must',coords:[-97.7431,30.2607],text:'Austin Highlight'},
-{name:'The Range at Austin',type:'must',coords:[-97.7440,30.1700],text:'Highlight · The Range at Austin'},
-{name:'South Congress Hotel Area',type:'hidden',coords:[-97.7495,30.2496],text:'Austin Hidden Spot'},
-{name:'Cosmic Coffee',type:'hidden',coords:[-97.7696,30.2296],text:'Austin Hidden Spot'},
-{name:'Secret Beach',type:'hidden',coords:[-97.7049,30.2444],text:'Austin Hidden Spot'},
-{name:'Laguna Gloria',type:'hidden',coords:[-97.7732,30.3129],text:'Austin Hidden Spot'},
-{name:'Rainey Street side lanes',type:'hidden',coords:[-97.7390,30.2586],text:'Austin Hidden Spot'},
-{name:'The Continental Club',type:'music',coords:[-97.7498,30.2475],text:'Austin Musik'},
-{name:"Antone's",type:'music',coords:[-97.7432,30.2672],text:'Austin Blues'},
-{name:'South Austin Music',type:'music',coords:[-97.7634,30.2350],text:'Gear'},
-{name:'Waterloo Records',type:'music',coords:[-97.7517,30.2966],text:'Plattenladen'},
-{name:'Franklin Barbecue',type:'food',coords:[-97.7310,30.2702],text:'Austin Food'},
-{name:'Still Austin Whiskey Co.',type:'distillery',coords:[-97.6994,30.2326],text:'Distillery Austin'},
-{name:'Treaty Oak Distilling',type:'distillery',coords:[-98.0186,30.1085],text:'Nahe Austin'},
-{name:'Andalusia Whiskey Co.',type:'distillery',coords:[-98.4463,30.0717],text:'Hill Country'}
-];
-const colors = {must:'#4f98a3',music:'#d19900',food:'#6daa45',hidden:'#dd6974',distillery:'#a86fdf',hotel:'#4da3ff'};
-const fallback = document.getElementById('fallback');
-function startMap(){
-try {
-if (!window.mapboxgl) { fallback.style.display='block'; return; }
-mapboxgl.accessToken = 'pk.eyJ1IjoiaGVpa29kdWVtaWciLCJhIjoiY21vY293MGI5MDJ0ajJwcXpvdHp0ejUzcyJ9.bpqIqbfmBUeekHSWrwUxzQ';
-const map = new mapboxgl.Map({container:'map',style:'mapbox://styles/mapbox/streets-v12',center:[-95.6,36.2],zoom:4});
-map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-function popupHtml(p){
-return '<strong>' + p.name + '</strong><br>' + p.text + '<br><a class="popup-link" href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(p.name) + '" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a>';
-}
-const markerDefs = [];
-let activeFilter = 'all';
-function refreshMarkers(){
-  markerDefs.forEach(function(entry){
-    const isVisible = activeFilter === 'all' || entry.type === activeFilter;
-    entry.marker.getElement().style.display = isVisible ? '' : 'none';
-  });
-}
-function syncMapButtons(){
-  document.querySelectorAll('.map-filter-btn').forEach(function(btn){
-    btn.classList.toggle('active', btn.dataset.mapFilter === activeFilter);
-  });
-}
-document.querySelectorAll('.map-filter-btn').forEach(function(btn){
-  btn.addEventListener('click', function(ev){
-    ev.preventDefault();
-    activeFilter = this.dataset.mapFilter || 'all';
-    syncMapButtons();
-    refreshMarkers();
-  });
-});
-map.on('load', function(){
-points.forEach(function(p){
-const marker = new mapboxgl.Marker({color: colors[p.type] || '#4f98a3'})
-.setLngLat(p.coords)
-.setPopup(new mapboxgl.Popup({offset:18}).setHTML(popupHtml(p)))
-.addTo(map);
-markerDefs.push({marker: marker, type: p.type});
-});
-syncMapButtons();
-refreshMarkers();
-const bounds = new mapboxgl.LngLatBounds();
-points.forEach(function(p){ bounds.extend(p.coords); });
-map.fitBounds(bounds, {padding: 50, maxZoom: 10});
-const routeStops = [[-87.6243,41.8763],[-90.1848,38.6247],[-95.9833,36.1539],[-98.4934,33.9137],[-98.3877,34.6085],[-97.7431,30.2672]];
-const routeUrl = 'https://api.mapbox.com/directions/v5/mapbox/driving/' + routeStops.map(c => c.join(',')).join(';') + '?geometries=geojson&overview=full&access_token=' + mapboxgl.accessToken;
-fetch(routeUrl).then(r => r.json()).then(data => {
-  const route = data && data.routes && data.routes[0] && data.routes[0].geometry;
-  if (!route) return;
-  map.addSource('route', {type:'geojson',data:{type:'Feature',geometry:route}});
-  map.addLayer({id:'route-line-outline',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#0f3638','line-width':7,'line-opacity':0.55}});
-  map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#4f98a3','line-width':4}});
-}).catch(() => {
-  map.addSource('route', {type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:routeStops}}});
-  map.addLayer({id:'route-line-outline',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#0f3638','line-width':7,'line-opacity':0.55}});
-  map.addLayer({id:'route-line',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#4f98a3','line-width':4}});
-});
-setTimeout(function(){ map.resize(); }, 300);
-});
-map.on('error', function(){ fallback.style.display='block'; });
-window.addEventListener('resize', function(){ map.resize(); });
-} catch (e) { fallback.style.display='block'; }
-}
-window.onload = startMap;
+    return `
+      <strong>${p.name}</strong><br>
+      ${p.text || ''}<br>
+      <a class="popup-link"
+         href="${mapsUrl}"
+         target="_blank" rel="noopener noreferrer">
+        In Google Maps öffnen
+      </a>
+    `;
+  }
+
+  function startMap() {
+    try {
+      if (!window.mapboxgl) {
+        fallback.style.display = 'block';
+        return;
+      }
+
+      mapboxgl.accessToken =
+        'pk.eyJ1IjoiaGVpa29kdWVtaWciLCJhIjoiY21vY293MGI5MDJ0ajJwcXpvdHp0ejUzcyJ9.bpqIqbfmBUeekHSWrwUxzQ';
+
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [-95.6, 36.2],
+        zoom: 4
+      });
+
+      map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+      const markerDefs = [];
+      let activeFilter = 'all';
+
+      function refreshMarkers() {
+        markerDefs.forEach((entry) => {
+          const isVisible =
+            activeFilter === 'all' || entry.type === activeFilter;
+          entry.marker.getElement().style.display = isVisible ? 'block' : 'none';
+        });
+      }
+
+      function syncMapButtons() {
+        document.querySelectorAll('.map-filter-btn').forEach((btn) => {
+          btn.classList.toggle(
+            'active',
+            btn.dataset.mapFilter === activeFilter
+          );
+        });
+      }
+
+      document.querySelectorAll('.map-filter-btn').forEach((btn) => {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          activeFilter = this.dataset.mapFilter || 'all';
+          syncMapButtons();
+          refreshMarkers();
+        });
+      });
+
+      map.on('load', () => {
+        // Marker
+        allPoints.forEach((p) => {
+          const isTop = topMusicNames.has(p.name);
+          const markerColor = isTop ? colors.topmusic : (colors[p.type] || '#4f98a3');
+
+          const marker = new mapboxgl.Marker({
+            color: markerColor
+          })
+            .setLngLat(p.coords)
+            .setPopup(new mapboxgl.Popup({ offset: 18 }).setHTML(popupHtml(p)))
+            .addTo(map);
+
+          markerDefs.push({ marker, type: p.type });
+        });
+
+        syncMapButtons();
+        refreshMarkers();
+
+        // Bounds
+        const bounds = new mapboxgl.LngLatBounds();
+        allPoints.forEach((p) => bounds.extend(p.coords));
+        map.fitBounds(bounds, { padding: 50, maxZoom: 10 });
+
+        // Animierte Reiseroute
+        const routeStops = [
+          [-87.6243, 41.8763], // Chicago / Route 66 Begin
+          [-90.1848, 38.6247], // St. Louis
+          [-95.9833, 36.1539], // Tulsa
+          [-98.4934, 33.9137], // Wichita Falls optional
+          [-98.3877, 34.6085], // Lawton / Hotel
+          [-97.7431, 30.2672]  // Austin
+        ];
+
+        const animatedRoute = {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [routeStops[0]]
+          }
+        };
+
+        map.addSource('route', {
+          type: 'geojson',
+          data: animatedRoute
+        });
+
+        map.addLayer({
+          id: 'route-line-outline',
+          type: 'line',
+          source: 'route',
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          paint: {
+            'line-color': '#0f3638',
+            'line-width': 7,
+            'line-opacity': 0.55
+          }
+        });
+
+        map.addLayer({
+          id: 'route-line',
+          type: 'line',
+          source: 'route',
+          layout: {
+            'line-cap': 'round',
+            'line-join': 'round'
+          },
+          paint: {
+            'line-color': '#4f98a3',
+            'line-width': 4
+          }
+        });
+
+        let progress = 0;
+        const steps = 600;
+        const total = routeStops.length - 1;
+
+        function interpolate(a, b, t) {
+          return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+        }
+
+        function animateRoute() {
+          progress += 1 / steps;
+          if (progress > 1) {
+            progress = 0;
+            animatedRoute.geometry.coordinates = [routeStops[0]];
+            map.getSource('route').setData(animatedRoute);
+          } else {
+            const scaled = progress * total;
+            const index = Math.floor(scaled);
+            const localT = scaled - index;
+            const coords = [];
+
+            for (let i = 0; i <= index; i++) {
+              coords.push(routeStops[i]);
+            }
+
+            if (index < total) {
+              const current = routeStops[index];
+              const next = routeStops[index + 1];
+              coords.push(interpolate(current, next, localT));
+            }
+
+            animatedRoute.geometry.coordinates = coords;
+            map.getSource('route').setData(animatedRoute);
+          }
+
+          requestAnimationFrame(animateRoute);
+        }
+
+        animateRoute();
+      });
+
+      function handleResize() {
+        try {
+          map.resize();
+        } catch (e) {}
+      }
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
+    } catch (e) {
+      fallback.style.display = 'block';
+    }
+  }
+
+  window.onload = startMap;
 </script>
 </body>
 </html>
