@@ -3,53 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</title>
+<title>Route 66 Music Trip · Interaktive Karte v24</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#111111">
-<link rel="apple-touch-icon" href="assets/icon-192.png">
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css">
 <style>
-
 :root{
-  --bg:#070b0f;
-  --panel:rgba(12,18,24,.82);
-  --panel-solid:#111820;
-  --panel-soft:rgba(20,30,39,.72);
-  --line:rgba(148,185,195,.22);
-  --text:#f6fbff;
-  --muted:#a8bac2;
-  --cyan:#46d6e6;
-  --cyan-2:#74f0ff;
-  --gold:#f3bd2f;
-  --green:#95d166;
-  --rose:#ee7680;
-  --purple:#b982f2;
-  --blue:#4da3ff;
-  --shadow:0 18px 60px rgba(0,0,0,.45);
+  --bg:#070b0f;--panel:#111820;--panel2:#17232d;--line:rgba(148,185,195,.22);
+  --text:#f6fbff;--muted:#a8bac2;--cyan:#46d6e6;--blue:#1a73e8;--shadow:0 18px 60px rgba(0,0,0,.45);
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 20% -10%,rgba(70,214,230,.16),transparent 36%),radial-gradient(circle at 90% 5%,rgba(179,130,242,.12),transparent 34%),var(--bg);color:var(--text);scroll-behavior:smooth}
-html{scroll-padding-top:180px}
-body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent 28%,transparent 68%,rgba(70,214,230,.05));z-index:-1}
-header{padding:18px 22px 14px;background:linear-gradient(180deg,rgba(9,12,16,.97),rgba(9,12,16,.88));border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);box-shadow:0 10px 35px rgba(0,0,0,.36)}
-h1{margin:0;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.04em;line-height:1.05;font-weight:900;text-shadow:0 8px 30px rgba(70,214,230,.12)}
-header p{margin:7px 0 0;color:var(--cyan-2);font-size:15px;line-height:1.45;font-weight:700}
-.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:13px;color:#e6f6f8}
-.legend span{display:flex;align-items:center;gap:7px;white-space:nowrap;font-weight:700}.dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 14px currentColor}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);color:#f4fbff;text-decoration:none;font-size:13px;font-weight:800;box-shadow:inset 0 1px rgba(255,255,255,.08);transition:.2s ease}.quick-links a:hover{background:rgba(70,214,230,.16);border-color:rgba(70,214,230,.5);transform:translateY(-1px)}
-.map-wrap{position:relative;padding:10px;background:#05080b;border-bottom:1px solid var(--line)}
-#map{height:72vh;min-height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow)}
-.map-wrap:after{content:"";position:absolute;inset:10px;border-radius:20px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(116,240,255,.08),inset 0 -80px 120px rgba(0,0,0,.25)}
-.map-filter-panel{position:absolute;top:22px;left:22px;z-index:12;display:flex;flex-wrap:wrap;gap:8px;max-width:min(78vw,1120px);padding:10px;border-radius:16px;background:rgba(5,9,13,.74);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);align-items:center;box-shadow:0 15px 45px rgba(0,0,0,.34)}
-.map-filter-panel span{font-size:12px;color:#d8eef2;margin-right:4px;font-weight:900;text-transform:uppercase;letter-spacing:.07em}.map-filter-btn{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);color:#f4fbff;font-size:13px;cursor:pointer;font-weight:800;transition:.2s ease}.map-filter-btn.active{background:linear-gradient(135deg,var(--cyan),#2d8da4);color:#031014;border-color:rgba(116,240,255,.65);box-shadow:0 0 20px rgba(70,214,230,.28)}.map-filter-btn:not(.active){opacity:.76}.map-filter-btn:hover{transform:translateY(-1px);opacity:1}
-.map-sidecard{position:absolute;right:24px;top:92px;z-index:10;width:min(310px,calc(100vw - 48px));background:rgba(5,9,13,.75);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(16px);border-radius:20px;padding:16px;box-shadow:var(--shadow);max-height:calc(100% - 125px);overflow:auto}
-.map-sidecard h2{font-size:16px;margin:0 0 10px;color:#fff;letter-spacing:-.01em}.route-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}.route-list li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;color:#dcecef;font-size:13px;line-height:1.25}.route-list b{display:block;color:#80f4ff;font-size:13px}.route-list i{width:20px;height:20px;border-radius:999px;background:linear-gradient(135deg,var(--cyan),#2d8da4);display:grid;place-items:center;color:#041014;font-style:normal;font-size:11px;font-weight:900;box-shadow:0 0 16px rgba(70,214,230,.35)}
-.trip-strip{max-width:1500px;margin:14px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(9,minmax(120px,1fr));gap:1px}.trip-strip a{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);color:#dff7fb;text-decoration:none;padding:12px 10px;min-height:64px;font-size:13px;display:flex;flex-direction:column;justify-content:center}.trip-strip a:first-child{border-radius:14px 0 0 14px}.trip-strip a:last-child{border-radius:0 14px 14px 0}.trip-strip b{color:#fff}.trip-strip span{color:var(--cyan-2);font-size:12px;margin-bottom:2px}
-#fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9;font-size:14px}
-main{max-width:1500px;margin:0 auto;padding:20px 18px 32px}.plan,.day{background:linear-gradient(180deg,rgba(17,24,31,.86),rgba(11,16,22,.86));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:22px;margin-bottom:18px;scroll-margin-top:190px;box-shadow:0 14px 45px rgba(0,0,0,.24);backdrop-filter:blur(10px)}.day h2,.plan h2{margin:0 0 10px;font-size:clamp(21px,2vw,29px);letter-spacing:-.035em}.meta{color:#8eeaf5;font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:17px;box-shadow:inset 0 1px rgba(255,255,255,.06)}.card h3{margin:0 0 10px;font-size:16px;color:#fff;letter-spacing:-.01em}.card ul{margin:0;padding-left:18px}.card li{margin-bottom:7px;color:#d6e3e7;line-height:1.48}.links a,.route-links a{display:inline-flex;align-items:center;margin:8px 7px 0 0;padding:9px 11px;border-radius:999px;background:rgba(70,214,230,.12);border:1px solid rgba(70,214,230,.24);color:#dffbff;text-decoration:none;font-size:13px;font-weight:800}.links a:hover,.route-links a:hover{background:rgba(70,214,230,.22)}
-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-size:14px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.1)}th,td{border-bottom:1px solid rgba(255,255,255,.09);padding:12px;vertical-align:top;text-align:left}th{background:rgba(255,255,255,.075);color:#fff}td{color:#dce7ea}tbody tr:last-child td{border-bottom:0}.note{font-size:13px;color:#b9c8ce;margin-top:10px}.mapboxgl-popup-content{color:#eefbff !important;background:rgba(7,11,15,.94) !important;border:1px solid rgba(116,240,255,.28);border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.45;box-shadow:0 18px 50px rgba(0,0,0,.45);backdrop-filter:blur(12px)}.mapboxgl-popup-content strong{color:#81f5ff !important}.mapboxgl-popup-tip{border-top-color:rgba(7,11,15,.94) !important;border-bottom-color:rgba(7,11,15,.94) !important}.popup-link{display:inline-block;margin-top:7px;font-size:12px;color:#89eefa;text-decoration:none;font-weight:900}.mapboxgl-ctrl-logo,.mapboxgl-ctrl-attrib{filter:invert(1) hue-rotate(160deg);opacity:.8}
-@media (max-width:1200px){.grid{grid-template-columns:1fr 1fr}.trip-strip{grid-template-columns:repeat(3,1fr)}.map-sidecard{display:none}.map-filter-panel{max-width:calc(100vw - 48px)}}
-@media (max-width:760px){header{padding:15px 14px}#map{height:62vh;min-height:430px;border-radius:16px}.map-wrap{padding:7px}.map-filter-panel{position:static;margin:8px 0 0;max-width:none;border-radius:16px}.trip-strip{grid-template-columns:1fr 1fr;padding:0 8px}.trip-strip a{border-radius:12px !important}.grid{grid-template-columns:1fr}main{padding:14px 10px 26px}.plan,.day{padding:16px;border-radius:18px}table{font-size:13px;display:block;overflow-x:auto;white-space:nowrap}.day h2,.plan h2{font-size:22px}}
+html{scroll-padding-top:210px} html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 20% -10%,rgba(70,214,230,.16),transparent 36%),var(--bg);color:var(--text);scroll-behavior:smooth}
+header{padding:20px 24px 16px;background:linear-gradient(180deg,rgba(9,12,16,.98),rgba(9,12,16,.9));border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(16px)}
+h1{margin:0;font-size:clamp(24px,3vw,40px);letter-spacing:-.045em;line-height:1.05}
+header p{margin:8px 0 0;color:#74f0ff;font-weight:800}
+.nav,.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.nav a,.filters button,.button{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#f4fbff;text-decoration:none;font-size:13px;font-weight:900;cursor:pointer}
+.filters button.active,.button{background:var(--blue)}
+.map-wrap{padding:10px;background:#05080b;border-bottom:1px solid var(--line);position:relative}
+#map{width:100%;height:72vh;min-height:620px;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);background:#eef3f4}
+.status{position:absolute;left:22px;bottom:22px;background:rgba(5,9,13,.85);border:1px solid rgba(255,255,255,.12);padding:10px 13px;border-radius:14px;color:#fff;z-index:5;font-size:13px}
+main{max-width:1500px;margin:0 auto;padding:22px 18px 36px}
+.section{scroll-margin-top:210px;background:linear-gradient(180deg,rgba(17,24,31,.9),rgba(11,16,22,.88));border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:22px;margin-bottom:20px;box-shadow:0 14px 45px rgba(0,0,0,.24)}
+.section h2{margin:0 0 12px;font-size:clamp(24px,2.5vw,34px);letter-spacing:-.035em}
+.meta{color:#8eeaf5;font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px;font-weight:900}
+.note{color:var(--muted);line-height:1.55}
+table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-size:14px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.1)}
+th,td{border-bottom:1px solid rgba(255,255,255,.09);padding:13px;vertical-align:top;text-align:left}
+th{background:rgba(255,255,255,.075);color:#fff}td{color:#dce7ea}tbody tr:last-child td{border-bottom:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:17px}
+.card h3{margin:4px 0 8px;font-size:18px}.card p{color:#c9d8dd;line-height:1.5}
+.tag{display:inline-block;padding:5px 9px;border-radius:999px;background:rgba(70,214,230,.16);color:#8ef4ff;font-size:12px;font-weight:900}
+.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px}
+.place-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:11px}
+.place-row strong{display:block;color:#fff}.place-row span{display:block;color:#b9c8ce;font-size:13px;margin-top:3px}.place-row a{padding:7px 10px;border-radius:999px;background:#1a73e8;color:white;text-decoration:none;font-size:12px;font-weight:900}
+.gm-style .gm-style-iw-c{color:#111}
+@media(max-width:760px){header{padding:16px 14px}#map{height:62vh;min-height:430px;border-radius:15px}main{padding:14px 10px 28px}.section{padding:16px;border-radius:18px}table{display:block;overflow-x:auto;white-space:nowrap}}
+
+.city-block{
+  margin:0 0 18px;
+}
+.city-block h3{
+  margin:0 0 10px;
+  color:#8ef4ff;
+  font-size:22px;
+  letter-spacing:-.02em;
+}
+
+
+.editor-tools{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:12px 0 0;
+}
+.editor-tools button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:9px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:#f4fbff;
+  font-weight:900;
+  cursor:pointer;
+}
+.place-row select{
+  background:#0e1720;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:999px;
+  padding:7px 8px;
+  font-size:12px;
+  max-width:150px;
+}
 
 
 .map-layer-panel{
@@ -108,2162 +136,350 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
 </head>
 <body>
 <header>
-  <h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
-  <p>From Chicago to Austin · Route 66 Music Trip · nur KMZ-/My-Maps-Ziele entlang der Route · Google-Maps-Grün · Kategorien aus Beschreibung</p>
-  <div class="legend">
-    <span><i class="dot" style="background:#097138"></i>KMZ-/Google-Maps-Ziele</span>
-    <span>Filter zeigen nur Kategorien, die aus KMZ-Notiz, Google-Maps-Beschreibung oder Name abgeleitet wurden.</span>
-  </div>
-  <div class="toolbar">
-    <div class="quick-links">
-      <a href="#plan">Fahrplan</a>
-      <a href="#hotels">Hotels</a>
-      <a href="#day-chicago-arrival">14.05. · Chicago</a>
-      <a href="#day-chicago">15.05. · Chicago</a>
-      <a href="#day-stl-drive">16.05. · St. Louis</a>
-      <a href="#day-stl">17.05. · St. Louis</a>
-      <a href="#day-tulsa-drive">18.05. · Tulsa</a>
-      <a href="#day-tulsa">19.05. · Tulsa</a>
-      <a href="#day-lawton">20.05. · Wichita Falls / Lawton</a>
-      <a href="#day-austin-drive">21.05. · Austin</a>
-      <a href="#day-austin">22.05. · Austin</a>
-    </div>
-  </div>
+  <h1>Route 66 Music Trip · Interaktive Karte v24</h1>
+  <p>Google Places API · Smart-USA · Map-Layer-Filter · editierbare Kategorien</p>
+  <nav class="nav">
+    <a href="#karte">Karte</a><a href="#fahrplan">Timeline / Fahrplan</a><a href="#hotels">Hotels</a><a href="#musicbars">MusicBars</a><a href="#topfood">Top Food</a><a href="#alle">Alle Orte</a>
+  </nav>
+  <div class="editor-tools"><button onclick="resetCategoryEdits()">Kategorien zurücksetzen</button><button onclick="clearResolvedCache()">Orte neu auflösen</button></div>
 </header>
 
-<div class="map-wrap">
-  <div id="map"></div>
-  <div class="map-filter-panel">
-    <span>Filter:</span>
-    <button class="map-filter-btn active" data-map-filter="all">Alle KMZ-Ziele</button>
-    <button class="map-filter-btn" data-map-filter="hotel">Hotels</button>
-    <button class="map-filter-btn" data-map-filter="breakfast">Frühstück</button>
-    <button class="map-filter-btn" data-map-filter="food">Essen &amp; BBQ</button>
-    <button class="map-filter-btn" data-map-filter="music">Kneipen &amp; Musik</button>
-    <button class="map-filter-btn" data-map-filter="route66">Route 66</button>
-    <button class="map-filter-btn" data-map-filter="museum">Museen</button>
-    <button class="map-filter-btn" data-map-filter="nature">Natur &amp; Parks</button>
-    <button class="map-filter-btn" data-map-filter="distillery">Distilleries</button>
-    <button class="map-filter-btn" data-map-filter="western">Western &amp; Boots</button>
-    <button class="map-filter-btn" data-map-filter="toys">Spielzeug</button>
-    <button class="map-filter-btn" data-map-filter="sight">Sonstiges</button>
+<div class="map-wrap" id="karte">
+  
+  <div class="map-layer-panel">
+    <span>Layer:</span>
+    <div class="filters map-filters">
+    <button class="active" data-filter="all">Alle</button>
+    <button data-filter="music">Musik / Bars</button>
+    <button data-filter="hotel">Hotels</button>
+    <button data-filter="food">Food / Restaurants</button>
+    <button data-filter="sight">Sehenswürdigkeiten</button>
+    <button data-filter="hidden">Hidden Spots</button>
+    <button data-filter="distillery">Distilleries</button>
+    <button data-filter="other">Sonstiges</button>
   </div>
-  <aside class="map-sidecard" aria-label="Route Übersicht">
-    <h2>Chicago → Austin</h2>
-    <ul class="route-list">
-      <li><i>1</i><span><b>Chicago, IL</b>Blues, Skyline & Route 66 Start</span></li>
-      <li><i>2</i><span><b>St. Louis, MO</b>Gateway Arch & Live Music</span></li>
-      <li><i>3</i><span><b>Tulsa, OK</b>Music History & Mother Road</span></li>
-      <li><i>4</i><span><b>Lawton / Wichita Falls</b>Übergangsetappe & Natur</span></li>
-      <li><i>5</i><span><b>Austin, TX</b>Live Music Capital</span></li>
-    </ul>
-  </aside>
+  </div>
+  <div id="map"></div>
+  <div class="status" id="status">Starte Karte…</div>
 </div>
 
-<nav class="trip-strip" aria-label="Reisetage">
-  <a href="#day-chicago-arrival"><span>14.05.</span><b>Chicago</b>Ankunft</a>
-  <a href="#day-chicago"><span>15.05.</span><b>Chicago</b>Stay</a>
-  <a href="#day-stl-drive"><span>16.05.</span><b>St. Louis</b>Drive</a>
-  <a href="#day-stl"><span>17.05.</span><b>St. Louis</b>Stay</a>
-  <a href="#day-tulsa-drive"><span>18.05.</span><b>Tulsa</b>Drive</a>
-  <a href="#day-tulsa"><span>19.05.</span><b>Tulsa</b>Stay</a>
-  <a href="#day-lawton"><span>20.05.</span><b>Falls / Lawton</b>Drive</a>
-  <a href="#day-austin-drive"><span>21.05.</span><b>Austin</b>Drive</a>
-  <a href="#day-austin"><span>22.05.</span><b>Austin</b>Stay</a>
-</nav>
-
-<div id="fallback">Die Karte konnte nicht geladen werden. Bitte die Datei direkt im Browser öffnen.</div>
-
 <main>
-  <!-- Fahrplan-Block -->
-  <section class="plan" id="plan">
-    <div class="meta">Fahrplan der Reise</div>
-    <h2>Strecken, Zeiten und empfohlene Stopps</h2>
-    <p>Die Zeiten im Fahrplan sind als realistische Reiseplanung mit Puffer gedacht, nicht als starre Verpflichtung. Bei den langen Etappen sind die empfohlenen Route-66-Stopps so gesetzt, dass sie machbar bleiben.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Datum</th>
-          <th>Strecke</th>
-          <th>Abfahrt / Ankunft</th>
-          <th>Ca. km</th>
-          <th>Empfohlene Stopps</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>14.05.2026 · Chicago</td>
-          <td>Flugankunft Chicago → citizenM Downtown</td>
-          <td>Ankunft 12:55 CDT, Hotel ca. 14:30</td>
-          <td>ca. 30 km Transfer</td>
-          <td>Nur leichtes Programm: Riverwalk, Millennium Park, Abendmusik.</td>
-        </tr>
-        <tr>
-          <td>15.05.2026 · Chicago</td>
-          <td>Chicago Stadttag</td>
-          <td>Start ca. 09:30, Abend offen</td>
-          <td>lokal</td>
-          <td>Chicago Music Exchange, Wicker Park, Logan Square, Buddy Guy’s oder House of Blues.</td>
-        </tr>
-        <tr>
-          <td>16.05.2026 · St. Louis</td>
-          <td>Chicago → St. Louis</td>
-          <td>Empfohlen ab 08:00, Ankunft ca. 18:30</td>
-          <td>ca. 480 km</td>
-          <td>Begin Sign, Gemini Giant, Pontiac Route 66 Museum, Cozy Dog Drive-In.</td>
-        </tr>
-        <tr>
-          <td>17.05.2026 · St. Louis</td>
-          <td>St. Louis Stadttag</td>
-          <td>Start ca. 09:30, Abend offen</td>
-          <td>lokal</td>
-          <td>Gateway Arch, Citygarden, Cherokee Street, Blueberry Hill oder Old Rock House.</td>
-        </tr>
-        <tr>
-          <td>18.05.2026 · Tulsa</td>
-          <td>St. Louis → Tulsa</td>
-          <td>Empfohlen ab 08:00, Ankunft ca. 20:00</td>
-          <td>ca. 630 km</td>
-          <td>Chain of Rocks Bridge, Meramec Caverns, Cuba Murals, Neon Park, Blue Whale of Catoosa.</td>
-        </tr>
-        <tr>
-          <td>19.05.2026 · Tulsa</td>
-          <td>Tulsa Stadttag</td>
-          <td>Start ca. 10:00, Abend offen</td>
-          <td>lokal</td>
-          <td>Cyrus Avery Plaza, Philbrook, Woody Guthrie Center, Mercury Lounge, Red Fork Distillery.</td>
-        </tr>
-        <tr>
-          <td>20.05.2026 · Wichita Falls / Lawton</td>
-          <td>Tulsa → Wichita Falls / Lawton (Hotel)</td>
-          <td>Empfohlen ab 09:00, Ankunft ca. 14:30–15:30</td>
-          <td>ca. 340 km bis Wichita Falls, ca. 430 km bis Lawton/Hotel</td>
-          <td>Höchstens kurzer Stopp bei Wichita Falls, danach weiter zum Hotel in Lawton.</td>
-        </tr>
-        <tr>
-          <td>21.05.2026 · Austin</td>
-          <td>Lawton (Hotel) → Austin</td>
-          <td>Früher Start ca. 07:30, Ankunft ca. 18:30–20:00</td>
-          <td>ca. 900+ km je nach Startpunkt</td>
-          <td>Fokus auf Fahrstrecke; nur wenige Pausen. In Austin abends South Congress oder kurzer Musikabend.</td>
-        </tr>
-        <tr>
-          <td>22.05.2026 · Austin</td>
-          <td>Austin Zusatztag</td>
-          <td>Flexibel</td>
-          <td>lokal / optional Hill Country</td>
-          <td>Samstag: The Range at Austin; dazu Still Austin, Treaty Oak, Waterloo Records, Lieblings-Spots von 2026 wiederholen.</td>
-        </tr>
-      </tbody>
-    </table>
-    <p class="note">Hinweis: Optionaler kurzer Stopp nur im Raum Wichita Falls; das Hotel liegt in Lawton. Der 21.05. bleibt dadurch eine lange, aber klarere Etappe ab Lawton Richtung Austin.</p>
+  <section class="section" id="fahrplan">
+    <div class="meta">Timeline / Fahrplan</div>
+    <h2>Reiseübersicht</h2>
+    <p class="note">Die Marker werden beim ersten Laden über Google Places aufgelöst und lokal im Browser zwischengespeichert.</p>
+    <table><thead><tr><th>Datum</th><th>Ort / Strecke</th><th>Abfahrt / Ankunft</th><th>Ca. km</th><th>Plan / Stopps</th></tr></thead><tbody><tr><td>14.05.2026</td><td><strong>Chicago</strong><br>Flugankunft → citizenM Downtown</td><td>Ankunft 12:55 CDT · Hotel ca. 14:30</td><td>ca. 30 km Transfer</td><td>Leichtes Programm: Riverwalk, Millennium Park, Blues/Musik optional.</td></tr>
+<tr><td>15.05.2026</td><td><strong>Chicago</strong><br>Stadttag</td><td>Start ca. 09:30 · Abend offen</td><td>lokal</td><td>Chicago Music Exchange, Wicker Park, Logan Square, Bluesclubs.</td></tr>
+<tr><td>16.05.2026</td><td><strong>Chicago → St. Louis</strong><br>Route-66-Start</td><td>Abfahrt ca. 08:00 · Ankunft ca. 18:30</td><td>ca. 480 km</td><td>Route 66 Begin Sign, Gemini Giant, Pontiac Route 66 Museum, Cozy Dog Drive-In.</td></tr>
+<tr><td>17.05.2026</td><td><strong>St. Louis</strong><br>Stadttag · Hotel Lumière at the Arch</td><td>Start ca. 09:30 · Abend offen</td><td>lokal</td><td>Gateway Arch, Citygarden, Cherokee Street, Soulard, Live-Musik.</td></tr>
+<tr><td>18.05.2026</td><td><strong>St. Louis → Tulsa</strong><br>Lange Route-66-Etappe</td><td>Abfahrt ca. 08:00 · Ankunft ca. 20:00</td><td>ca. 630 km</td><td>Chain of Rocks Bridge, Meramec Caverns, Cuba Murals, Route 66 Neon Park, Blue Whale.</td></tr>
+<tr><td>19.05.2026</td><td><strong>Tulsa</strong><br>Stadttag · The Mayo Hotel</td><td>Start ca. 10:00 · Abend offen</td><td>lokal</td><td>Cyrus Avery Plaza, Woody Guthrie Center, Cain’s Ballroom, Mercury Lounge.</td></tr>
+<tr><td>20.05.2026</td><td><strong>Tulsa → Lawton / Wichita Falls</strong><br>Übergangstag · Apache Casino Hotel</td><td>Abfahrt ca. 09:00 · Ankunft ca. 14:30–15:30</td><td>ca. 340–430 km</td><td>Wichita Falls kurzer Stopp optional, danach Lawton / Wichita Mountains bei Zeit.</td></tr>
+<tr><td>21.05.2026</td><td><strong>Lawton → Austin</strong><br>Langer Reisetag · citizenM Austin Downtown</td><td>Abfahrt ca. 07:30 · Ankunft ca. 18:30–20:00</td><td>ca. 900+ km</td><td>Fokus auf Strecke; abends South Congress, Continental Club oder Antone’s locker.</td></tr>
+<tr><td>22.05.2026</td><td><strong>Austin</strong><br>Austin-Tag / Abreisetag nach Plan</td><td>Flexibel</td><td>lokal</td><td>Continental Club, Antone’s, The White Horse, BBQ, Waterloo Records, South Congress.</td></tr></tbody></table>
   </section>
 
-  <!-- Tages- und Hotel-Kacheln (wie zuvor) -->
-  <section class="day" id="day-chicago-arrival">
-    <div class="meta">14.05.2026 · Chicago · citizenM Downtown</div>
-    <h2>Entspannter Ankunftstag mit Downtown-Fokus</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Highlights</h3>
-        <ul>
-          <li>Millennium Park.</li>
-          <li>Chicago Riverwalk.</li>
-          <li>Chicago Cultural Center.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Millennium+Park+Chicago" target="_blank" rel="noopener noreferrer">Millennium Park</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Chicago+Riverwalk" target="_blank" rel="noopener noreferrer">Riverwalk</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Chicago+Cultural+Center" target="_blank" rel="noopener noreferrer">Cultural Center</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Hidden Spots & Food</h3>
-        <ul>
-          <li>Ping Tom Memorial Park, falls noch Energie da ist.</li>
-          <li>Maxwell Street als geschichtsträchtiger Food-Ort.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Ping+Tom+Memorial+Park" target="_blank" rel="noopener noreferrer">Ping Tom Park</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Maxwell+Street+Chicago" target="_blank" rel="noopener noreferrer">Maxwell Street</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Abend / Musik</h3>
-        <ul>
-          <li>Buddy Guy’s Legends.</li>
-          <li>House of Blues Chicago.</li>
-          <li>Leicht halten wegen Flugtag.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Buddy+Guy%27s+Legends+Chicago" target="_blank" rel="noopener noreferrer">Buddy Guy’s</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=House+of+Blues+Chicago" target="_blank" rel="noopener noreferrer">House of Blues</a>
-        </div>
-      </div>
-    </div>
+  <section class="section" id="hotels">
+    <div class="meta">Hotels</div>
+    <h2>Hotelübersicht</h2>
+    <div class="grid" id="hotelGrid"></div>
   </section>
 
-  <!-- Chicago Tag -->
-  <section class="day" id="day-chicago">
-    <div class="meta">15.05.2026 · Chicago · citizenM Downtown</div>
-    <h2>Chicago für Musiker, Viertel und Live-Vibes</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Must-Sees</h3>
-        <ul>
-          <li>Art Institute oder Navy Pier je nach Lust.</li>
-          <li>Wicker Park und Logan Square.</li>
-          <li>Lincoln Park als ruhiger Gegenpol.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Art+Institute+of+Chicago" target="_blank" rel="noopener noreferrer">Art Institute</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Wicker+Park+Chicago" target="_blank" rel="noopener noreferrer">Wicker Park</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Logan+Square+Chicago" target="_blank" rel="noopener noreferrer">Logan Square</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Musik & Gear</h3>
-        <ul>
-          <li>Chicago Music Exchange.</li>
-          <li>Rock N Roll Vintage als sinnvolle Ergänzung.</li>
-          <li>Abends erneut Blues oder Americana.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Chicago+Music+Exchange" target="_blank" rel="noopener noreferrer">Chicago Music Exchange</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Rock+N+Roll+Vintage+Chicago" target="_blank" rel="noopener noreferrer">Rock N Roll Vintage</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Distilleries & Hidden Spots</h3>
-        <ul>
-          <li>KOVAL Distillery.</li>
-          <li>FEW Spirits in Evanston.</li>
-          <li>Garfield Park Conservatory oder Humboldt Park.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=KOVAL+Distillery+Chicago" target="_blank" rel="noopener noreferrer">KOVAL</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=FEW+Spirits+Evanston" target="_blank" rel="noopener noreferrer">FEW Spirits</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Garfield+Park+Conservatory" target="_blank" rel="noopener noreferrer">Garfield Park</a>
-        </div>
-      </div>
-    </div>
+  <section class="section" id="musicbars">
+    <div class="meta">MusicBars</div>
+    <h2>Top Musik / Bars Empfehlungen</h2>
+    <p class="note">Blues, Rock, Country, Honky Tonk, Americana, Open Stage und lokale Live-Musik.</p>
+    <div class="list" id="musicList"></div>
   </section>
 
-  <!-- Chicago → St. Louis -->
-  <section class="day" id="day-stl-drive">
-    <div class="meta">16.05.2026 · Chicago → St. Louis</div>
-    <h2>Roadtrip-Start auf der Route 66</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Fahrplan</h3>
-        <ul>
-          <li>Abfahrt empfohlen: 08:00.</li>
-          <li>Mit 3 bis 4 Stopps Ankunft gegen 18:30.</li>
-          <li>Strecke ca. 480 km.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Empfohlene Stopps</h3>
-        <ul>
-          <li>Route 66 Begin Sign.</li>
-          <li>Gemini Giant.</li>
-          <li>Pontiac Route 66 Museum.</li>
-          <li>Cozy Dog Drive-In.</li>
-        </ul>
-        <div class="route-links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Route+66+Begin+Sign+Chicago" target="_blank" rel="noopener noreferrer">Begin Sign</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Gemini+Giant+Wilmington+Illinois" target="_blank" rel="noopener noreferrer">Gemini Giant</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Pontiac+Route+66+Museum+Illinois" target="_blank" rel="noopener noreferrer">Pontiac Museum</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Cozy+Dog+Drive+In+Springfield+Illinois" target="_blank" rel="noopener noreferrer">Cozy Dog</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Ankunft</h3>
-        <ul>
-          <li>Nach Ankunft nur noch lockerer Downtown- oder Arch-Blick.</li>
-          <li>Nicht zu spät planen, damit der 17.05. entspannt bleibt.</li>
-        </ul>
-      </div>
-    </div>
+
+  <section class="section" id="topfood">
+    <div class="meta">Top Food / Restaurants</div>
+    <h2>Top Restaurants & Food-Spots</h2>
+    <p class="note">Kuratiert für Frühstück, BBQ, Diner, Route-66-Food und lokale Klassiker. Jeder Eintrag öffnet Google Maps in einem neuen Fenster.</p>
+    <div id="foodList"></div>
   </section>
 
-  <!-- St. Louis -->
-  <section class="day" id="day-stl">
-    <div class="meta">17.05.2026 · St. Louis · Hotel Lumière at the Arch</div>
-    <h2>St. Louis Kernprogramm mit Live-Musik am Abend</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Highlights</h3>
-        <ul>
-          <li>Gateway Arch.</li>
-          <li>Citygarden.</li>
-          <li>Missouri Botanical Garden oder Forest Park.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Gateway+Arch+St+Louis" target="_blank" rel="noopener noreferrer">Gateway Arch</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Citygarden+St+Louis" target="_blank" rel="noopener noreferrer">Citygarden</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Missouri+Botanical+Garden" target="_blank" rel="noopener noreferrer">Botanical Garden</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Hidden Spots & Food</h3>
-        <ul>
-          <li>Cherokee Street, Soulard, Lafayette Square.</li>
-          <li>Ted Drewes als einfacher Klassiker.</li>
-          <li>The Hill für lokale Essenslogik.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Cherokee+Street+St+Louis" target="_blank" rel="noopener noreferrer">Cherokee Street</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Ted+Drewes+St+Louis" target="_blank" rel="noopener noreferrer">Ted Drewes</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=The+Hill+St+Louis" target="_blank" rel="noopener noreferrer">The Hill</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Musik & Distillery</h3>
-        <ul>
-          <li>Blueberry Hill Duck Room.</li>
-          <li>Old Rock House.</li>
-          <li>StiLL 630 oder Switchgrass Spirits.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Blueberry+Hill+Duck+Room+St+Louis" target="_blank" rel="noopener noreferrer">Blueberry Hill</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Old+Rock+House+St+Louis" target="_blank" rel="noopener noreferrer">Old Rock House</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=StiLL+630+St+Louis" target="_blank" rel="noopener noreferrer">StiLL 630</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- St. Louis → Tulsa -->
-  <section class="day" id="day-tulsa-drive">
-    <div class="meta">18.05.2026 · St. Louis → Tulsa</div>
-    <h2>Lange Etappe mit den besten Route-66-Stopps</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Fahrplan</h3>
-        <ul>
-          <li>Abfahrt empfohlen: 08:00.</li>
-          <li>Ankunft realistisch: ca. 20:00.</li>
-          <li>Strecke ca. 630 km.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Empfohlene Stopps</h3>
-        <ul>
-          <li>Chain of Rocks Bridge.</li>
-          <li>Meramec Caverns.</li>
-          <li>Cuba Murals.</li>
-          <li>Route 66 Neon Park.</li>
-          <li>Blue Whale of Catoosa.</li>
-        </ul>
-        <div class="route-links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Chain+of+Rocks+Bridge" target="_blank" rel="noopener noreferrer">Chain of Rocks</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Meramec+Caverns" target="_blank" rel="noopener noreferrer">Meramec Caverns</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Cuba+Missouri+Route+66+Murals" target="_blank" rel="noopener noreferrer">Cuba Murals</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Blue+Whale+of+Catoosa" target="_blank" rel="noopener noreferrer">Blue Whale</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Planungstipp</h3>
-        <ul>
-          <li>Diese Etappe nicht überladen.</li>
-          <li>Wenn Zeit fehlt, Blue Whale auf jeden Fall retten.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tulsa -->
-  <section class="day" id="day-tulsa">
-    <div class="meta">19.05.2026 · Tulsa · The Mayo Hotel</div>
-    <h2>Tulsa mit Musikgeschichte und Route-66-Atmosphäre</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Highlights</h3>
-        <ul>
-          <li>Cyrus Avery Plaza.</li>
-          <li>Philbrook Museum.</li>
-          <li>Woody Guthrie Center.</li>
-          <li>Gathering Place.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Cyrus+Avery+Centennial+Plaza+Tulsa" target="_blank" rel="noopener noreferrer">Cyrus Avery</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Philbrook+Museum+Tulsa" target="_blank" rel="noopener noreferrer">Philbrook</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Woody+Guthrie+Center+Tulsa" target="_blank" rel="noopener noreferrer">Woody Guthrie Center</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Hidden Spots & Food</h3>
-        <ul>
-          <li>Center of the Universe.</li>
-          <li>Red Fork Historic District.</li>
-          <li>Blue Dome District oder Cherry Street.</li>
-          <li>Mother Road Market.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Center+of+the+Universe+Tulsa" target="_blank" rel="noopener noreferrer">Center of the Universe</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Mother+Road+Market+Tulsa" target="_blank" rel="noopener noreferrer">Mother Road Market</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Musik & Distillery</h3>
-        <ul>
-          <li>Mercury Lounge.</li>
-          <li>Cain’s Ballroom-Umfeld.</li>
-          <li>Red Fork Distillery.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Mercury+Lounge+Tulsa" target="_blank" rel="noopener noreferrer">Mercury Lounge</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Cain%27s+Ballroom+Tulsa" target="_blank" rel="noopener noreferrer">Cain’s Ballroom</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Red+Fork+Distillery+Tulsa" target="_blank" rel="noopener noreferrer">Red Fork Distillery</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Tulsa → Lawton -->
-  <section class="day" id="day-lawton">
-    <div class="meta">20.05.2026 · Wichita Falls / Lawton · Hotel in Lawton</div>
-    <h2>Kompakter Übergangstag mit Fokus auf Kernstopps</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Fahrplan & Stadt</h3>
-        <ul>
-          <li>Abfahrt Tulsa ca. 09:00.</li>
-          <li>Kurzer Stopp bei Wichita Falls möglich; Ankunft im Hotel in Lawton später am Nachmittag/Abend.</li>
-          <li>Kurzes, konzentriertes Programm sinnvoller als ein voller Stadttag.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Stopps unterwegs</h3>
-        <ul>
-          <li>Optional kurzer Halt in Wichita Falls, z. B. für Pause, Snack oder einen kleinen Downtown-Abstecher.</li>
-          <li>Danach Weiterfahrt zum Hotel in Lawton.</li>
-          <li>Als Natur-Highlight bei Zeit: Wichita Mountains Wildlife Refuge.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Wichita+Falls+TX+downtown" target="_blank" rel="noopener noreferrer">Wichita Falls</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Lawton+OK" target="_blank" rel="noopener noreferrer">Lawton</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Wichita+Mountains+Wildlife+Refuge" target="_blank" rel="noopener noreferrer">Wildlife Refuge</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Hotel</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Planungstipp</h3>
-        <ul>
-          <li>Wegen der folgenden langen Südetappe früh zurück und gut vorbereiten.</li>
-          <li>Nur 2 bis 4 Programmpunkte wählen.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Lawton → Austin -->
-  <section class="day" id="day-austin-drive">
-    <div class="meta">21.05.2026 · Austin · citizenM Downtown</div>
-    <h2>Langer Reisetag und entspannter Austin-Abend</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Fahrplan</h3>
-        <ul>
-          <li>Früher Start empfohlen: 07:30.</li>
-          <li>Ankunft in Austin: ca. 18:30–20:00, je nach tatsächlichem Startpunkt.</li>
-          <li>Sehr lange Etappe, daher tagsüber nur Pausen statt Sightseeing.</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Nach Ankunft</h3>
-        <ul>
-          <li>South Congress als bester kurzer Start in Austin.</li>
-          <li>Kurzer Spaziergang an Lady Bird Lake, wenn noch Energie da ist.</li>
-          <li>Abends Continental Club oder Antone’s nur locker anpeilen.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=South+Congress+Austin" target="_blank" rel="noopener noreferrer">South Congress</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Lady+Bird+Lake+Austin" target="_blank" rel="noopener noreferrer">Lady Bird Lake</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin" target="_blank" rel="noopener noreferrer">Continental Club</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Food & Musik</h3>
-        <ul>
-          <li>Franklin Barbecue nur, wenn es logistisch passt; sonst flexibler bleiben.</li>
-          <li>South Austin Music oder Waterloo Records eher am Folgetag bzw. Zusatztag vertiefen.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Franklin+Barbecue+Austin" target="_blank" rel="noopener noreferrer">Franklin Barbecue</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Waterloo+Records+Austin" target="_blank" rel="noopener noreferrer">Waterloo Records</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Austin Zusatztag -->
-  <section class="day" id="day-austin">
-    <div class="meta">22.05.2026 · Austin</div>
-    <h2>Perfekter Zusatztag für Vertiefung</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Highlights</h3>
-        <ul>
-          <li>Texas State Capitol.</li>
-          <li>Barton Springs und Zilker Park.</li>
-          <li>Mount Bonnell oder Laguna Gloria.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Texas+State+Capitol+Austin" target="_blank" rel="noopener noreferrer">Capitol</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Barton+Springs+Pool+Austin" target="_blank" rel="noopener noreferrer">Barton Springs</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Mount+Bonnell+Austin" target="_blank" rel="noopener noreferrer">Mount Bonnell</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Musik, Food & Samstag</h3>
-        <ul>
-          <li>Waterloo Records und South Austin Music.</li>
-          <li>Continental Club, Antone’s oder Broken-Spoke-Logik erneut aufnehmen.</li>
-          <li>Samstag: The Range at Austin als besonderes Highlight.</li>
-          <li>BBQ ohne Zeitdruck planen.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=South+Austin+Music" target="_blank" rel="noopener noreferrer">South Austin Music</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=The+Range+at+Austin" target="_blank" rel="noopener noreferrer">The Range at Austin</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Antone%27s+Nightclub+Austin" target="_blank" rel="noopener noreferrer">Antone’s</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Distillery-Optionen</h3>
-        <ul>
-          <li>Still Austin Whiskey Co. direkt in der Stadt.</li>
-          <li>Treaty Oak Distilling als einfacher Außentrip.</li>
-          <li>Andalusia Whiskey Co. im Hill Country, wenn du bewusst rausfahren willst.</li>
-        </ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Still+Austin+Whiskey+Co" target="_blank" rel="noopener noreferrer">Still Austin</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Treaty+Oak+Distilling+Driftwood+Texas" target="_blank" rel="noopener noreferrer">Treaty Oak</a>
-          <a href="https://www.google.com/maps/search/?api=1&query=Andalusia+Whiskey+Company+Blanco+Texas" target="_blank" rel="noopener noreferrer">Andalusia</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Hotels -->
-  <section class="day" id="hotels">
-    <div class="meta">Hotels der Reise</div>
-    <h2>Übernachtungen auf einen Blick</h2>
-    <div class="grid">
-      <div class="card">
-        <h3>Chicago</h3>
-        <ul><li>citizenM Chicago Downtown.</li></ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=citizenM+Chicago+Downtown" target="_blank" rel="noopener noreferrer">citizenM Chicago Downtown</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>St. Louis</h3>
-        <ul><li>Hotel Lumière at the Arch.</li></ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Lumi%C3%A8re+at+the+Arch+St+Louis" target="_blank" rel="noopener noreferrer">Hotel Lumière at the Arch</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Tulsa</h3>
-        <ul><li>The Mayo Hotel.</li></ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=The+Mayo+Hotel+Tulsa" target="_blank" rel="noopener noreferrer">The Mayo Hotel</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Lawton</h3>
-        <ul><li>Apache Casino Hotel (oder Hotelbereich Lawton).</li></ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=Apache+Casino+Hotel+Lawton+OK" target="_blank" rel="noopener noreferrer">Apache Casino Hotel</a>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Austin</h3>
-        <ul><li>citizenM Austin Downtown (oder vergleichbare Downtown-Lage).</li></ul>
-        <div class="links">
-          <a href="https://www.google.com/maps/search/?api=1&query=citizenM+Austin+Downtown" target="_blank" rel="noopener noreferrer">citizenM Austin Downtown</a>
-        </div>
-      </div>
-    </div>
+  <section class="section" id="alle">
+    <div class="meta">Alle Orte</div>
+    <h2>Ortsliste</h2>
+    <div class="list" id="placeList"></div>
   </section>
 </main>
 
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
 <script>
-// Top-Sets für Filter über alle Städte
-const topMusicGear = new Set([
-  "Chicago Music Exchange",
-  "Buddy Guy's Legends",
-  "House of Blues Chicago",
-  "Blueberry Hill Duck Room",
-  "Old Rock House",
-  "Mercury Lounge",
-  "Cain's Ballroom",
-  "The Continental Club",
-  "Antone's",
-  "South Austin Music"
-]);
+const API_KEY = "AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY";
+const RAW_PLACES = [{"name": "Boomarang Diner - Lawton", "note": "Frühstück", "description": "Notiz: Frühstück URL: https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738 Tags: Kommentar:", "address": "Boomarang Diner - Lawton Frühstück https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738", "category": "food", "googleMapsUrl": "https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738", "query": "Boomarang Diner - Lawton Frühstück"}, {"name": "Phoebe's Downtown", "note": "Frühstück", "description": "Notiz: Frühstück URL: https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900 Tags: Kommentar:", "address": "Phoebe's Downtown Frühstück https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900", "category": "food", "googleMapsUrl": "https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900", "query": "Phoebe's Downtown Frühstück"}, {"name": "Chili Mac's Diner", "note": "Frühstück", "description": "Notiz: Frühstück URL: https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c Tags: Kommentar:", "address": "Chili Mac's Diner Frühstück https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c", "category": "food", "googleMapsUrl": "https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c", "query": "Chili Mac's Diner Frühstück"}, {"name": "Cherry Street Kitchen and Catering", "note": "Frühstück", "description": "Notiz: Frühstück URL: https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f Tags: Kommentar:", "address": "Cherry Street Kitchen and Catering Frühstück https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f", "category": "food", "googleMapsUrl": "https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f", "query": "Cherry Street Kitchen and Catering Frühstück"}, {"name": "The LEGO® Store Chicago", "note": "Spielzeug", "description": "Notiz: Spielzeug URL: https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c Tags: Kommentar:", "address": "The LEGO® Store Chicago Spielzeug https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c", "query": "The LEGO® Store Chicago Spielzeug"}, {"name": "Imagination Toys Inc", "note": "Spielzeug", "description": "Notiz: Spielzeug URL: https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee Tags: Kommentar:", "address": "Imagination Toys Inc Spielzeug https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee", "query": "Imagination Toys Inc Spielzeug"}, {"name": "Tulsa Toy Depot", "note": "Spielzeug", "description": "Notiz: Spielzeug URL: https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b Tags: Kommentar:", "address": "Tulsa Toy Depot Spielzeug https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b", "query": "Tulsa Toy Depot Spielzeug"}, {"name": "Another Planet Comics & Other Stuff", "note": "Spielzeug", "description": "Notiz: Spielzeug URL: https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b Tags: Kommentar:", "address": "Another Planet Comics & Other Stuff Spielzeug https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b", "query": "Another Planet Comics & Other Stuff Spielzeug"}, {"name": "Terra Toys", "note": "Spielzeug", "description": "Notiz: Spielzeug URL: https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d Tags: Kommentar:", "address": "Terra Toys Spielzeug https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d", "query": "Terra Toys Spielzeug"}, {"name": "Drysdales Western Wear", "note": "Stiefel und Western", "description": "Notiz: Stiefel und Western URL: https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac Tags: Kommentar:", "address": "Drysdales Western Wear Stiefel und Western https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac", "query": "Drysdales Western Wear Stiefel und Western"}, {"name": "Red Wing - Lawton, OK", "note": "Stiefel und Western", "description": "Notiz: Stiefel und Western URL: https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f Tags: Kommentar:", "address": "Red Wing - Lawton, OK Stiefel und Western https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f", "query": "Red Wing - Lawton, OK Stiefel und Western"}, {"name": "Chisos Boot Company", "note": "Stiefel und Western", "description": "Notiz: Stiefel und Western URL: https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b Tags: Kommentar:", "address": "Chisos Boot Company Stiefel und Western https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b", "query": "Chisos Boot Company Stiefel und Western"}, {"name": "Levine Hat Co.", "note": "Stiefel und Western", "description": "Notiz: Stiefel und Western URL: https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6 Tags: Kommentar:", "address": "Levine Hat Co. Stiefel und Western https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6", "query": "Levine Hat Co. Stiefel und Western"}, {"name": "Alcala's Western Wear", "note": "Stiefel und Western", "description": "Notiz: Stiefel und Western URL: https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c Tags: Kommentar:", "address": "Alcala's Western Wear Stiefel und Western https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c", "query": "Alcala's Western Wear Stiefel und Western"}, {"name": "Rhine Hall Distillery", "note": "Destillerie", "description": "Notiz: Destillerie URL: https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4 Tags: Kommentar:", "address": "Rhine Hall Distillery Destillerie https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4", "category": "distillery", "googleMapsUrl": "https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4", "query": "Rhine Hall Distillery Destillerie"}, {"name": "Wolf Point Distilling", "note": "Destillerie", "description": "Notiz: Destillerie URL: https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477 Tags: Kommentar:", "address": "Wolf Point Distilling Destillerie https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477", "category": "distillery", "googleMapsUrl": "https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477", "query": "Wolf Point Distilling Destillerie"}, {"name": "StilL 630 Distillery", "note": "Destillerie", "description": "Notiz: Destillerie URL: https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef Tags: Kommentar:", "address": "StilL 630 Distillery Destillerie https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef", "category": "distillery", "googleMapsUrl": "https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef", "query": "StilL 630 Distillery Destillerie"}, {"name": "Dulce Vida Spirits", "note": "Destillerie", "description": "Notiz: Destillerie URL: https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d Tags: Kommentar:", "address": "Dulce Vida Spirits Destillerie https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d", "category": "distillery", "googleMapsUrl": "https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d", "query": "Dulce Vida Spirits Destillerie"}, {"name": "Chain of Rocks Bridge", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b Tags: Kommentar:", "address": "Chain of Rocks Bridge https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b", "query": "Chain of Rocks Bridge"}, {"name": "citizenM Chicago Downtown", "note": "Hotel Chicago", "description": "Notiz: Hotel Chicago URL: https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d Tags: Kommentar:", "address": "citizenM Chicago Downtown Hotel Chicago https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d", "category": "hotel", "googleMapsUrl": "https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d", "query": "citizenM Chicago Downtown Hotel Chicago"}, {"name": "HoteLumiere at The Arch", "note": "Hotel St.Louis", "description": "Notiz: Hotel St.Louis URL: https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd Tags: Kommentar:", "address": "HoteLumiere at The Arch Hotel St.Louis https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd", "category": "hotel", "googleMapsUrl": "https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd", "query": "HoteLumiere at The Arch Hotel St.Louis"}, {"name": "Apache Casino Hotel", "note": "Hotel Lawton", "description": "Notiz: Hotel Lawton URL: https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c Tags: Kommentar:", "address": "Apache Casino Hotel Hotel Lawton https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c", "category": "hotel", "googleMapsUrl": "https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c", "query": "Apache Casino Hotel Hotel Lawton"}, {"name": "The Mayo Hotel", "note": "Hotel Tulsa", "description": "Notiz: Hotel Tulsa URL: https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38 Tags: Kommentar:", "address": "The Mayo Hotel Hotel Tulsa https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38", "category": "hotel", "googleMapsUrl": "https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38", "query": "The Mayo Hotel Hotel Tulsa"}, {"name": "citizenM Austin Downtown", "note": "Hotel Austin", "description": "Notiz: Hotel Austin URL: https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf Tags: Kommentar:", "address": "citizenM Austin Downtown Hotel Austin https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf", "category": "hotel", "googleMapsUrl": "https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf", "query": "citizenM Austin Downtown Hotel Austin"}, {"name": "Dr Pepper Museum", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157 Tags: Kommentar:", "address": "Dr Pepper Museum https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157", "query": "Dr Pepper Museum"}, {"name": "Wonders Of Wildlife National Museum & Aquarium", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e Tags: Kommentar:", "address": "Wonders Of Wildlife National Museum & Aquarium https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e", "query": "Wonders Of Wildlife National Museum & Aquarium"}, {"name": "Route 66 1903 Courthouse Museum", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0 Tags: Kommentar:", "address": "Route 66 1903 Courthouse Museum https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0", "query": "Route 66 1903 Courthouse Museum"}, {"name": "Soulsby Service Station", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4 Tags: Kommentar:", "address": "Soulsby Service Station https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4", "query": "Soulsby Service Station"}, {"name": "Lauterbach Muffler Man (Lauterbach Giant)", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3 Tags: Kommentar:", "address": "Lauterbach Muffler Man (Lauterbach Giant) https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3", "query": "Lauterbach Muffler Man (Lauterbach Giant)"}, {"name": "Litchfield Museum & Route 66 Welcome Center", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c Tags: Kommentar:", "address": "Litchfield Museum & Route 66 Welcome Center https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c", "query": "Litchfield Museum & Route 66 Welcome Center"}, {"name": "Covert Park at Mount Bonnell", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd Tags: Kommentar:", "address": "Covert Park at Mount Bonnell https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd", "query": "Covert Park at Mount Bonnell"}, {"name": "Pops on 66", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4 Tags: Kommentar:", "address": "Pops on 66 https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4", "query": "Pops on 66"}, {"name": "Southfork Ranch", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964 Tags: Kommentar:", "address": "Southfork Ranch https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964", "query": "Southfork Ranch"}, {"name": "Wichita Falls Museum of Art", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea Tags: Kommentar:", "address": "Wichita Falls Museum of Art https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea", "query": "Wichita Falls Museum of Art"}, {"name": "Arcadia Round Barn", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016 Tags: Kommentar:", "address": "Arcadia Round Barn https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016", "category": "music", "googleMapsUrl": "https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016", "query": "Arcadia Round Barn"}, {"name": "Pink Elephant Antique Mall", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd Tags: Kommentar:", "address": "Pink Elephant Antique Mall https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd", "query": "Pink Elephant Antique Mall"}, {"name": "World's Largest Railsplitter Covered Wagon", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f Tags: Kommentar:", "address": "World's Largest Railsplitter Covered Wagon https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f", "query": "World's Largest Railsplitter Covered Wagon"}, {"name": "Pontiac Museum Complex", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73 Tags: Kommentar:", "address": "Pontiac Museum Complex https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73", "query": "Pontiac Museum Complex"}, {"name": "Pontiac Oakland Auto Museum", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b Tags: Kommentar:", "address": "Pontiac Oakland Auto Museum https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b", "query": "Pontiac Oakland Auto Museum"}, {"name": "Route 66 Wall Art Photopoint", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df Tags: Kommentar:", "address": "Route 66 Wall Art Photopoint https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df", "query": "Route 66 Wall Art Photopoint"}, {"name": "Route 66 decommissioned Illinois State police headquarter", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c Tags: Kommentar:", "address": "Route 66 decommissioned Illinois State police headquarter https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c", "query": "Route 66 decommissioned Illinois State police headquarter"}, {"name": "Route 66 Association of Illinois", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7 Tags: Kommentar:", "address": "Route 66 Association of Illinois https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7", "query": "Route 66 Association of Illinois"}, {"name": "Historic Rainbow Bridge", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16 Tags: Kommentar:", "address": "Historic Rainbow Bridge https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16", "query": "Historic Rainbow Bridge"}, {"name": "Uranus Fudge Factory And General Store - Uranus Missouri", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4 Tags: Kommentar:", "address": "Uranus Fudge Factory And General Store - Uranus Missouri https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4", "query": "Uranus Fudge Factory And General Store - Uranus Missouri"}, {"name": "Buck Atom's Cosmic Curios on 66", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13 Tags: Kommentar:", "address": "Buck Atom's Cosmic Curios on 66 https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13", "query": "Buck Atom's Cosmic Curios on 66"}, {"name": "Route 66 Historical Village", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6 Tags: Kommentar:", "address": "Route 66 Historical Village https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6", "query": "Route 66 Historical Village"}, {"name": "Bonnie and Clyde Hideout Apartment", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24 Tags: Kommentar:", "address": "Bonnie and Clyde Hideout Apartment https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24", "query": "Bonnie and Clyde Hideout Apartment"}, {"name": "Red Oak II", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf Tags: Kommentar:", "address": "Red Oak II https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf", "query": "Red Oak II"}, {"name": "Gary’s Gay Parita", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227 Tags: Kommentar:", "address": "Gary’s Gay Parita https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227", "query": "Gary’s Gay Parita"}, {"name": "Meramec Caverns", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136 Tags: Kommentar:", "address": "Meramec Caverns https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136", "query": "Meramec Caverns"}, {"name": "S Congress Ave", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d Tags: Kommentar:", "address": "S Congress Ave https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d", "query": "S Congress Ave"}, {"name": "Barton Springs Pool", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6 Tags: Kommentar:", "address": "Barton Springs Pool https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6", "category": "music", "googleMapsUrl": "https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6", "query": "Barton Springs Pool"}, {"name": "Sixth Street Historic District", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4 Tags: Kommentar:", "address": "Sixth Street Historic District https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4", "query": "Sixth Street Historic District"}, {"name": "Sahara Lounge", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749 Tags: Kommentar:", "address": "Sahara Lounge https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749", "category": "music", "googleMapsUrl": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749", "query": "Sahara Lounge"}, {"name": "Saxon Pub", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623 Tags: Kommentar:", "address": "Saxon Pub https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623", "category": "music", "googleMapsUrl": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623", "query": "Saxon Pub"}, {"name": "Elephant Room", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9 Tags: Kommentar:", "address": "Elephant Room https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9", "query": "Elephant Room"}, {"name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697 Tags: Kommentar:", "address": "Austin City Limits Live (ACL Live & 3TEN ACL Live) https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697", "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live)"}, {"name": "Museum of the Great Plains", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5 Tags: Kommentar:", "address": "Museum of the Great Plains https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5", "query": "Museum of the Great Plains"}, {"name": "The Holy City of the Wichitas", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4 Tags: Kommentar:", "address": "The Holy City of the Wichitas https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4", "query": "The Holy City of the Wichitas"}, {"name": "Gilcrease Museum", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c Tags: Kommentar:", "address": "Gilcrease Museum https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c", "query": "Gilcrease Museum"}, {"name": "Cyrus Avery Centennial Plaza", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4 Tags: Kommentar:", "address": "Cyrus Avery Centennial Plaza https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4", "query": "Cyrus Avery Centennial Plaza"}, {"name": "Shops at Mother Road Market", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9 Tags: Kommentar:", "address": "Shops at Mother Road Market https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9", "category": "hidden", "googleMapsUrl": "https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9", "query": "Shops at Mother Road Market"}, {"name": "Philbrook Museum of Art", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012 Tags: Kommentar:", "address": "Philbrook Museum of Art https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012", "query": "Philbrook Museum of Art"}, {"name": "Golden Driller Statue", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab Tags: Kommentar:", "address": "Golden Driller Statue https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab", "query": "Golden Driller Statue"}, {"name": "The St. Louis Wheel", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0 Tags: Kommentar:", "address": "The St. Louis Wheel https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0", "query": "The St. Louis Wheel"}, {"name": "Anheuser-Busch St. Louis Brewery", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b Tags: Kommentar:", "address": "Anheuser-Busch St. Louis Brewery https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b", "category": "distillery", "googleMapsUrl": "https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b", "query": "Anheuser-Busch St. Louis Brewery"}, {"name": "Missouri Botanical Garden", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080 Tags: Kommentar:", "address": "Missouri Botanical Garden https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080", "query": "Missouri Botanical Garden"}, {"name": "Museum at the Gateway Arch", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156 Tags: Kommentar:", "address": "Museum at the Gateway Arch https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156", "query": "Museum at the Gateway Arch"}, {"name": "Gateway Arch", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834 Tags: Kommentar:", "address": "Gateway Arch https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834", "query": "Gateway Arch"}, {"name": "House of Blues Chicago", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849 Tags: Kommentar:", "address": "House of Blues Chicago https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849", "category": "music", "googleMapsUrl": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849", "query": "House of Blues Chicago"}, {"name": "Lincoln Park Zoo", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db Tags: Kommentar:", "address": "Lincoln Park Zoo https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db", "query": "Lincoln Park Zoo"}, {"name": "Chicago River Boat Architecture Tours", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180 Tags: Kommentar:", "address": "Chicago River Boat Architecture Tours https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180", "query": "Chicago River Boat Architecture Tours"}, {"name": "Griffin Museum of Science and Industry", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306 Tags: Kommentar:", "address": "Griffin Museum of Science and Industry https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306", "query": "Griffin Museum of Science and Industry"}, {"name": "Field Museum of Natural History", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da Tags: Kommentar:", "address": "Field Museum of Natural History https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da", "category": "sight", "googleMapsUrl": "https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da", "query": "Field Museum of Natural History"}, {"name": "360 Chicago", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74 Tags: Kommentar:", "address": "360 Chicago https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74", "query": "360 Chicago"}, {"name": "Cloud Gate", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51 Tags: Kommentar:", "address": "Cloud Gate https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51", "query": "Cloud Gate"}, {"name": "Navy Pier", "note": "", "description": "Notiz: URL: https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc Tags: Kommentar:", "address": "Navy Pier https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc", "category": "other", "googleMapsUrl": "https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc", "query": "Navy Pier"}, {"name": "Buddy Guy's Legends", "note": "ikonischer Bluesclub", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Buddy+Guy's+Legends+Chicago", "query": "Buddy Guy's Legends Chicago"}, {"name": "Kingston Mines", "note": "legendäre Late-Night-Blues-Sessions", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago", "query": "Kingston Mines Chicago"}, {"name": "Blue Chicago", "note": "echter Chicago Blues", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Blue+Chicago+Chicago", "query": "Blue Chicago Chicago"}, {"name": "House of Blues Chicago", "note": "größere Live-Acts", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=House+of+Blues+Chicago+Chicago", "query": "House of Blues Chicago Chicago"}, {"name": "Carol's Pub", "note": "Country & Honky Tonk", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Carol's+Pub+Chicago", "query": "Carol's Pub Chicago"}, {"name": "Rosa's Lounge", "note": "authentischer lokaler Blues", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Rosa's+Lounge+Chicago", "query": "Rosa's Lounge Chicago"}, {"name": "Reggies Chicago", "note": "Rock / Americana / Blues Rock", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Reggies+Chicago+Chicago", "query": "Reggies Chicago Chicago"}, {"name": "The Hideout Chicago", "note": "Alternative Country / Indie", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Hideout+Chicago+Chicago", "query": "The Hideout Chicago Chicago"}, {"name": "AliveOne Chicago", "note": "Jam-Bar / Live-Musik", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=AliveOne+Chicago+Chicago", "query": "AliveOne Chicago Chicago"}, {"name": "Empty Bottle Chicago", "note": "Indie / Rock", "description": "Top Musik/Bars Empfehlung", "address": "Chicago", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Empty+Bottle+Chicago+Chicago", "query": "Empty Bottle Chicago Chicago"}, {"name": "Broadway Oyster Bar", "note": "Blues / Jam / Rock", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Broadway+Oyster+Bar+St.+Louis", "query": "Broadway Oyster Bar St. Louis"}, {"name": "Blueberry Hill Duck Room", "note": "Chuck-Berry-Legende", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Blueberry+Hill+Duck+Room+St.+Louis", "query": "Blueberry Hill Duck Room St. Louis"}, {"name": "Old Rock House", "note": "Americana / Rock", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Old+Rock+House+St.+Louis", "query": "Old Rock House St. Louis"}, {"name": "BB's Jazz Blues and Soups", "note": "Blues & Jazz", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=BB's+Jazz+Blues+and+Soups+St.+Louis", "query": "BB's Jazz Blues and Soups St. Louis"}, {"name": "Hammerstone's", "note": "Soulard Blues", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hammerstone's+St.+Louis", "query": "Hammerstone's St. Louis"}, {"name": "Venice Cafe St. Louis", "note": "kreative lokale Musikszene", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Venice+Cafe+St.+Louis+St.+Louis", "query": "Venice Cafe St. Louis St. Louis"}, {"name": "Off Broadway St. Louis", "note": "Folk / Americana", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Off+Broadway+St.+Louis+St.+Louis", "query": "Off Broadway St. Louis St. Louis"}, {"name": "1860 Saloon", "note": "Blues-Bar in Soulard", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=1860+Saloon+St.+Louis", "query": "1860 Saloon St. Louis"}, {"name": "The Honky Tonk STL", "note": "Country / Honky Tonk", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Honky+Tonk+STL+St.+Louis", "query": "The Honky Tonk STL St. Louis"}, {"name": "The House Of Soul St. Louis", "note": "Soul / Blues", "description": "Top Musik/Bars Empfehlung", "address": "St. Louis", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+House+Of+Soul+St.+Louis+St.+Louis", "query": "The House Of Soul St. Louis St. Louis"}, {"name": "Mercury Lounge Tulsa", "note": "Route-66-Vibes / Country / Blues", "description": "Top Musik/Bars Empfehlung", "address": "Tulsa", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mercury+Lounge+Tulsa+Tulsa", "query": "Mercury Lounge Tulsa Tulsa"}, {"name": "Cain's Ballroom", "note": "historische Country-Venue", "description": "Top Musik/Bars Empfehlung", "address": "Tulsa", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cain's+Ballroom+Tulsa", "query": "Cain's Ballroom Tulsa"}, {"name": "The Colony Tulsa", "note": "Open Stage / Songwriter", "description": "Top Musik/Bars Empfehlung", "address": "Tulsa", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Colony+Tulsa+Tulsa", "query": "The Colony Tulsa Tulsa"}, {"name": "Soundpony Tulsa", "note": "lokale Alternative-Szene", "description": "Top Musik/Bars Empfehlung", "address": "Tulsa", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Soundpony+Tulsa+Tulsa", "query": "Soundpony Tulsa Tulsa"}, {"name": "LowDown Tulsa", "note": "Jazz / Blues", "description": "Top Musik/Bars Empfehlung", "address": "Tulsa", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=LowDown+Tulsa+Tulsa", "query": "LowDown Tulsa Tulsa"}, {"name": "Medicine Park Tavern", "note": "lokale Musikbar", "description": "Top Musik/Bars Empfehlung", "address": "Lawton", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Medicine+Park+Tavern+Lawton", "query": "Medicine Park Tavern Lawton"}, {"name": "Apache Casino Event Center", "note": "Casino Concert Venue", "description": "Top Musik/Bars Empfehlung", "address": "Lawton", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Apache+Casino+Event+Center+Lawton", "query": "Apache Casino Event Center Lawton"}, {"name": "CW Scooters Lawton", "note": "Country / Dancehall", "description": "Top Musik/Bars Empfehlung", "address": "Lawton", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=CW+Scooters+Lawton+Lawton", "query": "CW Scooters Lawton Lawton"}, {"name": "Iron Horse Pub Wichita Falls", "note": "Pub / Live-Musik", "description": "Top Musik/Bars Empfehlung", "address": "Wichita Falls", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Iron+Horse+Pub+Wichita+Falls+Wichita+Falls", "query": "Iron Horse Pub Wichita Falls Wichita Falls"}, {"name": "Back Porch Draft House Lawton", "note": "Bar / Food / lokale Szene", "description": "Top Musik/Bars Empfehlung", "address": "Lawton", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Back+Porch+Draft+House+Lawton+Lawton", "query": "Back Porch Draft House Lawton Lawton"}, {"name": "The Continental Club Austin", "note": "Austin-Klassiker für Rock / Blues", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin+Austin", "query": "The Continental Club Austin Austin"}, {"name": "Antone's Nightclub Austin", "note": "legendärer Bluesclub", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Antone's+Nightclub+Austin+Austin", "query": "Antone's Nightclub Austin Austin"}, {"name": "The White Horse Austin", "note": "Honky Tonk / Country", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+White+Horse+Austin+Austin", "query": "The White Horse Austin Austin"}, {"name": "Broken Spoke Austin", "note": "Classic Texas Country", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Broken+Spoke+Austin+Austin", "query": "Broken Spoke Austin Austin"}, {"name": "Saxon Pub Austin", "note": "Singer-Songwriter", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Saxon+Pub+Austin+Austin", "query": "Saxon Pub Austin Austin"}, {"name": "C-Boy's Heart & Soul", "note": "Soul / Blues / Rock", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=C-Boy's+Heart+&+Soul+Austin", "query": "C-Boy's Heart & Soul Austin"}, {"name": "Hole in the Wall Austin", "note": "Rock Dive Bar", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hole+in+the+Wall+Austin+Austin", "query": "Hole in the Wall Austin Austin"}, {"name": "Stubb's Bar-B-Q Austin", "note": "Konzerte & BBQ", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Stubb's+Bar-B-Q+Austin+Austin", "query": "Stubb's Bar-B-Q Austin Austin"}, {"name": "Mohawk Austin", "note": "Indie / Rock", "description": "Top Musik/Bars Empfehlung", "address": "Austin", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mohawk+Austin+Austin", "query": "Mohawk Austin Austin"}, {"name": "Gruene Hall", "note": "legendäre Texas Dance Hall", "description": "Top Musik/Bars Empfehlung", "address": "New Braunfels", "category": "music", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gruene+Hall+New+Braunfels", "query": "Gruene Hall New Braunfels"}, {"name": "Lou Mitchell's", "note": "Route-66-Frühstücksklassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Lou+Mitchell's+Chicago", "query": "Lou Mitchell's Chicago"}, {"name": "Smoque BBQ", "note": "BBQ Empfehlung", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Smoque+BBQ+Chicago", "query": "Smoque BBQ Chicago"}, {"name": "Green Street Smoked Meats", "note": "BBQ / Smokehouse", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Green+Street+Smoked+Meats+Chicago", "query": "Green Street Smoked Meats Chicago"}, {"name": "Au Cheval", "note": "Burger / Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Au+Cheval+Chicago", "query": "Au Cheval Chicago"}, {"name": "Pequod's Pizza", "note": "Deep Dish Pizza", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pequod's+Pizza+Chicago", "query": "Pequod's Pizza Chicago"}, {"name": "Gene & Jude's", "note": "Hot Dogs / Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gene+&+Jude's+Chicago", "query": "Gene & Jude's Chicago"}, {"name": "Calumet Fisheries", "note": "historischer Seafood-Smokehouse-Stop", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Calumet+Fisheries+Chicago", "query": "Calumet Fisheries Chicago"}, {"name": "Manny's Cafeteria & Delicatessen", "note": "Chicago Deli Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Manny's+Cafeteria+&+Delicatessen+Chicago", "query": "Manny's Cafeteria & Delicatessen Chicago"}, {"name": "The Berghoff", "note": "historisches Downtown Restaurant", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Berghoff+Chicago", "query": "The Berghoff Chicago"}, {"name": "Portillo's Chicago", "note": "Chicago Hot Dogs / Italian Beef", "description": "Top Restaurant/Food Empfehlung", "address": "Chicago", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Portillo's+Chicago+Chicago", "query": "Portillo's Chicago Chicago"}, {"name": "Pappy's Smokehouse", "note": "BBQ Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Pappy's+Smokehouse+St.+Louis", "query": "Pappy's Smokehouse St. Louis"}, {"name": "Bogart's Smokehouse", "note": "BBQ in Soulard", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Bogart's+Smokehouse+St.+Louis", "query": "Bogart's Smokehouse St. Louis"}, {"name": "Sugarfire Smoke House", "note": "BBQ / Casual", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Sugarfire+Smoke+House+St.+Louis", "query": "Sugarfire Smoke House St. Louis"}, {"name": "Ted Drewes Frozen Custard", "note": "Dessert Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ted+Drewes+Frozen+Custard+St.+Louis", "query": "Ted Drewes Frozen Custard St. Louis"}, {"name": "Crown Candy Kitchen", "note": "historischer Diner / Shakes", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Crown+Candy+Kitchen+St.+Louis", "query": "Crown Candy Kitchen St. Louis"}, {"name": "Blueberry Hill", "note": "Food + Musikgeschichte", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Blueberry+Hill+St.+Louis", "query": "Blueberry Hill St. Louis"}, {"name": "Gioia's Deli", "note": "Hot Salami Sandwich", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gioia's+Deli+St.+Louis", "query": "Gioia's Deli St. Louis"}, {"name": "Charlie Gitto's On The Hill", "note": "Italian / The Hill", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Charlie+Gitto's+On+The+Hill+St.+Louis", "query": "Charlie Gitto's On The Hill St. Louis"}, {"name": "City Coffeehouse & Crêperie", "note": "Frühstück / Café", "description": "Top Restaurant/Food Empfehlung", "address": "St. Louis", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=City+Coffeehouse+&+Crêperie+St.+Louis", "query": "City Coffeehouse & Crêperie St. Louis"}, {"name": "Mother Road Market", "note": "Food Hall / Route 66", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mother+Road+Market+Tulsa", "query": "Mother Road Market Tulsa"}, {"name": "Tally's Good Food Cafe", "note": "Route-66-Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tally's+Good+Food+Cafe+Tulsa", "query": "Tally's Good Food Cafe Tulsa"}, {"name": "Burn Co Barbecue", "note": "BBQ Empfehlung", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Burn+Co+Barbecue+Tulsa", "query": "Burn Co Barbecue Tulsa"}, {"name": "El Rancho Grande", "note": "Route-66-Tex-Mex", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=El+Rancho+Grande+Tulsa", "query": "El Rancho Grande Tulsa"}, {"name": "Hank's Hamburgers", "note": "Burger Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hank's+Hamburgers+Tulsa", "query": "Hank's Hamburgers Tulsa"}, {"name": "Andolini's Pizzeria", "note": "Pizza / Casual", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Andolini's+Pizzeria+Tulsa", "query": "Andolini's Pizzeria Tulsa"}, {"name": "The Vault Restaurant", "note": "Downtown / Retro", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Vault+Restaurant+Tulsa", "query": "The Vault Restaurant Tulsa"}, {"name": "Dilly Diner", "note": "Frühstück / Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Dilly+Diner+Tulsa", "query": "Dilly Diner Tulsa"}, {"name": "Antoinette Baking Co.", "note": "Bakery / Café", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Antoinette+Baking+Co.+Tulsa", "query": "Antoinette Baking Co. Tulsa"}, {"name": "Hwy 66 Diner at Hard Rock Tulsa", "note": "Route-66-Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Tulsa", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hwy+66+Diner+at+Hard+Rock+Tulsa+Tulsa", "query": "Hwy 66 Diner at Hard Rock Tulsa Tulsa"}, {"name": "Boomarang Diner - Lawton", "note": "Frühstück / Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Lawton", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Boomarang+Diner+-+Lawton+Lawton", "query": "Boomarang Diner - Lawton Lawton"}, {"name": "Back Porch Draft House", "note": "Casual Food / Bar", "description": "Top Restaurant/Food Empfehlung", "address": "Lawton", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Back+Porch+Draft+House+Lawton", "query": "Back Porch Draft House Lawton"}, {"name": "Meers Store and Restaurant", "note": "Burger / Wichita Mountains", "description": "Top Restaurant/Food Empfehlung", "address": "Meers", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Meers+Store+and+Restaurant+Meers", "query": "Meers Store and Restaurant Meers"}, {"name": "Wayne's Drive Inn", "note": "Drive-In Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Lawton", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Wayne's+Drive+Inn+Lawton", "query": "Wayne's Drive Inn Lawton"}, {"name": "Mutti's German Restaurant", "note": "German Food", "description": "Top Restaurant/Food Empfehlung", "address": "Lawton", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mutti's+German+Restaurant+Lawton", "query": "Mutti's German Restaurant Lawton"}, {"name": "RibCrib BBQ Lawton", "note": "BBQ", "description": "Top Restaurant/Food Empfehlung", "address": "Lawton", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=RibCrib+BBQ+Lawton+Lawton", "query": "RibCrib BBQ Lawton Lawton"}, {"name": "McBride's Steakhouse", "note": "Steakhouse", "description": "Top Restaurant/Food Empfehlung", "address": "Wichita Falls", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=McBride's+Steakhouse+Wichita+Falls", "query": "McBride's Steakhouse Wichita Falls"}, {"name": "Hibiscus Cafe Wichita Falls", "note": "Breakfast / Brunch", "description": "Top Restaurant/Food Empfehlung", "address": "Wichita Falls", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hibiscus+Cafe+Wichita+Falls+Wichita+Falls", "query": "Hibiscus Cafe Wichita Falls Wichita Falls"}, {"name": "Progress & Provisions", "note": "Coffee / Food", "description": "Top Restaurant/Food Empfehlung", "address": "Wichita Falls", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Progress+&+Provisions+Wichita+Falls", "query": "Progress & Provisions Wichita Falls"}, {"name": "The Highlander Public House", "note": "Pub Food", "description": "Top Restaurant/Food Empfehlung", "address": "Wichita Falls", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Highlander+Public+House+Wichita+Falls", "query": "The Highlander Public House Wichita Falls"}, {"name": "Franklin Barbecue", "note": "BBQ Legende", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Franklin+Barbecue+Austin", "query": "Franklin Barbecue Austin"}, {"name": "Terry Black's Barbecue", "note": "BBQ Empfehlung", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Terry+Black's+Barbecue+Austin", "query": "Terry Black's Barbecue Austin"}, {"name": "La Barbecue", "note": "BBQ", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=La+Barbecue+Austin", "query": "La Barbecue Austin"}, {"name": "Micklethwait Craft Meats", "note": "BBQ / Food Truck", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Micklethwait+Craft+Meats+Austin", "query": "Micklethwait Craft Meats Austin"}, {"name": "Joann's Fine Foods", "note": "South Congress / Diner", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Joann's+Fine+Foods+Austin", "query": "Joann's Fine Foods Austin"}, {"name": "Magnolia Cafe", "note": "Diner / Breakfast", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Magnolia+Cafe+Austin", "query": "Magnolia Cafe Austin"}, {"name": "Home Slice Pizza", "note": "South Congress Pizza", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Home+Slice+Pizza+Austin", "query": "Home Slice Pizza Austin"}, {"name": "Matt's El Rancho", "note": "Tex-Mex Klassiker", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Matt's+El+Rancho+Austin", "query": "Matt's El Rancho Austin"}, {"name": "Juan in a Million", "note": "Breakfast Tacos", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Juan+in+a+Million+Austin", "query": "Juan in a Million Austin"}, {"name": "Torchy's Tacos Austin", "note": "Tacos / Casual", "description": "Top Restaurant/Food Empfehlung", "address": "Austin", "category": "food", "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Torchy's+Tacos+Austin+Austin", "query": "Torchy's Tacos Austin Austin"}];
+let map, service, infoWindow;
+let markers = [];
+let resolvedPlaces = [];
+const cacheKey = "route66ResolvedPlacesV27";
 
-const topMust = new Set([
-  "Millennium Park",
-  "Art Institute of Chicago",
-  "Route 66 Begin Sign",
-  "Gateway Arch",
-  "Missouri Botanical Garden",
-  "Chain of Rocks Bridge",
-  "Cyrus Avery Plaza",
-  "Gathering Place",
-  "Wichita Mountains Wildlife Refuge",
-  "The Range at Austin"
-]);
+const categoryEditKey = "route66CategoryOverridesV27";
 
-const topFood = new Set([
-  "Maxwell Street",
-  "Cozy Dog Drive-In",
-  "Ted Drewes",
-  "Mother Road Market",
-  "Franklin Barbecue"
-]);
-
-// Keine manuell ergänzten Kartenmarker: Auf der Karte werden nur die importierten My-Maps/KMZ-Ziele verwendet.
-const points = [];
-
-
-// Grobe Reiseroute Chicago → St. Louis → Tulsa → Wichita Falls/Lawton → Austin.
-// Wird verwendet, um importierte KMZ-Ziele zu filtern, damit nur Orte in Routennähe auf der Karte landen.
-const CSV_ROUTE_STOPS = [
-  [-87.6243,41.8763],
-  [-90.1848,38.6247],
-  [-95.9833,36.1539],
-  [-98.4934,33.9137],
-  [-98.3877,34.6085],
-  [-97.7431,30.2672]
-];
-
-// Grobe Bounding Box um die komplette Reise. Verhindert Geocoding-Treffer an Ost-/Westküste.
-const CSV_ROUTE_BBOX = '-100.5,29.0,-86.0,43.5';
-
-function distanceToSegmentDegrees(p, a, b) {
-  const x = p[0], y = p[1];
-  const x1 = a[0], y1 = a[1];
-  const x2 = b[0], y2 = b[1];
-  const A = x - x1;
-  const B = y - y1;
-  const C = x2 - x1;
-  const D = y2 - y1;
-  const dot = A * C + B * D;
-  const lenSq = C * C + D * D;
-  let param = -1;
-  if (lenSq !== 0) param = dot / lenSq;
-  let xx, yy;
-  if (param < 0) {
-    xx = x1; yy = y1;
-  } else if (param > 1) {
-    xx = x2; yy = y2;
-  } else {
-    xx = x1 + param * C;
-    yy = y1 + param * D;
-  }
-  const dx = x - xx;
-  const dy = y - yy;
-  return Math.sqrt(dx * dx + dy * dy);
+function getCategoryOverrides() {
+  try { return JSON.parse(localStorage.getItem(categoryEditKey) || "{}"); }
+  catch(e) { return {}; }
 }
 
-function isNearRoute(coords, maxDistanceDegrees = 0.95) {
-  for (let i = 0; i < CSV_ROUTE_STOPS.length - 1; i++) {
-    if (distanceToSegmentDegrees(coords, CSV_ROUTE_STOPS[i], CSV_ROUTE_STOPS[i + 1]) <= maxDistanceDegrees) {
-      return true;
-    }
-  }
-  return false;
+function saveCategoryOverrides(overrides) {
+  localStorage.setItem(categoryEditKey, JSON.stringify(overrides));
 }
 
-// Zusätzliche Ziele aus der CSV-Datei "USA 2026 4.csv".
-// Da die CSV keine Koordinaten enthält, werden diese Orte beim Laden über Mapbox Geocoding aufgelöst.
-const csvImportedPoints = [
-  {
-    "name": "Buckingham-Brunnen",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Buckingham-Brunnen/data=!4m2!3m1!1s0x880e2ca005fd8e87:0x2440022c9be1ae59",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Buckingham Fountain Chicago Grant Park",
-    "coords": [
-      -87.6189,
-      41.8765
-    ]
-  },
-  {
-    "name": "The Range at Austin",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+Range+at+Austin/data=!4m2!3m1!1s0x8644b3338d6c0729:0x54f471a5d3cb11ee",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The Range at Austin USA"
-  },
-  {
-    "name": "Pho 360",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Pho+360/data=!4m2!3m1!1s0x87ad1f180240a9b1:0xaaac18316526e13d",
-    "text": "KMZ · Frühstück",
-    "query": "Pho 360 USA"
-  },
-  {
-    "name": "Boomarang Diner - Lawton",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738",
-    "text": "KMZ · Frühstück",
-    "query": "Boomarang Diner - Lawton USA"
-  },
-  {
-    "name": "Ann's Country Kitchen",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Ann's+Country+Kitchen/data=!4m2!3m1!1s0x87acfd0a3f4eccd9:0x6b9505698c687d36",
-    "text": "KMZ · Frühstück",
-    "query": "Ann's Country Kitchen USA"
-  },
-  {
-    "name": "Country Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Country+Cafe/data=!4m2!3m1!1s0x87ad1f12bc8b3d09:0xb605560141f53ed4",
-    "text": "KMZ · Frühstück",
-    "query": "Country Cafe USA"
-  },
-  {
-    "name": "Caroline",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Caroline/data=!4m2!3m1!1s0x8644b509e7e92743:0x38cd855b7c17b277",
-    "text": "KMZ · Frühstück",
-    "query": "Caroline USA"
-  },
-  {
-    "name": "Phoebe's Downtown",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900",
-    "text": "KMZ · Frühstück",
-    "query": "Phoebe's Downtown USA"
-  },
-  {
-    "name": "Dilly Diner",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Dilly+Diner/data=!4m2!3m1!1s0x87b6eb7f6d9eac8f:0x196ac564737e5781",
-    "text": "KMZ · Frühstück",
-    "query": "Dilly Diner USA"
-  },
-  {
-    "name": "Tally's Good Food Café",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Tally's+Good+Food+Caf%C3%A9/data=!4m2!3m1!1s0x87b6ed125902cd5d:0xe0b8e9361ec87098",
-    "text": "KMZ · Frühstück",
-    "query": "Tally's Good Food Café USA"
-  },
-  {
-    "name": "Wildberry Pancakes & Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Wildberry+Pancakes+%26+Cafe/data=!4m2!3m1!1s0x880e2ca61afe006f:0x952fc2ea4e453f15",
-    "text": "KMZ · Frühstück",
-    "query": "Wildberry Pancakes & Cafe USA"
-  },
-  {
-    "name": "Chili Mac's Diner",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c",
-    "text": "KMZ · Frühstück",
-    "query": "Chili Mac's Diner USA"
-  },
-  {
-    "name": "Cherry Street Kitchen and Catering",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f",
-    "text": "KMZ · Frühstück",
-    "query": "Cherry Street Kitchen and Catering USA"
-  },
-  {
-    "name": "The LEGO® Store Chicago",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c",
-    "text": "KMZ · Spielzeug",
-    "query": "The LEGO® Store Chicago USA"
-  },
-  {
-    "name": "Building Blocks Toy Store",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Building+Blocks+Toy+Store/data=!4m2!3m1!1s0x880fd25a3457b65f:0x9883a83a4e0ae6aa",
-    "text": "KMZ · Spielzeug",
-    "query": "Building Blocks Toy Store USA"
-  },
-  {
-    "name": "S & B Candy & Toy",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/S+%26+B+Candy+%26+Toy/data=!4m2!3m1!1s0x87d8b2d866d93227:0xd2802fb744a265c5",
-    "text": "KMZ · Spielzeug",
-    "query": "S & B Candy & Toy USA"
-  },
-  {
-    "name": "The Minifig Shop",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/The+Minifig+Shop/data=!4m2!3m1!1s0x87d8cde5dc7686db:0x655c334450a125ad",
-    "text": "KMZ · Spielzeug",
-    "query": "The Minifig Shop USA"
-  },
-  {
-    "name": "Imagination Toys Inc",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee",
-    "text": "KMZ · Spielzeug",
-    "query": "Imagination Toys Inc USA"
-  },
-  {
-    "name": "Kiddlestix Toy Store",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Kiddlestix+Toy+Store/data=!4m2!3m1!1s0x87b692d7c866f445:0xe173251c0171366b",
-    "text": "KMZ · Spielzeug",
-    "query": "Kiddlestix Toy Store USA"
-  },
-  {
-    "name": "Tulsa Toy Depot",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b",
-    "text": "KMZ · Spielzeug",
-    "query": "Tulsa Toy Depot USA"
-  },
-  {
-    "name": "Another Planet Comics & Other Stuff",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b",
-    "text": "KMZ · Spielzeug",
-    "query": "Another Planet Comics & Other Stuff USA"
-  },
-  {
-    "name": "Terra Toys",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d",
-    "text": "KMZ · Spielzeug",
-    "query": "Terra Toys USA"
-  },
-  {
-    "name": "Toy Joy",
-    "category": "Spielzeug",
-    "type": "toys",
-    "url": "https://www.google.com/maps/place/Toy+Joy/data=!4m2!3m1!1s0x8644b57f7379a59d:0x2c613df415af9483",
-    "text": "KMZ · Spielzeug",
-    "query": "Toy Joy USA"
-  },
-  {
-    "name": "Boot Barn",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Boot+Barn/data=!4m2!3m1!1s0x87b68df61a052a69:0x25eec87c203cddbc",
-    "text": "KMZ · Western & Boots",
-    "query": "Boot Barn USA"
-  },
-  {
-    "name": "Drysdales Western Wear",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac",
-    "text": "KMZ · Western & Boots",
-    "query": "Drysdales Western Wear USA"
-  },
-  {
-    "name": "Dos Amigos",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Dos+Amigos/data=!4m2!3m1!1s0x87b6f325bfafd593:0x32490aada604d7f",
-    "text": "KMZ · Western & Boots",
-    "query": "Dos Amigos USA"
-  },
-  {
-    "name": "Red Wing - Lawton, OK",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f",
-    "text": "KMZ · Western & Boots",
-    "query": "Red Wing - Lawton, OK USA"
-  },
-  {
-    "name": "Allens Boots",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Allens+Boots/data=!4m2!3m1!1s0x8644b4fc8d157bf3:0x954e1efa2e66082a",
-    "text": "KMZ · Western & Boots",
-    "query": "Allens Boots USA"
-  },
-  {
-    "name": "Chisos Boot Company",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b",
-    "text": "KMZ · Western & Boots",
-    "query": "Chisos Boot Company USA"
-  },
-  {
-    "name": "Tecovas",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Tecovas/data=!4m2!3m1!1s0x8644b434b3e0befb:0x9201eb58961ab808",
-    "text": "KMZ · Western & Boots",
-    "query": "Tecovas USA"
-  },
-  {
-    "name": "Cavender's Western Outfitter",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Cavender's+Western+Outfitter/data=!4m2!3m1!1s0x87ded4eacd2ce0f5:0xdf07a1ab2e97ca48",
-    "text": "KMZ · Western & Boots",
-    "query": "Cavender's Western Outfitter USA"
-  },
-  {
-    "name": "Levine Hat Co.",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6",
-    "text": "KMZ · Western & Boots",
-    "query": "Levine Hat Co. USA"
-  },
-  {
-    "name": "Alcala's Western Wear",
-    "category": "Western & Boots",
-    "type": "western",
-    "url": "https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c",
-    "text": "KMZ · Western & Boots",
-    "query": "Alcala's Western Wear USA"
-  },
-  {
-    "name": "Rhine Hall Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Rhine Hall Distillery USA"
-  },
-  {
-    "name": "Wolf Point Distilling",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Wolf Point Distilling USA"
-  },
-  {
-    "name": "Square One Brewery & Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Square+One+Brewery+%26+Distillery/data=!4m2!3m1!1s0x87d8b37145198191:0x717614de0ec78272",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Square One Brewery & Distillery USA"
-  },
-  {
-    "name": "StilL 630 Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "StilL 630 Distillery USA"
-  },
-  {
-    "name": "Dulce Vida Spirits",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Dulce Vida Spirits USA"
-  },
-  {
-    "name": "Chain of Rocks Bridge",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Chain of Rocks Bridge USA"
-  },
-  {
-    "name": "citizenM Chicago Downtown",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d",
-    "text": "KMZ · Hotels",
-    "query": "citizenM Chicago Downtown USA"
-  },
-  {
-    "name": "HoteLumiere at The Arch",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd",
-    "text": "KMZ · Hotels",
-    "query": "HoteLumiere at The Arch USA"
-  },
-  {
-    "name": "Apache Casino Hotel",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c",
-    "text": "KMZ · Hotels",
-    "query": "Apache Casino Hotel USA"
-  },
-  {
-    "name": "The Mayo Hotel",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38",
-    "text": "KMZ · Hotels",
-    "query": "The Mayo Hotel USA"
-  },
-  {
-    "name": "citizenM Austin Downtown",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf",
-    "text": "KMZ · Hotels",
-    "query": "citizenM Austin Downtown USA"
-  },
-  {
-    "name": "Dr Pepper Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157",
-    "text": "KMZ · Museen",
-    "query": "Dr Pepper Museum USA"
-  },
-  {
-    "name": "Downtown Fort Worth",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Downtown+Fort+Worth/data=!4m2!3m1!1s0x864e7169d7c19c23:0xcc37b6f11c62ddcc",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Downtown Fort Worth USA"
-  },
-  {
-    "name": "Fort Worth Stockyards",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Fort+Worth+Stockyards/data=!4m2!3m1!1s0x864e76a42759fe4d:0x475f2ff64a820fcb",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Fort Worth Stockyards USA"
-  },
-  {
-    "name": "National Cowboy & Western Heritage Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/National+Cowboy+%26+Western+Heritage+Museum/data=!4m2!3m1!1s0x87b219b49d1ee743:0x434de24e4aeb12cd",
-    "text": "KMZ · Museen",
-    "query": "National Cowboy & Western Heritage Museum USA"
-  },
-  {
-    "name": "Wonders Of Wildlife National Museum & Aquarium",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e",
-    "text": "KMZ · Museen",
-    "query": "Wonders Of Wildlife National Museum & Aquarium USA"
-  },
-  {
-    "name": "Route 66 Car Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Car+Museum/data=!4m2!3m1!1s0x87cf624ca95c8323:0x8f342cd60f6fd89e",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Car Museum USA"
-  },
-  {
-    "name": "Route 66 1903 Courthouse Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0",
-    "text": "KMZ · Museen",
-    "query": "Route 66 1903 Courthouse Museum USA"
-  },
-  {
-    "name": "Soulsby Service Station",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Soulsby Service Station USA"
-  },
-  {
-    "name": "Lauterbach Muffler Man (Lauterbach Giant)",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Lauterbach Muffler Man (Lauterbach Giant) USA"
-  },
-  {
-    "name": "Litchfield Museum & Route 66 Welcome Center",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c",
-    "text": "KMZ · Museen",
-    "query": "Litchfield Museum & Route 66 Welcome Center USA"
-  },
-  {
-    "name": "Abraham Lincoln Presidential Library",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Abraham+Lincoln+Presidential+Library/data=!4m2!3m1!1s0x887539c3ec790a81:0x2f51299423595cdf",
-    "text": "KMZ · Museen",
-    "query": "Abraham Lincoln Presidential Library USA"
-  },
-  {
-    "name": "Austin Bat Tours",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Austin+Bat+Tours/data=!4m2!3m1!1s0x8644b5a09f19eedf:0xcd55f894cc1c89eb",
-    "text": "KMZ · Natur & Parks",
-    "query": "Austin Bat Tours USA"
-  },
-  {
-    "name": "Covert Park at Mount Bonnell",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd",
-    "text": "KMZ · Natur & Parks",
-    "query": "Covert Park at Mount Bonnell USA"
-  },
-  {
-    "name": "McKinney Falls State Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/McKinney+Falls+State+Park/data=!4m2!3m1!1s0x8644b3be3538b38b:0xfb83098f6001c693",
-    "text": "KMZ · Natur & Parks",
-    "query": "McKinney Falls State Park USA"
-  },
-  {
-    "name": "Pops on 66",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Pops on 66 USA"
-  },
-  {
-    "name": "Southfork Ranch",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Southfork Ranch USA"
-  },
-  {
-    "name": "Vitek's BBQ",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Vitek's+BBQ/data=!4m2!3m1!1s0x864f8231185d7ffd:0x60376158c64c02ec",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Vitek's BBQ USA"
-  },
-  {
-    "name": "Riscky's BAR-B-Q",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Riscky's+BAR-B-Q/data=!4m2!3m1!1s0x864e76a6e78e8a2b:0x319f079669fb068e",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Riscky's BAR-B-Q USA"
-  },
-  {
-    "name": "Wichita Falls Museum of Art",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea",
-    "text": "KMZ · Museen",
-    "query": "Wichita Falls Museum of Art USA"
-  },
-  {
-    "name": "Arcadia Round Barn",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Arcadia Round Barn USA"
-  },
-  {
-    "name": "Jubelt's Bakery & Restaurant",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Jubelt's+Bakery+%26+Restaurant/data=!4m2!3m1!1s0x8875a2e0c4593b8d:0x42a76ce5f5e3c86c",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Jubelt's Bakery & Restaurant USA"
-  },
-  {
-    "name": "The Ariston Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/The+Ariston+Cafe/data=!4m2!3m1!1s0x8875a2e12882dc63:0x44da7c1b9d53c9e6",
-    "text": "KMZ · Frühstück",
-    "query": "The Ariston Cafe USA"
-  },
-  {
-    "name": "Route 66 Motorheads Bar & Grill, Museum and Entertainment Complex",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Route+66+Motorheads+Bar+%26+Grill,+Museum+and+Entertainment+Complex/data=!4m2!3m1!1s0x88753eea74efffff:0xbf4e5a0c09a372b9",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Route 66 Motorheads Bar & Grill, Museum and Entertainment Complex USA"
-  },
-  {
-    "name": "Cozy Dog Drive In",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Cozy+Dog+Drive+In/data=!4m2!3m1!1s0x887539122a4c5241:0x27e23eaee638d5cd",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Cozy Dog Drive In USA"
-  },
-  {
-    "name": "Henry's Drive-In",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Henry's+Drive-In/data=!4m2!3m1!1s0x880e33f67167351d:0x9cceb7646777ddc5",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Henry's Drive-In USA"
-  },
-  {
-    "name": "Pink Elephant Antique Mall",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Pink Elephant Antique Mall USA"
-  },
-  {
-    "name": "World's Largest Railsplitter Covered Wagon",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "World's Largest Railsplitter Covered Wagon USA"
-  },
-  {
-    "name": "Pontiac Museum Complex",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73",
-    "text": "KMZ · Museen",
-    "query": "Pontiac Museum Complex USA"
-  },
-  {
-    "name": "Pontiac Oakland Auto Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b",
-    "text": "KMZ · Museen",
-    "query": "Pontiac Oakland Auto Museum USA"
-  },
-  {
-    "name": "Route 66 Wall Art Photopoint",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 Wall Art Photopoint USA"
-  },
-  {
-    "name": "Route 66 decommissioned Illinois State police headquarter",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 decommissioned Illinois State police headquarter USA"
-  },
-  {
-    "name": "Route 66 Association of Illinois",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Association of Illinois USA"
-  },
-  {
-    "name": "Gemini Giant",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Gemini+Giant/data=!4m2!3m1!1s0x880e7f0000cde9c1:0x3909f9af1819906e",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Gemini Giant USA"
-  },
-  {
-    "name": "Blues Brothers Copmobile",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Blues+Brothers+Copmobile/data=!4m2!3m1!1s0x880e6504315f67d9:0xe0ee0da453bc27f3",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Blues Brothers Copmobile USA"
-  },
-  {
-    "name": "Lou Mitchell's",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Lou+Mitchell's/data=!4m2!3m1!1s0x880e2cc19f7a7309:0x313c4c01a977c832",
-    "text": "KMZ · Frühstück",
-    "query": "Lou Mitchell's USA"
-  },
-  {
-    "name": "Historic Rainbow Bridge",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Historic Rainbow Bridge USA"
-  },
-  {
-    "name": "Uranus Fudge Factory And General Store - Uranus Missouri",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Uranus Fudge Factory And General Store - Uranus Missouri USA"
-  },
-  {
-    "name": "Rock Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Rock+Cafe/data=!4m2!3m1!1s0x87b158b740722ad7:0x5badc84a5f2e1c5d",
-    "text": "KMZ · Frühstück",
-    "query": "Rock Cafe USA"
-  },
-  {
-    "name": "Crabbys Seafood Bar & Grill",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Crabbys+Seafood+Bar+%26+Grill/data=!4m2!3m1!1s0x87c91101ff0df65b:0xb3d34d379161f19a",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Crabbys Seafood Bar & Grill USA"
-  },
-  {
-    "name": "Red’s Giant Hamburg",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Red%E2%80%99s+Giant+Hamburg/data=!4m2!3m1!1s0x87cf63a0dd4f35db:0xdc58ddc3c85fb600",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Red’s Giant Hamburg USA"
-  },
-  {
-    "name": "Missouri Hick Barbeque",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Missouri+Hick+Barbeque/data=!4m2!3m1!1s0x87dbce700bc0104d:0xfce95e4aff69f9d",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Missouri Hick Barbeque USA"
-  },
-  {
-    "name": "Meadow Gold Sign",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Meadow+Gold+Sign/data=!4m2!3m1!1s0x87b6ed2062e9082d:0xc945d60fe3f30fc5",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Meadow Gold Sign USA"
-  },
-  {
-    "name": "Buck Atom's Cosmic Curios on 66",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Buck Atom's Cosmic Curios on 66 USA"
-  },
-  {
-    "name": "Route 66 Historical Village",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 Historical Village USA"
-  },
-  {
-    "name": "Bonnie and Clyde Hideout Apartment",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Bonnie and Clyde Hideout Apartment USA"
-  },
-  {
-    "name": "Red Oak II",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Red Oak II USA"
-  },
-  {
-    "name": "Gary’s Gay Parita",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Gary’s Gay Parita USA"
-  },
-  {
-    "name": "Route 66 Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Museum/data=!4m2!3m1!1s0x87c539a1d1e9a4cd:0xb3ff5b0c42486dc8",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Museum USA"
-  },
-  {
-    "name": "Meramec Caverns",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136",
-    "text": "KMZ · Natur & Parks",
-    "query": "Meramec Caverns USA"
-  },
-  {
-    "name": "S Congress Ave",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "S Congress Ave USA"
-  },
-  {
-    "name": "Barton Springs Pool",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6",
-    "text": "KMZ · Natur & Parks",
-    "query": "Barton Springs Pool USA"
-  },
-  {
-    "name": "Lady Bird Lake",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Lady+Bird+Lake/data=!4m2!3m1!1s0x8644b50e720134c3:0x9eb67ecc9e2fcb81",
-    "text": "KMZ · Natur & Parks",
-    "query": "Lady Bird Lake USA"
-  },
-  {
-    "name": "Texas State Capitol",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Texas+State+Capitol/data=!4m2!3m1!1s0x8644b5a014ac8dcf:0xcb6f5722a795d039",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Texas State Capitol USA"
-  },
-  {
-    "name": "Sixth Street Historic District",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Sixth Street Historic District USA"
-  },
-  {
-    "name": "Sahara Lounge",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Sahara Lounge USA"
-  },
-  {
-    "name": "C-Boy's Heart & Soul",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/C-Boy's+Heart+%26+Soul/data=!4m2!3m1!1s0x8644b4fad65e90c9:0x1c94863d87a40907",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "C-Boy's Heart & Soul USA"
-  },
-  {
-    "name": "Saxon Pub",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Saxon Pub USA"
-  },
-  {
-    "name": "Elephant Room",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Elephant Room USA"
-  },
-  {
-    "name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live) USA"
-  },
-  {
-    "name": "The Continental Club",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/The+Continental+Club/data=!4m2!3m1!1s0x8644b4fdbac94625:0x9a4922e26f855ca4",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "The Continental Club USA"
-  },
-  {
-    "name": "Antone's Nightclub",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Antone's+Nightclub/data=!4m2!3m1!1s0x8644b5091bd69d65:0x945d683a5e34b71f",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Antone's Nightclub USA"
-  },
-  {
-    "name": "Medicine Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Medicine+Park/data=!4m2!3m1!1s0x87ad1d0076492bdf:0xd92dcfcf63c71c04",
-    "text": "KMZ · Natur & Parks",
-    "query": "Medicine Park USA"
-  },
-  {
-    "name": "US Army Artillery Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/US+Army+Artillery+Museum/data=!4m2!3m1!1s0x87ad1b8d3d04382d:0xdc55a5fa198b00ca",
-    "text": "KMZ · Museen",
-    "query": "US Army Artillery Museum USA"
-  },
-  {
-    "name": "Museum of the Great Plains",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5",
-    "text": "KMZ · Museen",
-    "query": "Museum of the Great Plains USA"
-  },
-  {
-    "name": "The Holy City of the Wichitas",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4",
-    "text": "KMZ · Natur & Parks",
-    "query": "The Holy City of the Wichitas USA"
-  },
-  {
-    "name": "Longhorn Mountain",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Longhorn+Mountain/data=!4m2!3m1!1s0x87ac58cb25af27f5:0x695925e045747bc0",
-    "text": "KMZ · Natur & Parks",
-    "query": "Longhorn Mountain USA"
-  },
-  {
-    "name": "Mt Scott",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Mt+Scott/data=!4m2!3m1!1s0x87acfcd42346881b:0x62b6b01c6cbc6417",
-    "text": "KMZ · Natur & Parks",
-    "query": "Mt Scott USA"
-  },
-  {
-    "name": "Turkey Mountain",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Turkey+Mountain/data=!4m2!3m1!1s0x87b694888ec40eab:0xcc78fe7ce4650ce9",
-    "text": "KMZ · Natur & Parks",
-    "query": "Turkey Mountain USA"
-  },
-  {
-    "name": "The Cave House",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+Cave+House/data=!4m2!3m1!1s0x87b6eb0c7ee4974f:0x1c42f0d89d48dd7a",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The Cave House USA"
-  },
-  {
-    "name": "Center of the Universe",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Center+of+the+Universe/data=!4m2!3m1!1s0x87b6eb82821d7b43:0xa2fbfaea775fca17",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Center of the Universe USA"
-  },
-  {
-    "name": "Gilcrease Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c",
-    "text": "KMZ · Museen",
-    "query": "Gilcrease Museum USA"
-  },
-  {
-    "name": "Cyrus Avery Centennial Plaza",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Cyrus Avery Centennial Plaza USA"
-  },
-  {
-    "name": "Shops at Mother Road Market",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Shops at Mother Road Market USA"
-  },
-  {
-    "name": "Gathering Place",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Gathering+Place/data=!4m2!3m1!1s0x87b6edd0d5e789ad:0xc560003ab2a3d697",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Gathering Place USA"
-  },
-  {
-    "name": "Philbrook Museum of Art",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012",
-    "text": "KMZ · Museen",
-    "query": "Philbrook Museum of Art USA"
-  },
-  {
-    "name": "Golden Driller Statue",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Golden Driller Statue USA"
-  },
-  {
-    "name": "Blue Whale of Catoosa",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Blue+Whale+of+Catoosa/data=!4m2!3m1!1s0x87b6f5f5af1d471d:0x6f018baa1950a1e2",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Blue Whale of Catoosa USA"
-  },
-  {
-    "name": "Route 66 Neon Sign Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Route+66+Neon+Sign+Park/data=!4m2!3m1!1s0x87b6ebd1f4082901:0xead0a1a24809e26f",
-    "text": "KMZ · Natur & Parks",
-    "query": "Route 66 Neon Sign Park USA"
-  },
-  {
-    "name": "Ted Drewes Frozen Custard",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Ted+Drewes+Frozen+Custard/data=!4m2!3m1!1s0x87d8ca0d4a93c1b3:0x822a7d0e38f70a59",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Ted Drewes Frozen Custard USA"
-  },
-  {
-    "name": "The St. Louis Wheel",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The St. Louis Wheel USA"
-  },
-  {
-    "name": "Anheuser-Busch St. Louis Brewery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Anheuser-Busch St. Louis Brewery USA"
-  },
-  {
-    "name": "Missouri Botanical Garden",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080",
-    "text": "KMZ · Natur & Parks",
-    "query": "Missouri Botanical Garden USA"
-  },
-  {
-    "name": "Saint Louis Zoo",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Saint+Louis+Zoo/data=!4m2!3m1!1s0x87d8b55ccc04062d:0x6075080197e8e830",
-    "text": "KMZ · Natur & Parks",
-    "query": "Saint Louis Zoo USA"
-  },
-  {
-    "name": "Forest Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Forest+Park/data=!4m2!3m1!1s0x87d8b5469178c4c9:0x9d27c5026db294aa",
-    "text": "KMZ · Natur & Parks",
-    "query": "Forest Park USA"
-  },
-  {
-    "name": "City Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/City+Museum/data=!4m2!3m1!1s0x87d8b33dc2801e55:0xc97c4420308aca04",
-    "text": "KMZ · Museen",
-    "query": "City Museum USA"
-  },
-  {
-    "name": "Museum at the Gateway Arch",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156",
-    "text": "KMZ · Museen",
-    "query": "Museum at the Gateway Arch USA"
-  },
-  {
-    "name": "Gateway Arch",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Gateway Arch USA"
-  },
-  {
-    "name": "Kingston Mines",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Kingston+Mines/data=!4m2!3m1!1s0x880fd305919cbff1:0x719a19cc064f264a",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Kingston Mines USA"
-  },
-  {
-    "name": "House of Blues Chicago",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "House of Blues Chicago USA"
-  },
-  {
-    "name": "Buddy Guy's Legends",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Buddy+Guy's+Legends/data=!4m2!3m1!1s0x880e2c98ff384575:0xe0fa16c26ad26915",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Buddy Guy's Legends USA"
-  },
-  {
-    "name": "Lincoln Park Zoo",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db",
-    "text": "KMZ · Natur & Parks",
-    "query": "Lincoln Park Zoo USA"
-  },
-  {
-    "name": "Grant Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Grant+Park/data=!4m2!3m1!1s0x880e2c9fabc8820f:0xe897c144f1557e1d",
-    "text": "KMZ · Natur & Parks",
-    "query": "Grant Park USA"
-  },
-  {
-    "name": "Chicago River Boat Architecture Tours",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180",
-    "text": "KMZ · Natur & Parks",
-    "query": "Chicago River Boat Architecture Tours USA"
-  },
-  {
-    "name": "Griffin Museum of Science and Industry",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306",
-    "text": "KMZ · Museen",
-    "query": "Griffin Museum of Science and Industry USA"
-  },
-  {
-    "name": "Field Museum of Natural History",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da",
-    "text": "KMZ · Museen",
-    "query": "Field Museum of Natural History USA"
-  },
-  {
-    "name": "360 Chicago",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "360 Chicago USA"
-  },
-  {
-    "name": "Cloud Gate",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Cloud Gate USA"
-  },
-  {
-    "name": "Navy Pier",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Navy Pier USA"
-  }
-];
-
-
-const KMZ_COORD_OVERRIDES = {
-  "Buckingham-Brunnen": [-87.61892, 41.87579],
-  "citizenM Chicago Downtown": [-87.62572, 41.88698],
-  "citizenM Austin Downtown": [-97.7447, 30.2690]
-};
-
-function correctedKmzQuery(item) {
-  const hints = {
-    "Buckingham-Brunnen": "Buckingham Fountain Chicago Grant Park IL",
-    "citizenM Chicago Downtown": "citizenM Chicago Downtown 80 East Wacker Place Chicago IL",
-    "citizenM Austin Downtown": "citizenM Austin Downtown 617 Colorado Street Austin TX",
-    "HoteLumiere at The Arch": "HoteLumiere at The Arch St Louis MO",
-    "The Mayo Hotel": "The Mayo Hotel Tulsa OK",
-    "Apache Casino Hotel": "Apache Casino Hotel Lawton OK",
-    "The Range at Austin": "The Range at Austin TX"
-  };
-  if (hints[item.name]) return hints[item.name];
-  if (item.type === 'hotel') return item.name + ' hotel Route 66 Chicago St Louis Tulsa Lawton Austin';
-  if (item.type === 'route66') return item.name + ' Route 66 Missouri Oklahoma Illinois';
-  if (item.type === 'music') return item.name + ' music bar Chicago St Louis Tulsa Austin';
-  return item.query || item.name;
+function placeKey(p) {
+  return `${p.name || ""}__${p.address || ""}`.toLowerCase();
 }
 
-function deriveKmzType(item) {
-  // Die Kategorie kommt direkt aus der KMZ-/Google-Maps-Beschreibung bzw. aus klaren Namensmustern.
-  return item.type || 'sight';
+function applyCategoryOverrides() {
+  const overrides = getCategoryOverrides();
+  resolvedPlaces.forEach(p => {
+    const k = placeKey(p);
+    if (overrides[k]) p.category = overrides[k];
+  });
 }
 
-function kmzLabel(item, type) {
-  const labels = {
-    sight: 'Sehenswürdigkeiten',
-    route66: 'Route 66 & Roadside',
-    music: 'Kneipen & Musik',
-    food: 'Essen & BBQ',
-    breakfast: 'Frühstück',
-    distillery: 'Destillerien & Brauereien',
-    nature: 'Natur & Parks',
-    museum: 'Museen',
-    western: 'Western & Boots',
-    toys: 'Spielzeug',
-    hotel: 'Hotels'
-  };
-  return 'KMZ · ' + (item.category || labels[type] || 'Ziel');
+function changeCategory(key, category) {
+  const overrides = getCategoryOverrides();
+  overrides[key] = category;
+  saveCategoryOverrides(overrides);
+  applyCategoryOverrides();
+  renderMarkers(document.querySelector(".filters button.active")?.dataset.filter || "all");
+  renderLists();
 }
 
-async function geocodeImportedPoints(token) {
-  const results = [];
-  for (const item of csvImportedPoints) {
-    try {
-      const type = deriveKmzType(item);
-      let center = KMZ_COORD_OVERRIDES[item.name] || item.coords || null;
-      if (!center) {
-        const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-          encodeURIComponent(correctedKmzQuery(item)) +
-          '.json?limit=1&country=us&bbox=' + CSV_ROUTE_BBOX + '&proximity=-95.37,38.85&language=de&access_token=' + token;
-        const response = await fetch(url);
-        const data = await response.json();
-        const feature = data && data.features && data.features[0];
-        center = feature && feature.center ? feature.center : null;
-      }
-      if (center) {
-        // Die KMZ enthält Google-Places ohne Koordinaten. Mapbox-Geocoding kann bei generischen Namen
-        // falsche Treffer weit abseits der Reiseroute liefern. Solche Treffer werden nicht angezeigt.
-        if (!KMZ_COORD_OVERRIDES[item.name] && !isNearRoute(center, 0.95)) {
-          console.warn('KMZ-Ziel außerhalb der Route übersprungen:', item.name, center);
-          continue;
-        }
-        results.push({
-          name: item.name,
-          type: type,
-          coords: center,
-          text: kmzLabel(item, type),
-          category: item.category || '',
-          url: item.url,
-          imported: true
-        });
-      } else {
-        console.warn('Kein Geocoding-Treffer für KMZ-Ziel:', item.name);
-      }
-    } catch (err) {
-      console.warn('Geocoding fehlgeschlagen:', item.name, err);
-    }
-  }
-  return results;
+function categorySelect(p) {
+  const key = placeKey(p);
+  const options = [
+    ["music","Musik / Bars"],
+    ["food","Food / Restaurants"],
+    ["hotel","Hotels"],
+    ["sight","Sehenswürdigkeit"],
+    ["hidden","Hidden Spot"],
+    ["distillery","Distillery"],
+    ["other","Sonstiges"]
+  ];
+  return `<select onchange="changeCategory('${key.replace(/'/g, "\\'")}', this.value)">
+    ${options.map(([v,l]) => `<option value="${v}" ${p.category===v ? "selected" : ""}>${l}</option>`).join("")}
+  </select>`;
 }
+
+function resetCategoryEdits() {
+  localStorage.removeItem(categoryEditKey);
+  applyCategoryOverrides();
+  renderMarkers("all");
+  renderLists();
+  document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+  document.querySelector('.filters button[data-filter="all"]').classList.add("active");
+}
+
+function clearResolvedCache() {
+  localStorage.removeItem(cacheKey);
+  location.reload();
+}
+
 
 const colors = {
-  sight:'#097138',
-  route66:'#097138',
-  music:'#097138',
-  food:'#097138',
-  breakfast:'#097138',
-  distillery:'#097138',
-  nature:'#097138',
-  museum:'#097138',
-  western:'#097138',
-  toys:'#097138',
-  hotel:'#097138'
+  music:"#fbbc04", hotel:"#4285f4", food:"#34a853", sight:"#ea4335", hidden:"#a142f4", distillery:"#9c6b30", other:"#607d8b"
 };
-const fallback = document.getElementById('fallback');
 
-function startMap(){
-  try {
-    if (!window.mapboxgl) { fallback.style.display='block'; return; }
-
-    mapboxgl.accessToken = 'pk.eyJ1IjoiaGVpa29kdWVtaWciLCJhIjoiY21vY293MGI5MDJ0ajJwcXpvdHp0ejUzcyJ9.bpqIqbfmBUeekHSWrwUxzQ';
-
-    const map = new mapboxgl.Map({
-      container:'map',
-      style:'mapbox://styles/mapbox/dark-v11',
-      center:[-95.6,36.2],
-      zoom:4
-    });
-
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-    let placesGeoJson = {
-      type: 'FeatureCollection',
-      features: points.map(function(p){
-        return {
-          type: 'Feature',
-          properties: {
-            name: p.name,
-            type: p.type,
-            text: p.text || '',
-            isTopMusic: topMusicGear.has(p.name),
-            isTopMust: topMust.has(p.name),
-            isTopFood: topFood.has(p.name)
-          },
-          geometry: {
-            type: 'Point',
-            coordinates: p.coords
-          }
-        };
-      })
-    };
-
-    let activeFilter = 'all';
-
-    function popupHtml(props){
-      const link = props.url && props.url.length
-        ? props.url
-        : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(props.name);
-      return '<strong>' + props.name + '</strong><br>' + (props.text || '') +
-        '<br><a class="popup-link" href="' + link + '" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a>';
-    }
-
-    function syncMapButtons(){
-      document.querySelectorAll('.map-filter-btn').forEach(function(btn){
-        btn.classList.toggle('active', btn.dataset.mapFilter === activeFilter);
-      });
-    }
-
-    function filterExpression(filter){
-      if (filter === 'all') return null;
-      return ['==', ['get', 'type'], filter];
-    }
-
-    function applyFilter(){
-      if (map.getLayer('places-layer')) {
-        map.setFilter('places-layer', filterExpression(activeFilter));
-      }
-    }
-
-    document.querySelectorAll('.map-filter-btn').forEach(function(btn){
-      btn.addEventListener('click', function(ev){
-        ev.preventDefault();
-        activeFilter = this.dataset.mapFilter || 'all';
-        syncMapButtons();
-        applyFilter();
-      });
-    });
-
-    map.on('load', async function(){
-      const importedPoints = await geocodeImportedPoints(mapboxgl.accessToken);
-      const allPoints = importedPoints;
-      const csvCountEl = document.getElementById('csvCount');
-      if (csvCountEl) csvCountEl.textContent = importedPoints.length + ' KMZ-Ziele geladen';
-      placesGeoJson = {
-        type: 'FeatureCollection',
-        features: allPoints.map(function(p){
-          return {
-            type: 'Feature',
-            properties: {
-              name: p.name,
-              type: p.type,
-              text: p.text || '',
-              category: p.category || '',
-              url: p.url || '',
-              imported: !!p.imported,
-              isTopMusic: topMusicGear.has(p.name),
-              isTopMust: topMust.has(p.name),
-              isTopFood: topFood.has(p.name)
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: p.coords
-            }
-          };
-        })
-      };
-
-      map.addSource('places', {
-        type: 'geojson',
-        data: placesGeoJson
-      });
-
-      map.addLayer({
-        id: 'places-layer',
-        type: 'circle',
-        source: 'places',
-        paint: {
-          'circle-radius': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            3, 4,
-            8, 7,
-            13, 10
-          ],
-          'circle-color': [
-            'match',
-            ['get', 'type'],
-            'sight', colors.sight,
-            'route66', colors.route66,
-            'music', colors.music,
-            'food', colors.food,
-            'breakfast', colors.breakfast,
-            'distillery', colors.distillery,
-            'nature', colors.nature,
-            'museum', colors.museum,
-            'western', colors.western,
-            'toys', colors.toys,
-            'hotel', colors.hotel,
-            '#4f98a3'
-          ],
-          'circle-stroke-width': 2,
-          'circle-stroke-color': '#05080b',
-          'circle-opacity': 0.96
-        }
-      });
-
-      const popup = new mapboxgl.Popup({
-        offset: 18,
-        closeButton: true,
-        closeOnClick: true
-      });
-
-      map.on('click', 'places-layer', function(e){
-        const feature = e.features && e.features[0];
-        if (!feature) return;
-        popup
-          .setLngLat(feature.geometry.coordinates)
-          .setHTML(popupHtml(feature.properties))
-          .addTo(map);
-      });
-
-      map.on('mouseenter', 'places-layer', function(){
-        map.getCanvas().style.cursor = 'pointer';
-      });
-
-      map.on('mouseleave', 'places-layer', function(){
-        map.getCanvas().style.cursor = '';
-      });
-
-      syncMapButtons();
-      applyFilter();
-
-      const bounds = new mapboxgl.LngLatBounds();
-      allPoints.forEach(function(p){ bounds.extend(p.coords); });
-      map.fitBounds(bounds, {padding: 50, maxZoom: 10});
-
-      const routeStops = CSV_ROUTE_STOPS;
-
-      function addFallbackRoute(){
-        if (map.getSource('route')) return;
-        map.addSource('route', {
-          type:'geojson',
-          data:{type:'Feature',geometry:{type:'LineString',coordinates:routeStops}}
-        });
-        addRouteLayers();
-      }
-
-      function addRouteLayers(){
-        if (!map.getLayer('route-line-outline')) {
-          map.addLayer({
-            id:'route-line-outline',
-            type:'line',
-            source:'route',
-            layout:{'line-cap':'round','line-join':'round'},
-            paint:{'line-color':'#021114','line-width':10,'line-opacity':0.8}
-          }, 'places-layer');
-        }
-        if (!map.getLayer('route-line')) {
-          map.addLayer({
-            id:'route-line',
-            type:'line',
-            source:'route',
-            layout:{'line-cap':'round','line-join':'round'},
-            paint:{'line-color':'#46d6e6','line-width':5,'line-opacity':0.95}
-          }, 'places-layer');
-        }
-      }
-
-      const routeUrl =
-        'https://api.mapbox.com/directions/v5/mapbox/driving/' +
-        routeStops.map(c => c.join(',')).join(';') +
-        '?geometries=geojson&overview=full&access_token=' +
-        mapboxgl.accessToken;
-
-      fetch(routeUrl).then(r => r.json()).then(data => {
-        const route = data && data.routes && data.routes[0] && data.routes[0].geometry;
-        if (!route) { addFallbackRoute(); return; }
-        map.addSource('route', {type:'geojson',data:{type:'Feature',geometry:route}});
-        addRouteLayers();
-      }).catch(addFallbackRoute);
-
-      setTimeout(function(){ map.resize(); }, 300);
-    });
-
-    map.on('error', function(){ fallback.style.display='block'; });
-    window.addEventListener('resize', function(){ map.resize(); });
-
-  } catch (e) {
-    fallback.style.display='block';
-  }
+function categoryLabel(c) {
+  return {
+    music:"Musik / Bars", hotel:"Hotel", food:"Food", sight:"Sehenswürdigkeit",
+    hidden:"Hidden Spot", distillery:"Distillery", other:"Sonstiges"
+  }[c] || "Sonstiges";
 }
 
-window.onload = startMap;
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function(){
-    navigator.serviceWorker.register('./service-worker.js').catch(function(err){
-      console.warn('Service Worker konnte nicht registriert werden:', err);
+function smartUSAQuery(raw) {
+  let q = (raw.query || raw.name || "").trim();
+  const t = `${raw.name || ""} ${raw.note || ""} ${raw.address || ""}`.toLowerCase();
+
+  if (/(chicago|illinois)/.test(t)) return `${q} Chicago Illinois USA Route 66`;
+  if (/(st\.?\s*louis|saint louis|missouri)/.test(t)) return `${q} St. Louis Missouri USA Route 66`;
+  if (/(tulsa|oklahoma)/.test(t)) return `${q} Tulsa Oklahoma USA Route 66`;
+  if (/(lawton|wichita falls|medicine park)/.test(t)) return `${q} Oklahoma Texas USA Route 66`;
+  if (/(austin|new braunfels|gruene|texas)/.test(t)) return `${q} Texas USA`;
+
+  return `${q} USA Route 66`;
+}
+
+function setStatus(txt) { document.getElementById("status").textContent = txt; }
+
+function makeMarkerIcon(color) {
+  return {
+    path: google.maps.SymbolPath.CIRCLE,
+    fillColor: color,
+    fillOpacity: 1,
+    strokeColor: "#ffffff",
+    strokeWeight: 2,
+    scale: 8
+  };
+}
+
+function searchPlace(raw) {
+  return new Promise(resolve => {
+    service.findPlaceFromQuery({
+      query: smartUSAQuery(raw),
+      fields: ["name","geometry","formatted_address","place_id","rating","user_ratings_total"]
+    }, (results, status) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results && results[0] && results[0].geometry) {
+        const r = results[0];
+        resolve({
+          ...raw,
+          resolvedName: r.name,
+          lat: r.geometry.location.lat(),
+          lng: r.geometry.location.lng(),
+          formattedAddress: r.formatted_address || "",
+          placeId: r.place_id || "",
+          rating: r.rating || "",
+          ratingsTotal: r.user_ratings_total || ""
+        });
+      } else {
+        resolve({...raw, error: status || "NO_RESULT"});
+      }
+    });
+  });
+}
+
+async function resolveAllPlaces() {
+  const cached = localStorage.getItem(cacheKey);
+  if (cached) {
+    try {
+      resolvedPlaces = JSON.parse(cached);
+      setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`);
+      return;
+    } catch(e) {}
+  }
+  resolvedPlaces = [];
+  for (let i=0; i<RAW_PLACES.length; i++) {
+    setStatus(`Löse Orte auf… ${i+1} / ${RAW_PLACES.length}`);
+    const p = await searchPlace(RAW_PLACES[i]);
+    resolvedPlaces.push(p);
+    await new Promise(r => setTimeout(r, 110));
+  }
+  localStorage.setItem(cacheKey, JSON.stringify(resolvedPlaces));
+  setStatus(`Fertig: ${resolvedPlaces.filter(p=>p.lat).length} Orte gefunden`);
+}
+
+function createPopup(p) {
+  const rating = p.rating ? `<p><strong>Bewertung:</strong> ${p.rating} ⭐ (${p.ratingsTotal || 0})</p>` : "";
+  const addr = p.formattedAddress ? `<p>${p.formattedAddress}</p>` : "";
+  const note = p.note ? `<p><strong>${p.note}</strong></p>` : "";
+  const maps = p.placeId
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.resolvedName || p.name)}&query_place_id=${p.placeId}`
+    : p.googleMapsUrl;
+  return `<div style="max-width:260px;color:#111">
+    <h3 style="margin:0 0 8px">${p.name}</h3>
+    <p style="margin:0 0 6px"><em>${categoryLabel(p.category)}</em></p>
+    ${note}${addr}${rating}
+    <a href="${maps}" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:8px;padding:8px 10px;border-radius:999px;background:#1a73e8;color:white;text-decoration:none;font-weight:700">In Google Maps öffnen</a>
+  </div>`;
+}
+
+function renderMarkers(filter="all") {
+  markers.forEach(m => m.setMap(null));
+  markers = [];
+  const bounds = new google.maps.LatLngBounds();
+  resolvedPlaces.filter(p => p.lat && (filter === "all" || p.category === filter)).forEach(p => {
+    const marker = new google.maps.Marker({
+      position: {lat:p.lat, lng:p.lng},
+      map,
+      title: p.name,
+      icon: makeMarkerIcon(colors[p.category] || colors.other)
+    });
+    marker.addListener("click", () => {
+      infoWindow.setContent(createPopup(p));
+      infoWindow.open(map, marker);
+    });
+    markers.push(marker);
+    bounds.extend(marker.getPosition());
+  });
+  if (markers.length) map.fitBounds(bounds);
+  setStatus(`${markers.length} Marker angezeigt`);
+}
+
+
+
+function cityForPlace(p) {
+  const t = `${p.name || ""} ${p.address || ""} ${p.formattedAddress || ""} ${p.query || ""}`.toLowerCase();
+  if (t.includes("chicago") || t.includes("illinois")) return "Chicago";
+  if (t.includes("st. louis") || t.includes("saint louis") || t.includes("missouri")) return "St. Louis";
+  if (t.includes("tulsa")) return "Tulsa";
+  if (t.includes("lawton") || t.includes("wichita falls") || t.includes("medicine park") || t.includes("meers")) return "Lawton / Wichita Falls";
+  if (t.includes("austin") || t.includes("new braunfels") || t.includes("gruene")) return "Austin";
+  return "Unterwegs / Route 66";
+}
+
+function renderCityGrouped(container, places) {
+  const cityOrder = ["Chicago", "St. Louis", "Tulsa", "Lawton / Wichita Falls", "Austin", "Unterwegs / Route 66"];
+  const grouped = {};
+  places.forEach(p => {
+    const city = cityForPlace(p);
+    if (!grouped[city]) grouped[city] = [];
+    grouped[city].push(p);
+  });
+
+  container.innerHTML = cityOrder
+    .filter(city => grouped[city] && grouped[city].length)
+    .map(city => `
+      <section class="city-block">
+        <h3>${city}</h3>
+        <div class="list">
+          ${grouped[city].sort((a,b) => a.name.localeCompare(b.name)).map(row).join("")}
+        </div>
+      </section>
+    `).join("");
+}
+
+function renderLists() {
+  const hotelGrid = document.getElementById("hotelGrid");
+  const musicList = document.getElementById("musicList");
+  const foodList = document.getElementById("foodList");
+  const placeList = document.getElementById("placeList");
+
+  window.row = function row(p) {
+    const maps = p.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.resolvedName || p.name)}&query_place_id=${p.placeId}` : p.googleMapsUrl;
+    return `<div class="place-row"><div><strong>${p.name}</strong><span>${categoryLabel(p.category)}${p.note ? " · " + p.note : ""}</span></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">${categorySelect(p)}<a href="${maps}" target="_blank" rel="noopener noreferrer">Maps</a></div></div>`;
+  }
+
+  hotelGrid.innerHTML = resolvedPlaces.filter(p=>p.category==="hotel").sort((a,b)=>cityForPlace(a).localeCompare(cityForPlace(b))).map(p => {
+    const maps = p.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.resolvedName || p.name)}&query_place_id=${p.placeId}` : p.googleMapsUrl;
+    return `<article class="card"><div class="tag">${cityForPlace(p)}</div><h3>${p.name}</h3><p>${p.formattedAddress || p.address || ""}</p><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${categorySelect(p)}<a class="button" href="${maps}" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a></div></article>`;
+  }).join("");
+
+  renderCityGrouped(musicList, resolvedPlaces.filter(p=>p.category==="music"));
+  if (foodList) renderCityGrouped(foodList, resolvedPlaces.filter(p=>p.category==="food"));
+  renderCityGrouped(placeList, resolvedPlaces);
+}
+
+
+
+async function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: {lat:39.5,lng:-98.35},
+    zoom: 5,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true
+  });
+  service = new google.maps.places.PlacesService(map);
+  infoWindow = new google.maps.InfoWindow();
+
+  await resolveAllPlaces();
+  applyCategoryOverrides();
+  renderMarkers("all");
+  renderLists();
+
+  document.querySelectorAll(".filters button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      renderMarkers(btn.dataset.filter);
     });
   });
 }
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY&libraries=places&callback=initMap"></script>
 <script>
 document.addEventListener("click", function(e) {
   const a = e.target.closest('a[href^="#"]');
