@@ -56,16 +56,10 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
 <body>
 <header>
   <h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
-  <p>From Chicago to Austin · Route 66 Music Trip · nur My-Maps/KMZ-Ziele entlang der Route</p>
+  <p>From Chicago to Austin · Route 66 Music Trip · nur KMZ-/My-Maps-Ziele entlang der Route · Google-Maps-Grün · Kategorien aus Beschreibung</p>
   <div class="legend">
-    <span><i class="dot" style="background:#4f98a3"></i>Sehenswürdigkeiten</span>
-    <span><i class="dot" style="background:#dd6974"></i>Route 66</span>
-    <span><i class="dot" style="background:#d19900"></i>Musik &amp; Clubs</span>
-    <span><i class="dot" style="background:#6daa45"></i>Essen &amp; BBQ</span>
-    <span><i class="dot" style="background:#95d166"></i>Frühstück</span>
-    <span><i class="dot" style="background:#a86fdf"></i>Destillerien</span>
-    <span><i class="dot" style="background:#2aa876"></i>Natur &amp; Parks</span>
-    <span><i class="dot" style="background:#4da3ff"></i>Hotels</span>
+    <span><i class="dot" style="background:#097138"></i>KMZ-/Google-Maps-Ziele</span>
+    <span>Filter zeigen nur Kategorien, die aus KMZ-Notiz, Google-Maps-Beschreibung oder Name abgeleitet wurden.</span>
   </div>
   <div class="toolbar">
     <div class="quick-links">
@@ -88,18 +82,18 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
   <div id="map"></div>
   <div class="map-filter-panel">
     <span>Filter:</span>
-    <button class="map-filter-btn active" data-map-filter="all">Alle</button>
-    <button class="map-filter-btn" data-map-filter="sight">Sehenswürdigkeiten</button>
-    <button class="map-filter-btn" data-map-filter="route66">Route 66</button>
-    <button class="map-filter-btn" data-map-filter="music">Musik &amp; Clubs</button>
-    <button class="map-filter-btn" data-map-filter="food">Essen &amp; BBQ</button>
+    <button class="map-filter-btn active" data-map-filter="all">Alle KMZ-Ziele</button>
+    <button class="map-filter-btn" data-map-filter="hotel">Hotels</button>
     <button class="map-filter-btn" data-map-filter="breakfast">Frühstück</button>
-    <button class="map-filter-btn" data-map-filter="distillery">Destillerien</button>
-    <button class="map-filter-btn" data-map-filter="nature">Natur &amp; Parks</button>
+    <button class="map-filter-btn" data-map-filter="food">Essen &amp; BBQ</button>
+    <button class="map-filter-btn" data-map-filter="music">Kneipen &amp; Musik</button>
+    <button class="map-filter-btn" data-map-filter="route66">Route 66</button>
     <button class="map-filter-btn" data-map-filter="museum">Museen</button>
+    <button class="map-filter-btn" data-map-filter="nature">Natur &amp; Parks</button>
+    <button class="map-filter-btn" data-map-filter="distillery">Distilleries</button>
     <button class="map-filter-btn" data-map-filter="western">Western &amp; Boots</button>
     <button class="map-filter-btn" data-map-filter="toys">Spielzeug</button>
-    <button class="map-filter-btn" data-map-filter="hotel">Hotels</button>
+    <button class="map-filter-btn" data-map-filter="sight">Sonstiges</button>
   </div>
   <aside class="map-sidecard" aria-label="Route Übersicht">
     <h2>Chicago → Austin</h2>
@@ -724,7 +718,7 @@ function distanceToSegmentDegrees(p, a, b) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function isNearRoute(coords, maxDistanceDegrees = 1.25) {
+function isNearRoute(coords, maxDistanceDegrees = 0.95) {
   for (let i = 0; i < CSV_ROUTE_STOPS.length - 1; i++) {
     if (distanceToSegmentDegrees(coords, CSV_ROUTE_STOPS[i], CSV_ROUTE_STOPS[i + 1]) <= maxDistanceDegrees) {
       return true;
@@ -1358,10 +1352,10 @@ const csvImportedPoints = [
   },
   {
     "name": "Blues Brothers Copmobile",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Blues+Brothers+Copmobile/data=!4m2!3m1!1s0x880e6504315f67d9:0xe0ee0da453bc27f3",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Blues Brothers Copmobile USA"
   },
   {
@@ -1526,58 +1520,58 @@ const csvImportedPoints = [
   },
   {
     "name": "Sahara Lounge",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Sahara Lounge USA"
   },
   {
     "name": "C-Boy's Heart & Soul",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/C-Boy's+Heart+%26+Soul/data=!4m2!3m1!1s0x8644b4fad65e90c9:0x1c94863d87a40907",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "C-Boy's Heart & Soul USA"
   },
   {
     "name": "Saxon Pub",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Saxon Pub USA"
   },
   {
     "name": "Elephant Room",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Elephant Room USA"
   },
   {
     "name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live) USA"
   },
   {
     "name": "The Continental Club",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/The+Continental+Club/data=!4m2!3m1!1s0x8644b4fdbac94625:0x9a4922e26f855ca4",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "The Continental Club USA"
   },
   {
     "name": "Antone's Nightclub",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Antone's+Nightclub/data=!4m2!3m1!1s0x8644b5091bd69d65:0x945d683a5e34b71f",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Antone's Nightclub USA"
   },
   {
@@ -1790,26 +1784,26 @@ const csvImportedPoints = [
   },
   {
     "name": "Kingston Mines",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Kingston+Mines/data=!4m2!3m1!1s0x880fd305919cbff1:0x719a19cc064f264a",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Kingston Mines USA"
   },
   {
     "name": "House of Blues Chicago",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "House of Blues Chicago USA"
   },
   {
     "name": "Buddy Guy's Legends",
-    "category": "Musik & Clubs",
+    "category": "Kneipen & Musik",
     "type": "music",
     "url": "https://www.google.com/maps/place/Buddy+Guy's+Legends/data=!4m2!3m1!1s0x880e2c98ff384575:0xe0fa16c26ad26915",
-    "text": "KMZ · Musik & Clubs",
+    "text": "KMZ · Kneipen & Musik",
     "query": "Buddy Guy's Legends USA"
   },
   {
@@ -1879,6 +1873,29 @@ const csvImportedPoints = [
 ];
 
 
+const KMZ_COORD_OVERRIDES = {
+  "Buckingham-Brunnen": [-87.61892, 41.87579],
+  "citizenM Chicago Downtown": [-87.62572, 41.88698],
+  "citizenM Austin Downtown": [-97.7447, 30.2690]
+};
+
+function correctedKmzQuery(item) {
+  const hints = {
+    "Buckingham-Brunnen": "Buckingham Fountain Chicago Grant Park IL",
+    "citizenM Chicago Downtown": "citizenM Chicago Downtown 80 East Wacker Place Chicago IL",
+    "citizenM Austin Downtown": "citizenM Austin Downtown 617 Colorado Street Austin TX",
+    "HoteLumiere at The Arch": "HoteLumiere at The Arch St Louis MO",
+    "The Mayo Hotel": "The Mayo Hotel Tulsa OK",
+    "Apache Casino Hotel": "Apache Casino Hotel Lawton OK",
+    "The Range at Austin": "The Range at Austin TX"
+  };
+  if (hints[item.name]) return hints[item.name];
+  if (item.type === 'hotel') return item.name + ' hotel Route 66 Chicago St Louis Tulsa Lawton Austin';
+  if (item.type === 'route66') return item.name + ' Route 66 Missouri Oklahoma Illinois';
+  if (item.type === 'music') return item.name + ' music bar Chicago St Louis Tulsa Austin';
+  return item.query || item.name;
+}
+
 function deriveKmzType(item) {
   // Die Kategorie kommt direkt aus der KMZ-/Google-Maps-Beschreibung bzw. aus klaren Namensmustern.
   return item.type || 'sight';
@@ -1888,7 +1905,7 @@ function kmzLabel(item, type) {
   const labels = {
     sight: 'Sehenswürdigkeiten',
     route66: 'Route 66 & Roadside',
-    music: 'Musik & Clubs',
+    music: 'Kneipen & Musik',
     food: 'Essen & BBQ',
     breakfast: 'Frühstück',
     distillery: 'Destillerien & Brauereien',
@@ -1906,10 +1923,10 @@ async function geocodeImportedPoints(token) {
   for (const item of csvImportedPoints) {
     try {
       const type = deriveKmzType(item);
-      let center = item.coords || null;
+      let center = KMZ_COORD_OVERRIDES[item.name] || item.coords || null;
       if (!center) {
         const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-          encodeURIComponent(item.query || item.name) +
+          encodeURIComponent(correctedKmzQuery(item)) +
           '.json?limit=1&country=us&bbox=' + CSV_ROUTE_BBOX + '&proximity=-95.37,38.85&language=de&access_token=' + token;
         const response = await fetch(url);
         const data = await response.json();
@@ -1917,6 +1934,12 @@ async function geocodeImportedPoints(token) {
         center = feature && feature.center ? feature.center : null;
       }
       if (center) {
+        // Die KMZ enthält Google-Places ohne Koordinaten. Mapbox-Geocoding kann bei generischen Namen
+        // falsche Treffer weit abseits der Reiseroute liefern. Solche Treffer werden nicht angezeigt.
+        if (!KMZ_COORD_OVERRIDES[item.name] && !isNearRoute(center, 0.95)) {
+          console.warn('KMZ-Ziel außerhalb der Route übersprungen:', item.name, center);
+          continue;
+        }
         results.push({
           name: item.name,
           type: type,
@@ -1937,17 +1960,17 @@ async function geocodeImportedPoints(token) {
 }
 
 const colors = {
-  sight:'#4f98a3',
-  route66:'#dd6974',
-  music:'#d19900',
-  food:'#6daa45',
-  breakfast:'#95d166',
-  distillery:'#a86fdf',
-  nature:'#2aa876',
-  museum:'#4da3ff',
-  western:'#c47c33',
-  toys:'#e58bd1',
-  hotel:'#4da3ff'
+  sight:'#097138',
+  route66:'#097138',
+  music:'#097138',
+  food:'#097138',
+  breakfast:'#097138',
+  distillery:'#097138',
+  nature:'#097138',
+  museum:'#097138',
+  western:'#097138',
+  toys:'#097138',
+  hotel:'#097138'
 };
 const fallback = document.getElementById('fallback');
 
@@ -2005,10 +2028,6 @@ function startMap(){
 
     function filterExpression(filter){
       if (filter === 'all') return null;
-      if (filter === 'top-music') return ['==', ['get', 'isTopMusic'], true];
-      if (filter === 'top-must') return ['==', ['get', 'isTopMust'], true];
-      if (filter === 'top-food') return ['==', ['get', 'isTopFood'], true];
-      if (filter === 'csv') return ['==', ['get', 'imported'], true];
       return ['==', ['get', 'type'], filter];
     }
 
