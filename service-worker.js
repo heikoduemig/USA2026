@@ -1,9 +1,10 @@
-const CACHE_NAME = 'route66-pwa-kmz-v10';
+const CACHE_NAME = 'route66-pwa-kmz-v11';
 
 const PRECACHE_URLS = [
   './',
   './index.html',
   './manifest.webmanifest',
+  './musicBars.js',
   './assets/icon-192.png',
   './assets/icon-512.png'
 ];

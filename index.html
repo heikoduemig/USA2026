@@ -56,10 +56,14 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
 <body>
 <header>
   <h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
-  <p>From Chicago to Austin · Route 66 Music Trip · nur KMZ-/My-Maps-Ziele entlang der Route · Google-Maps-Grün · Kategorien aus Beschreibung</p>
+  <p>From Chicago to Austin · Route 66 Music Trip · 142 My-Maps/KMZ-Ziele entlang der Route</p>
   <div class="legend">
-    <span><i class="dot" style="background:#097138"></i>KMZ-/Google-Maps-Ziele</span>
-    <span>Filter zeigen nur Kategorien, die aus KMZ-Notiz, Google-Maps-Beschreibung oder Name abgeleitet wurden.</span>
+    <span><i class="dot" style="background:#4f98a3"></i>Highlights</span>
+    <span><i class="dot" style="background:#d19900"></i>Musik / Bars</span>
+    <span><i class="dot" style="background:#6daa45"></i>Food</span>
+    <span><i class="dot" style="background:#dd6974"></i>Hidden / On the way</span>
+    <span><i class="dot" style="background:#a86fdf"></i>Distilleries</span>
+    <span><i class="dot" style="background:#4da3ff"></i>Hotels</span>
   </div>
   <div class="toolbar">
     <div class="quick-links">
@@ -82,18 +86,17 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
   <div id="map"></div>
   <div class="map-filter-panel">
     <span>Filter:</span>
-    <button class="map-filter-btn active" data-map-filter="all">Alle KMZ-Ziele</button>
-    <button class="map-filter-btn" data-map-filter="hotel">Hotels</button>
-    <button class="map-filter-btn" data-map-filter="breakfast">Frühstück</button>
-    <button class="map-filter-btn" data-map-filter="food">Essen &amp; BBQ</button>
-    <button class="map-filter-btn" data-map-filter="music">Kneipen &amp; Musik</button>
-    <button class="map-filter-btn" data-map-filter="route66">Route 66</button>
-    <button class="map-filter-btn" data-map-filter="museum">Museen</button>
-    <button class="map-filter-btn" data-map-filter="nature">Natur &amp; Parks</button>
+    <button class="map-filter-btn active" data-map-filter="all">Alle</button>
+    <button class="map-filter-btn" data-map-filter="must">Highlights</button>
+    <button class="map-filter-btn" data-map-filter="music">Musik &amp; Gear</button>
+    <button class="map-filter-btn" data-map-filter="food">Food</button>
+    <button class="map-filter-btn" data-map-filter="hidden">Hidden</button>
     <button class="map-filter-btn" data-map-filter="distillery">Distilleries</button>
-    <button class="map-filter-btn" data-map-filter="western">Western &amp; Boots</button>
-    <button class="map-filter-btn" data-map-filter="toys">Spielzeug</button>
-    <button class="map-filter-btn" data-map-filter="sight">Sonstiges</button>
+    <button class="map-filter-btn" data-map-filter="hotel">Hotels</button>
+    <button class="map-filter-btn" data-map-filter="csv">KMZ-Ziele</button>
+    <button class="map-filter-btn" data-map-filter="top-music">Top Musik</button>
+    <button class="map-filter-btn" data-map-filter="top-must">Top Highlights</button>
+    <button class="map-filter-btn" data-map-filter="top-food">Top Food</button>
   </div>
   <aside class="map-sidecard" aria-label="Route Übersicht">
     <h2>Chicago → Austin</h2>
@@ -638,6 +641,7 @@ table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-
 </main>
 
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
+<script src="musicBars.js"></script>
 <script>
 // Top-Sets für Filter über alle Städte
 const topMusicGear = new Set([
@@ -674,8 +678,109 @@ const topFood = new Set([
   "Franklin Barbecue"
 ]);
 
-// Keine manuell ergänzten Kartenmarker: Auf der Karte werden nur die importierten My-Maps/KMZ-Ziele verwendet.
-const points = [];
+const points = [
+{name:'citizenM Chicago Downtown Hotel',type:'hotel',coords:[-87.6290,41.8860],text:'Hotel · Chicago'},
+{name:'Hotel Lumière at the Arch',type:'hotel',coords:[-90.1863,38.6312],text:'Hotel · St. Louis'},
+{name:'The Mayo Hotel',type:'hotel',coords:[-95.9929,36.1548],text:'Hotel · Tulsa'},
+{name:'Apache Casino Hotel',type:'hotel',coords:[-98.3877,34.6085],text:'Hotel · Lawton area'},
+{name:'citizenM Austin Downtown Hotel',type:'hotel',coords:[-97.7424,30.2676],text:'Hotel · Austin'},
+{name:'Millennium Park',type:'must',coords:[-87.6226,41.8826],text:'Chicago Highlight'},
+{name:'Chicago Riverwalk',type:'must',coords:[-87.6206,41.8880],text:'Chicago Highlight'},
+{name:'Chicago Cultural Center',type:'must',coords:[-87.6247,41.8838],text:'Chicago Highlight'},
+{name:'Art Institute of Chicago',type:'must',coords:[-87.6237,41.8796],text:'Chicago Highlight'},
+{name:'Willis Tower Skydeck',type:'must',coords:[-87.6359,41.8789],text:'Chicago Highlight'},
+{name:'Navy Pier',type:'must',coords:[-87.6079,41.8917],text:'Chicago Highlight'},
+{name:'Lincoln Park',type:'must',coords:[-87.6376,41.9214],text:'Chicago Highlight'},
+{name:'Wicker Park',type:'must',coords:[-87.6777,41.9088],text:'Chicago Highlight'},
+{name:'Logan Square',type:'must',coords:[-87.7081,41.9287],text:'Chicago Highlight'},
+{name:'Museum Campus',type:'must',coords:[-87.6140,41.8663],text:'Chicago Highlight'},
+{name:'Pilsen Murals',type:'hidden',coords:[-87.6708,41.8561],text:'Chicago Hidden Spot'},
+{name:'Humboldt Park',type:'hidden',coords:[-87.7017,41.9025],text:'Chicago Hidden Spot'},
+{name:'Promontory Point',type:'hidden',coords:[-87.5793,41.7925],text:'Chicago Hidden Spot'},
+{name:'Garfield Park Conservatory',type:'hidden',coords:[-87.7163,41.8864],text:'Chicago Hidden Spot'},
+{name:'Ping Tom Memorial Park',type:'hidden',coords:[-87.6330,41.8581],text:'Chicago Hidden Spot'},
+{name:'Chicago Music Exchange',type:'music',coords:[-87.6778,41.9580],text:'Musik & Gear'},
+{name:"Buddy Guy's Legends",type:'music',coords:[-87.6307,41.8675],text:'Blues Club'},
+{name:'House of Blues Chicago',type:'music',coords:[-87.6296,41.8892],text:'Live Musik'},
+{name:'Maxwell Street',type:'food',coords:[-87.6473,41.8642],text:'Food & Blues Geschichte'},
+{name:'KOVAL Distillery',type:'distillery',coords:[-87.7001,41.9266],text:'Distillery Chicago'},
+{name:'FEW Spirits',type:'distillery',coords:[-87.6906,42.0451],text:'Nahe Chicago'},
+{name:'Route 66 Begin Sign',type:'hidden',coords:[-87.6243,41.8763],text:'On the way'},
+{name:'Gemini Giant',type:'hidden',coords:[-88.1846,41.2917],text:'On the way'},
+{name:'Pontiac Route 66 Museum',type:'hidden',coords:[-88.6279,40.8809],text:'On the way'},
+{name:'Cozy Dog Drive-In',type:'hidden',coords:[-89.6501,39.7817],text:'On the way'},
+{name:'Gateway Arch',type:'must',coords:[-90.1848,38.6247],text:'St. Louis Highlight'},
+{name:'Citygarden',type:'must',coords:[-90.1994,38.6298],text:'St. Louis Highlight'},
+{name:'Missouri Botanical Garden',type:'must',coords:[-90.2590,38.6158],text:'St. Louis Highlight'},
+{name:'Forest Park',type:'must',coords:[-90.2843,38.6388],text:'St. Louis Highlight'},
+{name:'St. Louis Art Museum',type:'must',coords:[-90.2946,38.6393],text:'St. Louis Highlight'},
+{name:'Cathedral Basilica',type:'must',coords:[-90.2620,38.6425],text:'St. Louis Highlight'},
+{name:'Delmar Loop',type:'must',coords:[-90.3070,38.6554],text:'St. Louis Highlight'},
+{name:'Tower Grove Park',type:'must',coords:[-90.2544,38.6072],text:'St. Louis Highlight'},
+{name:'Union Station',type:'must',coords:[-90.2076,38.6247],text:'St. Louis Highlight'},
+{name:'Cherokee Street',type:'must',coords:[-90.2292,38.5948],text:'St. Louis Highlight'},
+{name:'Soulard',type:'hidden',coords:[-90.1990,38.6100],text:'St. Louis Hidden Spot'},
+{name:'Chain of Rocks Bridge',type:'hidden',coords:[-90.1483,38.7556],text:'St. Louis Hidden / Route 66'},
+{name:'Lafayette Square',type:'hidden',coords:[-90.2172,38.6175],text:'St. Louis Hidden Spot'},
+{name:'The Hill',type:'hidden',coords:[-90.2775,38.6178],text:'St. Louis Hidden Spot'},
+{name:'Bellefontaine Cemetery',type:'hidden',coords:[-90.2230,38.7036],text:'St. Louis Hidden Spot'},
+{name:'Blueberry Hill Duck Room',type:'music',coords:[-90.3078,38.6552],text:'Live Musik'},
+{name:'Old Rock House',type:'music',coords:[-90.1989,38.6184],text:'Live Musik'},
+{name:'Ted Drewes',type:'food',coords:[-90.3059,38.5868],text:'Food'},
+{name:'StiLL 630',type:'distillery',coords:[-90.2269,38.6185],text:'Distillery St. Louis'},
+{name:'Switchgrass Spirits',type:'distillery',coords:[-90.2240,38.6291],text:'Distillery St. Louis'},
+{name:'Meramec Caverns',type:'hidden',coords:[-91.5011,38.2445],text:'On the way'},
+{name:'Cuba Murals',type:'hidden',coords:[-91.4032,38.0631],text:'On the way'},
+{name:'Uranus Missouri',type:'hidden',coords:[-92.1026,37.8279],text:'On the way'},
+{name:'Route 66 Neon Park',type:'hidden',coords:[-92.6638,37.6809],text:'On the way'},
+{name:'Blue Whale of Catoosa',type:'hidden',coords:[-95.5714,36.1864],text:'On the way'},
+{name:'Buck Atom\'s Cosmic Curios',type:'hidden',coords:[-95.9228,36.1540],text:'On the way'},
+{name:'Cyrus Avery Plaza',type:'must',coords:[-96.0058,36.1497],text:'Tulsa Highlight'},
+{name:'Philbrook Museum',type:'must',coords:[-95.9670,36.1105],text:'Tulsa Highlight'},
+{name:'Woody Guthrie Center',type:'must',coords:[-95.9915,36.1575],text:'Tulsa Highlight'},
+{name:'Gathering Place',type:'must',coords:[-95.9665,36.1238],text:'Tulsa Highlight'},
+{name:'Golden Driller',type:'must',coords:[-95.9798,36.1318],text:'Tulsa Highlight'},
+{name:'Tulsa Arts District',type:'must',coords:[-95.9892,36.1586],text:'Tulsa Highlight'},
+{name:'Cain\'s Ballroom',type:'must',coords:[-95.9924,36.1601],text:'Tulsa Highlight'},
+{name:'Tulsa Botanic Garden',type:'must',coords:[-96.1521,36.2002],text:'Tulsa Highlight'},
+{name:'Mother Road Market',type:'must',coords:[-95.9617,36.1490],text:'Tulsa Highlight'},
+{name:'Turkey Mountain',type:'must',coords:[-95.9985,36.0923],text:'Tulsa Highlight'},
+{name:'Cherry Street',type:'hidden',coords:[-95.9648,36.1337],text:'Tulsa Hidden Spot'},
+{name:'Red Fork Historic District',type:'hidden',coords:[-96.0314,36.1451],text:'Tulsa Hidden Spot'},
+{name:'Center of the Universe',type:'hidden',coords:[-95.9920,36.1562],text:'Tulsa Hidden Spot'},
+{name:'Route 66 Rising Sculpture',type:'hidden',coords:[-96.0046,36.1463],text:'Tulsa Hidden Spot'},
+{name:'Blue Dome District',type:'hidden',coords:[-95.9874,36.1532],text:'Tulsa Hidden Spot'},
+{name:'Mercury Lounge',type:'music',coords:[-95.9841,36.1478],text:'Tulsa Musik'},
+{name:'Red Fork Distillery',type:'distillery',coords:[-96.0320,36.1453],text:'Distillery Tulsa'},
+{name:'Wichita Falls (optional stop)',type:'must',coords:[-98.4934,33.9137],text:'Optional short stop only'},
+{name:'Lawton',type:'must',coords:[-98.3903,34.6087],text:'Overnight area'},
+{name:'Wichita Mountains Wildlife Refuge',type:'must',coords:[-98.7000,34.7670],text:'Highlight nahe Lawton (Wichita Mountains Wildlife Refuge)'},
+{name:'South Congress',type:'must',coords:[-97.7496,30.2482],text:'Austin Highlight'},
+{name:'Lady Bird Lake',type:'must',coords:[-97.7428,30.2621],text:'Austin Highlight'},
+{name:'Texas State Capitol',type:'must',coords:[-97.7403,30.2747],text:'Austin Highlight'},
+{name:'Barton Springs Pool',type:'must',coords:[-97.7726,30.2640],text:'Austin Highlight'},
+{name:'Zilker Park',type:'must',coords:[-97.7727,30.2669],text:'Austin Highlight'},
+{name:'Mount Bonnell',type:'must',coords:[-97.7738,30.3213],text:'Austin Highlight'},
+{name:'The Domain',type:'must',coords:[-97.7250,30.4004],text:'Austin Highlight'},
+{name:'East Austin',type:'must',coords:[-97.7186,30.2640],text:'Austin Highlight'},
+{name:'Blanton Museum of Art',type:'must',coords:[-97.7378,30.2808],text:'Austin Highlight'},
+{name:'Congress Avenue Bridge Bats',type:'must',coords:[-97.7431,30.2607],text:'Austin Highlight'},
+{name:'The Range at Austin',type:'must',coords:[-97.7440,30.1700],text:'Highlight · The Range at Austin'},
+{name:'South Congress Hotel Area',type:'hidden',coords:[-97.7495,30.2496],text:'Austin Hidden Spot'},
+{name:'Cosmic Coffee',type:'hidden',coords:[-97.7696,30.2296],text:'Austin Hidden Spot'},
+{name:'Secret Beach',type:'hidden',coords:[-97.7049,30.2444],text:'Austin Hidden Spot'},
+{name:'Laguna Gloria',type:'hidden',coords:[-97.7732,30.3129],text:'Austin Hidden Spot'},
+{name:'Rainey Street side lanes',type:'hidden',coords:[-97.7390,30.2586],text:'Austin Hidden Spot'},
+{name:'The Continental Club',type:'music',coords:[-97.7498,30.2475],text:'Austin Musik'},
+{name:"Antone's",type:'music',coords:[-97.7432,30.2672],text:'Austin Blues'},
+{name:'South Austin Music',type:'music',coords:[-97.7634,30.2350],text:'Gear'},
+{name:'Waterloo Records',type:'music',coords:[-97.7517,30.2966],text:'Plattenladen'},
+{name:'Franklin Barbecue',type:'food',coords:[-97.7310,30.2702],text:'Austin Food'},
+{name:'Still Austin Whiskey Co.',type:'distillery',coords:[-97.6994,30.2326],text:'Distillery Austin'},
+{name:'Treaty Oak Distilling',type:'distillery',coords:[-98.0186,30.1085],text:'Nahe Austin'},
+{name:'Andalusia Whiskey Co.',type:'distillery',coords:[-98.4463,30.0717],text:'Hill Country'}
+];
+
 
 
 // Grobe Reiseroute Chicago → St. Louis → Tulsa → Wichita Falls/Lawton → Austin.
@@ -718,7 +823,7 @@ function distanceToSegmentDegrees(p, a, b) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-function isNearRoute(coords, maxDistanceDegrees = 0.95) {
+function isNearRoute(coords, maxDistanceDegrees = 1.25) {
   for (let i = 0; i < CSV_ROUTE_STOPS.length - 1; i++) {
     if (distanceToSegmentDegrees(coords, CSV_ROUTE_STOPS[i], CSV_ROUTE_STOPS[i + 1]) <= maxDistanceDegrees) {
       return true;
@@ -731,29 +836,153 @@ function isNearRoute(coords, maxDistanceDegrees = 0.95) {
 // Da die CSV keine Koordinaten enthält, werden diese Orte beim Laden über Mapbox Geocoding aufgelöst.
 const csvImportedPoints = [
   {
-    "name": "Buckingham-Brunnen",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Buckingham-Brunnen/data=!4m2!3m1!1s0x880e2ca005fd8e87:0x2440022c9be1ae59",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Buckingham Fountain Chicago Grant Park",
-    "coords": [
-      -87.6189,
-      41.8765
-    ]
+    "name": "Rhine Hall Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4",
+    "text": "KMZ · Destillerie",
+    "query": "Rhine Hall Distillery USA"
   },
   {
-    "name": "The Range at Austin",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+Range+at+Austin/data=!4m2!3m1!1s0x8644b3338d6c0729:0x54f471a5d3cb11ee",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The Range at Austin USA"
+    "name": "Wolf Point Distilling",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477",
+    "text": "KMZ · Destillerie",
+    "query": "Wolf Point Distilling USA"
+  },
+  {
+    "name": "Square One Brewery & Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Square+One+Brewery+%26+Distillery/data=!4m2!3m1!1s0x87d8b37145198191:0x717614de0ec78272",
+    "text": "KMZ · Destillerie",
+    "query": "Square One Brewery & Distillery USA"
+  },
+  {
+    "name": "StilL 630 Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef",
+    "text": "KMZ · Destillerie",
+    "query": "StilL 630 Distillery USA"
+  },
+  {
+    "name": "Dulce Vida Spirits",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d",
+    "text": "KMZ · Destillerie",
+    "query": "Dulce Vida Spirits USA"
+  },
+  {
+    "name": "Vitek's BBQ",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Vitek's+BBQ/data=!4m2!3m1!1s0x864f8231185d7ffd:0x60376158c64c02ec",
+    "text": "KMZ · Food",
+    "query": "Vitek's BBQ USA"
+  },
+  {
+    "name": "Riscky's BAR-B-Q",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Riscky's+BAR-B-Q/data=!4m2!3m1!1s0x864e76a6e78e8a2b:0x319f079669fb068e",
+    "text": "KMZ · Food",
+    "query": "Riscky's BAR-B-Q USA"
+  },
+  {
+    "name": "Arcadia Round Barn",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016",
+    "text": "KMZ · Food",
+    "query": "Arcadia Round Barn USA"
+  },
+  {
+    "name": "Jubelt's Bakery & Restaurant",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Jubelt's+Bakery+%26+Restaurant/data=!4m2!3m1!1s0x8875a2e0c4593b8d:0x42a76ce5f5e3c86c",
+    "text": "KMZ · Food",
+    "query": "Jubelt's Bakery & Restaurant USA"
+  },
+  {
+    "name": "The Ariston Cafe",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/The+Ariston+Cafe/data=!4m2!3m1!1s0x8875a2e12882dc63:0x44da7c1b9d53c9e6",
+    "text": "KMZ · Food",
+    "query": "The Ariston Cafe USA"
+  },
+  {
+    "name": "Cozy Dog Drive In",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Cozy+Dog+Drive+In/data=!4m2!3m1!1s0x887539122a4c5241:0x27e23eaee638d5cd",
+    "text": "KMZ · Food",
+    "query": "Cozy Dog Drive In USA"
+  },
+  {
+    "name": "Henry's Drive-In",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Henry's+Drive-In/data=!4m2!3m1!1s0x880e33f67167351d:0x9cceb7646777ddc5",
+    "text": "KMZ · Food",
+    "query": "Henry's Drive-In USA"
+  },
+  {
+    "name": "Rock Cafe",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Rock+Cafe/data=!4m2!3m1!1s0x87b158b740722ad7:0x5badc84a5f2e1c5d",
+    "text": "KMZ · Food",
+    "query": "Rock Cafe USA"
+  },
+  {
+    "name": "Crabbys Seafood Bar & Grill",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Crabbys+Seafood+Bar+%26+Grill/data=!4m2!3m1!1s0x87c91101ff0df65b:0xb3d34d379161f19a",
+    "text": "KMZ · Food",
+    "query": "Crabbys Seafood Bar & Grill USA"
+  },
+  {
+    "name": "Reds Giant Hamburg",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Red%E2%80%99s+Giant+Hamburg/data=!4m2!3m1!1s0x87cf63a0dd4f35db:0xdc58ddc3c85fb600",
+    "text": "KMZ · Food",
+    "query": "Reds Giant Hamburg USA"
+  },
+  {
+    "name": "Missouri Hick Barbeque",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Missouri+Hick+Barbeque/data=!4m2!3m1!1s0x87dbce700bc0104d:0xfce95e4aff69f9d",
+    "text": "KMZ · Food",
+    "query": "Missouri Hick Barbeque USA"
+  },
+  {
+    "name": "Ted Drewes Frozen Custard",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Ted+Drewes+Frozen+Custard/data=!4m2!3m1!1s0x87d8ca0d4a93c1b3:0x822a7d0e38f70a59",
+    "text": "KMZ · Food",
+    "query": "Ted Drewes Frozen Custard USA"
+  },
+  {
+    "name": "Anheuser-Busch St. Louis Brewery",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b",
+    "text": "KMZ · Food",
+    "query": "Anheuser-Busch St. Louis Brewery USA"
   },
   {
     "name": "Pho 360",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Pho+360/data=!4m2!3m1!1s0x87ad1f180240a9b1:0xaaac18316526e13d",
     "text": "KMZ · Frühstück",
     "query": "Pho 360 USA"
@@ -761,7 +990,7 @@ const csvImportedPoints = [
   {
     "name": "Boomarang Diner - Lawton",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738",
     "text": "KMZ · Frühstück",
     "query": "Boomarang Diner - Lawton USA"
@@ -769,7 +998,7 @@ const csvImportedPoints = [
   {
     "name": "Ann's Country Kitchen",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Ann's+Country+Kitchen/data=!4m2!3m1!1s0x87acfd0a3f4eccd9:0x6b9505698c687d36",
     "text": "KMZ · Frühstück",
     "query": "Ann's Country Kitchen USA"
@@ -777,7 +1006,7 @@ const csvImportedPoints = [
   {
     "name": "Country Cafe",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Country+Cafe/data=!4m2!3m1!1s0x87ad1f12bc8b3d09:0xb605560141f53ed4",
     "text": "KMZ · Frühstück",
     "query": "Country Cafe USA"
@@ -785,7 +1014,7 @@ const csvImportedPoints = [
   {
     "name": "Caroline",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Caroline/data=!4m2!3m1!1s0x8644b509e7e92743:0x38cd855b7c17b277",
     "text": "KMZ · Frühstück",
     "query": "Caroline USA"
@@ -793,7 +1022,7 @@ const csvImportedPoints = [
   {
     "name": "Phoebe's Downtown",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900",
     "text": "KMZ · Frühstück",
     "query": "Phoebe's Downtown USA"
@@ -801,7 +1030,7 @@ const csvImportedPoints = [
   {
     "name": "Dilly Diner",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Dilly+Diner/data=!4m2!3m1!1s0x87b6eb7f6d9eac8f:0x196ac564737e5781",
     "text": "KMZ · Frühstück",
     "query": "Dilly Diner USA"
@@ -809,7 +1038,7 @@ const csvImportedPoints = [
   {
     "name": "Tally's Good Food Café",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Tally's+Good+Food+Caf%C3%A9/data=!4m2!3m1!1s0x87b6ed125902cd5d:0xe0b8e9361ec87098",
     "text": "KMZ · Frühstück",
     "query": "Tally's Good Food Café USA"
@@ -817,7 +1046,7 @@ const csvImportedPoints = [
   {
     "name": "Wildberry Pancakes & Cafe",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Wildberry+Pancakes+%26+Cafe/data=!4m2!3m1!1s0x880e2ca61afe006f:0x952fc2ea4e453f15",
     "text": "KMZ · Frühstück",
     "query": "Wildberry Pancakes & Cafe USA"
@@ -825,7 +1054,7 @@ const csvImportedPoints = [
   {
     "name": "Chili Mac's Diner",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c",
     "text": "KMZ · Frühstück",
     "query": "Chili Mac's Diner USA"
@@ -833,15 +1062,759 @@ const csvImportedPoints = [
   {
     "name": "Cherry Street Kitchen and Catering",
     "category": "Frühstück",
-    "type": "breakfast",
+    "type": "food",
     "url": "https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f",
     "text": "KMZ · Frühstück",
     "query": "Cherry Street Kitchen and Catering USA"
   },
   {
+    "name": "Lou Mitchell's",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Lou+Mitchell's/data=!4m2!3m1!1s0x880e2cc19f7a7309:0x313c4c01a977c832",
+    "text": "KMZ · Frühstück",
+    "query": "Lou Mitchell's USA"
+  },
+  {
+    "name": "Buckingham-Brunnen",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Buckingham-Brunnen/data=!4m2!3m1!1s0x880e2ca005fd8e87:0x2440022c9be1ae59",
+    "text": "KMZ · Highlight",
+    "query": "Buckingham-Brunnen USA"
+  },
+  {
+    "name": "The Range at Austin",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Range+at+Austin/data=!4m2!3m1!1s0x8644b3338d6c0729:0x54f471a5d3cb11ee",
+    "text": "KMZ · Highlight",
+    "query": "The Range at Austin USA"
+  },
+  {
+    "name": "Chain of Rocks Bridge",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b",
+    "text": "KMZ · Highlight",
+    "query": "Chain of Rocks Bridge USA"
+  },
+  {
+    "name": "Downtown Fort Worth",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Downtown+Fort+Worth/data=!4m2!3m1!1s0x864e7169d7c19c23:0xcc37b6f11c62ddcc",
+    "text": "KMZ · Highlight",
+    "query": "Downtown Fort Worth USA"
+  },
+  {
+    "name": "Fort Worth Stockyards",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Fort+Worth+Stockyards/data=!4m2!3m1!1s0x864e76a42759fe4d:0x475f2ff64a820fcb",
+    "text": "KMZ · Highlight",
+    "query": "Fort Worth Stockyards USA"
+  },
+  {
+    "name": "Soulsby Service Station",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4",
+    "text": "KMZ · Highlight",
+    "query": "Soulsby Service Station USA"
+  },
+  {
+    "name": "Lauterbach Muffler Man (Lauterbach Giant)",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3",
+    "text": "KMZ · Highlight",
+    "query": "Lauterbach Muffler Man (Lauterbach Giant) USA"
+  },
+  {
+    "name": "Litchfield Museum & Route 66 Welcome Center",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c",
+    "text": "KMZ · Highlight",
+    "query": "Litchfield Museum & Route 66 Welcome Center USA"
+  },
+  {
+    "name": "Austin Bat Tours",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Austin+Bat+Tours/data=!4m2!3m1!1s0x8644b5a09f19eedf:0xcd55f894cc1c89eb",
+    "text": "KMZ · Highlight",
+    "query": "Austin Bat Tours USA"
+  },
+  {
+    "name": "Covert Park at Mount Bonnell",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd",
+    "text": "KMZ · Highlight",
+    "query": "Covert Park at Mount Bonnell USA"
+  },
+  {
+    "name": "McKinney Falls State Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/McKinney+Falls+State+Park/data=!4m2!3m1!1s0x8644b3be3538b38b:0xfb83098f6001c693",
+    "text": "KMZ · Highlight",
+    "query": "McKinney Falls State Park USA"
+  },
+  {
+    "name": "Pops on 66",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4",
+    "text": "KMZ · Highlight",
+    "query": "Pops on 66 USA"
+  },
+  {
+    "name": "Southfork Ranch",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964",
+    "text": "KMZ · Highlight",
+    "query": "Southfork Ranch USA"
+  },
+  {
+    "name": "Pink Elephant Antique Mall",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd",
+    "text": "KMZ · Highlight",
+    "query": "Pink Elephant Antique Mall USA"
+  },
+  {
+    "name": "World's Largest Railsplitter Covered Wagon",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f",
+    "text": "KMZ · Highlight",
+    "query": "World's Largest Railsplitter Covered Wagon USA"
+  },
+  {
+    "name": "Route 66 Wall Art Photopoint",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df",
+    "text": "KMZ · Highlight",
+    "query": "Route 66 Wall Art Photopoint USA"
+  },
+  {
+    "name": "Route 66 decommissioned Illinois State police headquarter",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c",
+    "text": "KMZ · Highlight",
+    "query": "Route 66 decommissioned Illinois State police headquarter USA"
+  },
+  {
+    "name": "Route 66 Association of Illinois",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7",
+    "text": "KMZ · Highlight",
+    "query": "Route 66 Association of Illinois USA"
+  },
+  {
+    "name": "Gemini Giant",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gemini+Giant/data=!4m2!3m1!1s0x880e7f0000cde9c1:0x3909f9af1819906e",
+    "text": "KMZ · Highlight",
+    "query": "Gemini Giant USA"
+  },
+  {
+    "name": "Blues Brothers Copmobile",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Blues+Brothers+Copmobile/data=!4m2!3m1!1s0x880e6504315f67d9:0xe0ee0da453bc27f3",
+    "text": "KMZ · Highlight",
+    "query": "Blues Brothers Copmobile USA"
+  },
+  {
+    "name": "Uranus Fudge Factory And General Store - Uranus Missouri",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4",
+    "text": "KMZ · Highlight",
+    "query": "Uranus Fudge Factory And General Store - Uranus Missouri USA"
+  },
+  {
+    "name": "Meadow Gold Sign",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Meadow+Gold+Sign/data=!4m2!3m1!1s0x87b6ed2062e9082d:0xc945d60fe3f30fc5",
+    "text": "KMZ · Highlight",
+    "query": "Meadow Gold Sign USA"
+  },
+  {
+    "name": "Buck Atom's Cosmic Curios on 66",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13",
+    "text": "KMZ · Highlight",
+    "query": "Buck Atom's Cosmic Curios on 66 USA"
+  },
+  {
+    "name": "Route 66 Historical Village",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6",
+    "text": "KMZ · Highlight",
+    "query": "Route 66 Historical Village USA"
+  },
+  {
+    "name": "Bonnie and Clyde Hideout Apartment",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24",
+    "text": "KMZ · Highlight",
+    "query": "Bonnie and Clyde Hideout Apartment USA"
+  },
+  {
+    "name": "Red Oak II",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf",
+    "text": "KMZ · Highlight",
+    "query": "Red Oak II USA"
+  },
+  {
+    "name": "Gary Gay Parita",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227",
+    "text": "KMZ · Highlight",
+    "query": "Gary Gay Parita USA"
+  },
+  {
+    "name": "Meramec Caverns",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136",
+    "text": "KMZ · Highlight",
+    "query": "Meramec Caverns USA"
+  },
+  {
+    "name": "S Congress Ave",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d",
+    "text": "KMZ · Highlight",
+    "query": "S Congress Ave USA"
+  },
+  {
+    "name": "Barton Springs Pool",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6",
+    "text": "KMZ · Highlight",
+    "query": "Barton Springs Pool USA"
+  },
+  {
+    "name": "Lady Bird Lake",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lady+Bird+Lake/data=!4m2!3m1!1s0x8644b50e720134c3:0x9eb67ecc9e2fcb81",
+    "text": "KMZ · Highlight",
+    "query": "Lady Bird Lake USA"
+  },
+  {
+    "name": "Texas State Capitol",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Texas+State+Capitol/data=!4m2!3m1!1s0x8644b5a014ac8dcf:0xcb6f5722a795d039",
+    "text": "KMZ · Highlight",
+    "query": "Texas State Capitol USA"
+  },
+  {
+    "name": "Sixth Street Historic District",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4",
+    "text": "KMZ · Highlight",
+    "query": "Sixth Street Historic District USA"
+  },
+  {
+    "name": "Medicine Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Medicine+Park/data=!4m2!3m1!1s0x87ad1d0076492bdf:0xd92dcfcf63c71c04",
+    "text": "KMZ · Highlight",
+    "query": "Medicine Park USA"
+  },
+  {
+    "name": "The Holy City of the Wichitas",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4",
+    "text": "KMZ · Highlight",
+    "query": "The Holy City of the Wichitas USA"
+  },
+  {
+    "name": "Longhorn Mountain",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Longhorn+Mountain/data=!4m2!3m1!1s0x87ac58cb25af27f5:0x695925e045747bc0",
+    "text": "KMZ · Highlight",
+    "query": "Longhorn Mountain USA"
+  },
+  {
+    "name": "Mt Scott",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Mt+Scott/data=!4m2!3m1!1s0x87acfcd42346881b:0x62b6b01c6cbc6417",
+    "text": "KMZ · Highlight",
+    "query": "Mt Scott USA"
+  },
+  {
+    "name": "Turkey Mountain",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Turkey+Mountain/data=!4m2!3m1!1s0x87b694888ec40eab:0xcc78fe7ce4650ce9",
+    "text": "KMZ · Highlight",
+    "query": "Turkey Mountain USA"
+  },
+  {
+    "name": "The Cave House",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Cave+House/data=!4m2!3m1!1s0x87b6eb0c7ee4974f:0x1c42f0d89d48dd7a",
+    "text": "KMZ · Highlight",
+    "query": "The Cave House USA"
+  },
+  {
+    "name": "Center of the Universe",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Center+of+the+Universe/data=!4m2!3m1!1s0x87b6eb82821d7b43:0xa2fbfaea775fca17",
+    "text": "KMZ · Highlight",
+    "query": "Center of the Universe USA"
+  },
+  {
+    "name": "Cyrus Avery Centennial Plaza",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4",
+    "text": "KMZ · Highlight",
+    "query": "Cyrus Avery Centennial Plaza USA"
+  },
+  {
+    "name": "Shops at Mother Road Market",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9",
+    "text": "KMZ · Highlight",
+    "query": "Shops at Mother Road Market USA"
+  },
+  {
+    "name": "Gathering Place",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gathering+Place/data=!4m2!3m1!1s0x87b6edd0d5e789ad:0xc560003ab2a3d697",
+    "text": "KMZ · Highlight",
+    "query": "Gathering Place USA"
+  },
+  {
+    "name": "Golden Driller Statue",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab",
+    "text": "KMZ · Highlight",
+    "query": "Golden Driller Statue USA"
+  },
+  {
+    "name": "Blue Whale of Catoosa",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Blue+Whale+of+Catoosa/data=!4m2!3m1!1s0x87b6f5f5af1d471d:0x6f018baa1950a1e2",
+    "text": "KMZ · Highlight",
+    "query": "Blue Whale of Catoosa USA"
+  },
+  {
+    "name": "Route 66 Neon Sign Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Neon+Sign+Park/data=!4m2!3m1!1s0x87b6ebd1f4082901:0xead0a1a24809e26f",
+    "text": "KMZ · Highlight",
+    "query": "Route 66 Neon Sign Park USA"
+  },
+  {
+    "name": "The St. Louis Wheel",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0",
+    "text": "KMZ · Highlight",
+    "query": "The St. Louis Wheel USA"
+  },
+  {
+    "name": "Missouri Botanical Garden",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080",
+    "text": "KMZ · Highlight",
+    "query": "Missouri Botanical Garden USA"
+  },
+  {
+    "name": "Saint Louis Zoo",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Saint+Louis+Zoo/data=!4m2!3m1!1s0x87d8b55ccc04062d:0x6075080197e8e830",
+    "text": "KMZ · Highlight",
+    "query": "Saint Louis Zoo USA"
+  },
+  {
+    "name": "Forest Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Forest+Park/data=!4m2!3m1!1s0x87d8b5469178c4c9:0x9d27c5026db294aa",
+    "text": "KMZ · Highlight",
+    "query": "Forest Park USA"
+  },
+  {
+    "name": "Gateway Arch",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834",
+    "text": "KMZ · Highlight",
+    "query": "Gateway Arch USA"
+  },
+  {
+    "name": "Kingston Mines",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Kingston+Mines/data=!4m2!3m1!1s0x880fd305919cbff1:0x719a19cc064f264a",
+    "text": "KMZ · Highlight",
+    "query": "Kingston Mines USA"
+  },
+  {
+    "name": "Lincoln Park Zoo",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db",
+    "text": "KMZ · Highlight",
+    "query": "Lincoln Park Zoo USA"
+  },
+  {
+    "name": "Grant Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Grant+Park/data=!4m2!3m1!1s0x880e2c9fabc8820f:0xe897c144f1557e1d",
+    "text": "KMZ · Highlight",
+    "query": "Grant Park USA"
+  },
+  {
+    "name": "Chicago River Boat Architecture Tours",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180",
+    "text": "KMZ · Highlight",
+    "query": "Chicago River Boat Architecture Tours USA"
+  },
+  {
+    "name": "360 Chicago",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74",
+    "text": "KMZ · Highlight",
+    "query": "360 Chicago USA"
+  },
+  {
+    "name": "Cloud Gate",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51",
+    "text": "KMZ · Highlight",
+    "query": "Cloud Gate USA"
+  },
+  {
+    "name": "Navy Pier",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc",
+    "text": "KMZ · Highlight",
+    "query": "Navy Pier USA"
+  },
+  {
+    "name": "citizenM Austin Downtown",
+    "category": "Hotel Austin",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf",
+    "text": "KMZ · Hotel Austin",
+    "query": "citizenM Austin Downtown USA"
+  },
+  {
+    "name": "citizenM Chicago Downtown",
+    "category": "Hotel Chicago",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d",
+    "text": "KMZ · Hotel Chicago",
+    "query": "citizenM Chicago Downtown USA"
+  },
+  {
+    "name": "Apache Casino Hotel",
+    "category": "Hotel Lawton",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c",
+    "text": "KMZ · Hotel Lawton",
+    "query": "Apache Casino Hotel USA"
+  },
+  {
+    "name": "HoteLumiere at The Arch",
+    "category": "Hotel St.Louis",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd",
+    "text": "KMZ · Hotel St.Louis",
+    "query": "HoteLumiere at The Arch USA"
+  },
+  {
+    "name": "The Mayo Hotel",
+    "category": "Hotel Tulsa",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38",
+    "text": "KMZ · Hotel Tulsa",
+    "query": "The Mayo Hotel USA"
+  },
+  {
+    "name": "Dr Pepper Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157",
+    "text": "KMZ · Museum",
+    "query": "Dr Pepper Museum USA"
+  },
+  {
+    "name": "National Cowboy & Western Heritage Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/National+Cowboy+%26+Western+Heritage+Museum/data=!4m2!3m1!1s0x87b219b49d1ee743:0x434de24e4aeb12cd",
+    "text": "KMZ · Museum",
+    "query": "National Cowboy & Western Heritage Museum USA"
+  },
+  {
+    "name": "Wonders Of Wildlife National Museum & Aquarium",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e",
+    "text": "KMZ · Museum",
+    "query": "Wonders Of Wildlife National Museum & Aquarium USA"
+  },
+  {
+    "name": "Route 66 Car Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Car+Museum/data=!4m2!3m1!1s0x87cf624ca95c8323:0x8f342cd60f6fd89e",
+    "text": "KMZ · Museum",
+    "query": "Route 66 Car Museum USA"
+  },
+  {
+    "name": "Route 66 1903 Courthouse Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0",
+    "text": "KMZ · Museum",
+    "query": "Route 66 1903 Courthouse Museum USA"
+  },
+  {
+    "name": "Abraham Lincoln Presidential Library",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Abraham+Lincoln+Presidential+Library/data=!4m2!3m1!1s0x887539c3ec790a81:0x2f51299423595cdf",
+    "text": "KMZ · Museum",
+    "query": "Abraham Lincoln Presidential Library USA"
+  },
+  {
+    "name": "Wichita Falls Museum of Art",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea",
+    "text": "KMZ · Museum",
+    "query": "Wichita Falls Museum of Art USA"
+  },
+  {
+    "name": "Route 66 Motorheads Bar & Grill",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Motorheads+Bar+%26+Grill,+Museum+and+Entertainment+Complex/data=!4m2!3m1!1s0x88753eea74efffff:0xbf4e5a0c09a372b9",
+    "text": "KMZ · Museum",
+    "query": "Route 66 Motorheads Bar & Grill USA"
+  },
+  {
+    "name": "Pontiac Museum Complex",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73",
+    "text": "KMZ · Museum",
+    "query": "Pontiac Museum Complex USA"
+  },
+  {
+    "name": "Pontiac Oakland Auto Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b",
+    "text": "KMZ · Museum",
+    "query": "Pontiac Oakland Auto Museum USA"
+  },
+  {
+    "name": "Historic Rainbow Bridge",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16",
+    "text": "KMZ · Museum",
+    "query": "Historic Rainbow Bridge USA"
+  },
+  {
+    "name": "Route 66 Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Museum/data=!4m2!3m1!1s0x87c539a1d1e9a4cd:0xb3ff5b0c42486dc8",
+    "text": "KMZ · Museum",
+    "query": "Route 66 Museum USA"
+  },
+  {
+    "name": "US Army Artillery Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/US+Army+Artillery+Museum/data=!4m2!3m1!1s0x87ad1b8d3d04382d:0xdc55a5fa198b00ca",
+    "text": "KMZ · Museum",
+    "query": "US Army Artillery Museum USA"
+  },
+  {
+    "name": "Museum of the Great Plains",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5",
+    "text": "KMZ · Museum",
+    "query": "Museum of the Great Plains USA"
+  },
+  {
+    "name": "Gilcrease Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c",
+    "text": "KMZ · Museum",
+    "query": "Gilcrease Museum USA"
+  },
+  {
+    "name": "Philbrook Museum of Art",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012",
+    "text": "KMZ · Museum",
+    "query": "Philbrook Museum of Art USA"
+  },
+  {
+    "name": "City Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/City+Museum/data=!4m2!3m1!1s0x87d8b33dc2801e55:0xc97c4420308aca04",
+    "text": "KMZ · Museum",
+    "query": "City Museum USA"
+  },
+  {
+    "name": "Museum at the Gateway Arch",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156",
+    "text": "KMZ · Museum",
+    "query": "Museum at the Gateway Arch USA"
+  },
+  {
+    "name": "Griffin Museum of Science and Industry",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306",
+    "text": "KMZ · Museum",
+    "query": "Griffin Museum of Science and Industry USA"
+  },
+  {
+    "name": "Field Museum of Natural History",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da",
+    "text": "KMZ · Museum",
+    "query": "Field Museum of Natural History USA"
+  },
+  {
+    "name": "Sahara Lounge",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749",
+    "text": "KMZ · Music",
+    "query": "Sahara Lounge USA"
+  },
+  {
+    "name": "C-Boy's Heart & Soul",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/C-Boy's+Heart+%26+Soul/data=!4m2!3m1!1s0x8644b4fad65e90c9:0x1c94863d87a40907",
+    "text": "KMZ · Music",
+    "query": "C-Boy's Heart & Soul USA"
+  },
+  {
+    "name": "Saxon Pub",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623",
+    "text": "KMZ · Music",
+    "query": "Saxon Pub USA"
+  },
+  {
+    "name": "Elephant Room",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9",
+    "text": "KMZ · Music",
+    "query": "Elephant Room USA"
+  },
+  {
+    "name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697",
+    "text": "KMZ · Music",
+    "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live) USA"
+  },
+  {
+    "name": "The Continental Club",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/The+Continental+Club/data=!4m2!3m1!1s0x8644b4fdbac94625:0x9a4922e26f855ca4",
+    "text": "KMZ · Music",
+    "query": "The Continental Club USA"
+  },
+  {
+    "name": "Antone's Nightclub",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Antone's+Nightclub/data=!4m2!3m1!1s0x8644b5091bd69d65:0x945d683a5e34b71f",
+    "text": "KMZ · Music",
+    "query": "Antone's Nightclub USA"
+  },
+  {
+    "name": "House of Blues Chicago",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849",
+    "text": "KMZ · Music",
+    "query": "House of Blues Chicago USA"
+  },
+  {
+    "name": "Buddy Guy's Legends",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Buddy+Guy's+Legends/data=!4m2!3m1!1s0x880e2c98ff384575:0xe0fa16c26ad26915",
+    "text": "KMZ · Music",
+    "query": "Buddy Guy's Legends USA"
+  },
+  {
     "name": "The LEGO® Store Chicago",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c",
     "text": "KMZ · Spielzeug",
     "query": "The LEGO® Store Chicago USA"
@@ -849,7 +1822,7 @@ const csvImportedPoints = [
   {
     "name": "Building Blocks Toy Store",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Building+Blocks+Toy+Store/data=!4m2!3m1!1s0x880fd25a3457b65f:0x9883a83a4e0ae6aa",
     "text": "KMZ · Spielzeug",
     "query": "Building Blocks Toy Store USA"
@@ -857,7 +1830,7 @@ const csvImportedPoints = [
   {
     "name": "S & B Candy & Toy",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/S+%26+B+Candy+%26+Toy/data=!4m2!3m1!1s0x87d8b2d866d93227:0xd2802fb744a265c5",
     "text": "KMZ · Spielzeug",
     "query": "S & B Candy & Toy USA"
@@ -865,7 +1838,7 @@ const csvImportedPoints = [
   {
     "name": "The Minifig Shop",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/The+Minifig+Shop/data=!4m2!3m1!1s0x87d8cde5dc7686db:0x655c334450a125ad",
     "text": "KMZ · Spielzeug",
     "query": "The Minifig Shop USA"
@@ -873,7 +1846,7 @@ const csvImportedPoints = [
   {
     "name": "Imagination Toys Inc",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee",
     "text": "KMZ · Spielzeug",
     "query": "Imagination Toys Inc USA"
@@ -881,7 +1854,7 @@ const csvImportedPoints = [
   {
     "name": "Kiddlestix Toy Store",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Kiddlestix+Toy+Store/data=!4m2!3m1!1s0x87b692d7c866f445:0xe173251c0171366b",
     "text": "KMZ · Spielzeug",
     "query": "Kiddlestix Toy Store USA"
@@ -889,7 +1862,7 @@ const csvImportedPoints = [
   {
     "name": "Tulsa Toy Depot",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b",
     "text": "KMZ · Spielzeug",
     "query": "Tulsa Toy Depot USA"
@@ -897,7 +1870,7 @@ const csvImportedPoints = [
   {
     "name": "Another Planet Comics & Other Stuff",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b",
     "text": "KMZ · Spielzeug",
     "query": "Another Planet Comics & Other Stuff USA"
@@ -905,7 +1878,7 @@ const csvImportedPoints = [
   {
     "name": "Terra Toys",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d",
     "text": "KMZ · Spielzeug",
     "query": "Terra Toys USA"
@@ -913,1044 +1886,118 @@ const csvImportedPoints = [
   {
     "name": "Toy Joy",
     "category": "Spielzeug",
-    "type": "toys",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Toy+Joy/data=!4m2!3m1!1s0x8644b57f7379a59d:0x2c613df415af9483",
     "text": "KMZ · Spielzeug",
     "query": "Toy Joy USA"
   },
   {
     "name": "Boot Barn",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Boot+Barn/data=!4m2!3m1!1s0x87b68df61a052a69:0x25eec87c203cddbc",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Boot Barn USA"
   },
   {
     "name": "Drysdales Western Wear",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Drysdales Western Wear USA"
   },
   {
     "name": "Dos Amigos",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Dos+Amigos/data=!4m2!3m1!1s0x87b6f325bfafd593:0x32490aada604d7f",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Dos Amigos USA"
   },
   {
-    "name": "Red Wing - Lawton, OK",
-    "category": "Western & Boots",
-    "type": "western",
+    "name": "Red Wing - Lawton",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f",
-    "text": "KMZ · Western & Boots",
-    "query": "Red Wing - Lawton, OK USA"
+    "text": "KMZ · Stiefel und Western",
+    "query": "Red Wing - Lawton USA"
   },
   {
     "name": "Allens Boots",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Allens+Boots/data=!4m2!3m1!1s0x8644b4fc8d157bf3:0x954e1efa2e66082a",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Allens Boots USA"
   },
   {
     "name": "Chisos Boot Company",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Chisos Boot Company USA"
   },
   {
     "name": "Tecovas",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Tecovas/data=!4m2!3m1!1s0x8644b434b3e0befb:0x9201eb58961ab808",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Tecovas USA"
   },
   {
     "name": "Cavender's Western Outfitter",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Cavender's+Western+Outfitter/data=!4m2!3m1!1s0x87ded4eacd2ce0f5:0xdf07a1ab2e97ca48",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Cavender's Western Outfitter USA"
   },
   {
     "name": "Levine Hat Co.",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Levine Hat Co. USA"
   },
   {
     "name": "Alcala's Western Wear",
-    "category": "Western & Boots",
-    "type": "western",
+    "category": "Stiefel und Western",
+    "type": "hidden",
     "url": "https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c",
-    "text": "KMZ · Western & Boots",
+    "text": "KMZ · Stiefel und Western",
     "query": "Alcala's Western Wear USA"
-  },
-  {
-    "name": "Rhine Hall Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Rhine Hall Distillery USA"
-  },
-  {
-    "name": "Wolf Point Distilling",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Wolf Point Distilling USA"
-  },
-  {
-    "name": "Square One Brewery & Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Square+One+Brewery+%26+Distillery/data=!4m2!3m1!1s0x87d8b37145198191:0x717614de0ec78272",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Square One Brewery & Distillery USA"
-  },
-  {
-    "name": "StilL 630 Distillery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "StilL 630 Distillery USA"
-  },
-  {
-    "name": "Dulce Vida Spirits",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Dulce Vida Spirits USA"
-  },
-  {
-    "name": "Chain of Rocks Bridge",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Chain of Rocks Bridge USA"
-  },
-  {
-    "name": "citizenM Chicago Downtown",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d",
-    "text": "KMZ · Hotels",
-    "query": "citizenM Chicago Downtown USA"
-  },
-  {
-    "name": "HoteLumiere at The Arch",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd",
-    "text": "KMZ · Hotels",
-    "query": "HoteLumiere at The Arch USA"
-  },
-  {
-    "name": "Apache Casino Hotel",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c",
-    "text": "KMZ · Hotels",
-    "query": "Apache Casino Hotel USA"
-  },
-  {
-    "name": "The Mayo Hotel",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38",
-    "text": "KMZ · Hotels",
-    "query": "The Mayo Hotel USA"
-  },
-  {
-    "name": "citizenM Austin Downtown",
-    "category": "Hotels",
-    "type": "hotel",
-    "url": "https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf",
-    "text": "KMZ · Hotels",
-    "query": "citizenM Austin Downtown USA"
-  },
-  {
-    "name": "Dr Pepper Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157",
-    "text": "KMZ · Museen",
-    "query": "Dr Pepper Museum USA"
-  },
-  {
-    "name": "Downtown Fort Worth",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Downtown+Fort+Worth/data=!4m2!3m1!1s0x864e7169d7c19c23:0xcc37b6f11c62ddcc",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Downtown Fort Worth USA"
-  },
-  {
-    "name": "Fort Worth Stockyards",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Fort+Worth+Stockyards/data=!4m2!3m1!1s0x864e76a42759fe4d:0x475f2ff64a820fcb",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Fort Worth Stockyards USA"
-  },
-  {
-    "name": "National Cowboy & Western Heritage Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/National+Cowboy+%26+Western+Heritage+Museum/data=!4m2!3m1!1s0x87b219b49d1ee743:0x434de24e4aeb12cd",
-    "text": "KMZ · Museen",
-    "query": "National Cowboy & Western Heritage Museum USA"
-  },
-  {
-    "name": "Wonders Of Wildlife National Museum & Aquarium",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e",
-    "text": "KMZ · Museen",
-    "query": "Wonders Of Wildlife National Museum & Aquarium USA"
-  },
-  {
-    "name": "Route 66 Car Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Car+Museum/data=!4m2!3m1!1s0x87cf624ca95c8323:0x8f342cd60f6fd89e",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Car Museum USA"
-  },
-  {
-    "name": "Route 66 1903 Courthouse Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0",
-    "text": "KMZ · Museen",
-    "query": "Route 66 1903 Courthouse Museum USA"
-  },
-  {
-    "name": "Soulsby Service Station",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Soulsby Service Station USA"
-  },
-  {
-    "name": "Lauterbach Muffler Man (Lauterbach Giant)",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Lauterbach Muffler Man (Lauterbach Giant) USA"
-  },
-  {
-    "name": "Litchfield Museum & Route 66 Welcome Center",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c",
-    "text": "KMZ · Museen",
-    "query": "Litchfield Museum & Route 66 Welcome Center USA"
-  },
-  {
-    "name": "Abraham Lincoln Presidential Library",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Abraham+Lincoln+Presidential+Library/data=!4m2!3m1!1s0x887539c3ec790a81:0x2f51299423595cdf",
-    "text": "KMZ · Museen",
-    "query": "Abraham Lincoln Presidential Library USA"
-  },
-  {
-    "name": "Austin Bat Tours",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Austin+Bat+Tours/data=!4m2!3m1!1s0x8644b5a09f19eedf:0xcd55f894cc1c89eb",
-    "text": "KMZ · Natur & Parks",
-    "query": "Austin Bat Tours USA"
-  },
-  {
-    "name": "Covert Park at Mount Bonnell",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd",
-    "text": "KMZ · Natur & Parks",
-    "query": "Covert Park at Mount Bonnell USA"
-  },
-  {
-    "name": "McKinney Falls State Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/McKinney+Falls+State+Park/data=!4m2!3m1!1s0x8644b3be3538b38b:0xfb83098f6001c693",
-    "text": "KMZ · Natur & Parks",
-    "query": "McKinney Falls State Park USA"
-  },
-  {
-    "name": "Pops on 66",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Pops on 66 USA"
-  },
-  {
-    "name": "Southfork Ranch",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Southfork Ranch USA"
-  },
-  {
-    "name": "Vitek's BBQ",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Vitek's+BBQ/data=!4m2!3m1!1s0x864f8231185d7ffd:0x60376158c64c02ec",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Vitek's BBQ USA"
-  },
-  {
-    "name": "Riscky's BAR-B-Q",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Riscky's+BAR-B-Q/data=!4m2!3m1!1s0x864e76a6e78e8a2b:0x319f079669fb068e",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Riscky's BAR-B-Q USA"
-  },
-  {
-    "name": "Wichita Falls Museum of Art",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea",
-    "text": "KMZ · Museen",
-    "query": "Wichita Falls Museum of Art USA"
-  },
-  {
-    "name": "Arcadia Round Barn",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Arcadia Round Barn USA"
-  },
-  {
-    "name": "Jubelt's Bakery & Restaurant",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Jubelt's+Bakery+%26+Restaurant/data=!4m2!3m1!1s0x8875a2e0c4593b8d:0x42a76ce5f5e3c86c",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Jubelt's Bakery & Restaurant USA"
-  },
-  {
-    "name": "The Ariston Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/The+Ariston+Cafe/data=!4m2!3m1!1s0x8875a2e12882dc63:0x44da7c1b9d53c9e6",
-    "text": "KMZ · Frühstück",
-    "query": "The Ariston Cafe USA"
-  },
-  {
-    "name": "Route 66 Motorheads Bar & Grill, Museum and Entertainment Complex",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Route+66+Motorheads+Bar+%26+Grill,+Museum+and+Entertainment+Complex/data=!4m2!3m1!1s0x88753eea74efffff:0xbf4e5a0c09a372b9",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Route 66 Motorheads Bar & Grill, Museum and Entertainment Complex USA"
-  },
-  {
-    "name": "Cozy Dog Drive In",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Cozy+Dog+Drive+In/data=!4m2!3m1!1s0x887539122a4c5241:0x27e23eaee638d5cd",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Cozy Dog Drive In USA"
-  },
-  {
-    "name": "Henry's Drive-In",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Henry's+Drive-In/data=!4m2!3m1!1s0x880e33f67167351d:0x9cceb7646777ddc5",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Henry's Drive-In USA"
-  },
-  {
-    "name": "Pink Elephant Antique Mall",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Pink Elephant Antique Mall USA"
-  },
-  {
-    "name": "World's Largest Railsplitter Covered Wagon",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "World's Largest Railsplitter Covered Wagon USA"
-  },
-  {
-    "name": "Pontiac Museum Complex",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73",
-    "text": "KMZ · Museen",
-    "query": "Pontiac Museum Complex USA"
-  },
-  {
-    "name": "Pontiac Oakland Auto Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b",
-    "text": "KMZ · Museen",
-    "query": "Pontiac Oakland Auto Museum USA"
-  },
-  {
-    "name": "Route 66 Wall Art Photopoint",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 Wall Art Photopoint USA"
-  },
-  {
-    "name": "Route 66 decommissioned Illinois State police headquarter",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 decommissioned Illinois State police headquarter USA"
-  },
-  {
-    "name": "Route 66 Association of Illinois",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Association of Illinois USA"
-  },
-  {
-    "name": "Gemini Giant",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Gemini+Giant/data=!4m2!3m1!1s0x880e7f0000cde9c1:0x3909f9af1819906e",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Gemini Giant USA"
-  },
-  {
-    "name": "Blues Brothers Copmobile",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Blues+Brothers+Copmobile/data=!4m2!3m1!1s0x880e6504315f67d9:0xe0ee0da453bc27f3",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Blues Brothers Copmobile USA"
-  },
-  {
-    "name": "Lou Mitchell's",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Lou+Mitchell's/data=!4m2!3m1!1s0x880e2cc19f7a7309:0x313c4c01a977c832",
-    "text": "KMZ · Frühstück",
-    "query": "Lou Mitchell's USA"
-  },
-  {
-    "name": "Historic Rainbow Bridge",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Historic Rainbow Bridge USA"
-  },
-  {
-    "name": "Uranus Fudge Factory And General Store - Uranus Missouri",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Uranus Fudge Factory And General Store - Uranus Missouri USA"
-  },
-  {
-    "name": "Rock Cafe",
-    "category": "Frühstück",
-    "type": "breakfast",
-    "url": "https://www.google.com/maps/place/Rock+Cafe/data=!4m2!3m1!1s0x87b158b740722ad7:0x5badc84a5f2e1c5d",
-    "text": "KMZ · Frühstück",
-    "query": "Rock Cafe USA"
-  },
-  {
-    "name": "Crabbys Seafood Bar & Grill",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Crabbys+Seafood+Bar+%26+Grill/data=!4m2!3m1!1s0x87c91101ff0df65b:0xb3d34d379161f19a",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Crabbys Seafood Bar & Grill USA"
-  },
-  {
-    "name": "Red’s Giant Hamburg",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Red%E2%80%99s+Giant+Hamburg/data=!4m2!3m1!1s0x87cf63a0dd4f35db:0xdc58ddc3c85fb600",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Red’s Giant Hamburg USA"
-  },
-  {
-    "name": "Missouri Hick Barbeque",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Missouri+Hick+Barbeque/data=!4m2!3m1!1s0x87dbce700bc0104d:0xfce95e4aff69f9d",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Missouri Hick Barbeque USA"
-  },
-  {
-    "name": "Meadow Gold Sign",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Meadow+Gold+Sign/data=!4m2!3m1!1s0x87b6ed2062e9082d:0xc945d60fe3f30fc5",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Meadow Gold Sign USA"
-  },
-  {
-    "name": "Buck Atom's Cosmic Curios on 66",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Buck Atom's Cosmic Curios on 66 USA"
-  },
-  {
-    "name": "Route 66 Historical Village",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Route 66 Historical Village USA"
-  },
-  {
-    "name": "Bonnie and Clyde Hideout Apartment",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Bonnie and Clyde Hideout Apartment USA"
-  },
-  {
-    "name": "Red Oak II",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Red Oak II USA"
-  },
-  {
-    "name": "Gary’s Gay Parita",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Gary’s Gay Parita USA"
-  },
-  {
-    "name": "Route 66 Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Route+66+Museum/data=!4m2!3m1!1s0x87c539a1d1e9a4cd:0xb3ff5b0c42486dc8",
-    "text": "KMZ · Museen",
-    "query": "Route 66 Museum USA"
-  },
-  {
-    "name": "Meramec Caverns",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136",
-    "text": "KMZ · Natur & Parks",
-    "query": "Meramec Caverns USA"
-  },
-  {
-    "name": "S Congress Ave",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "S Congress Ave USA"
-  },
-  {
-    "name": "Barton Springs Pool",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6",
-    "text": "KMZ · Natur & Parks",
-    "query": "Barton Springs Pool USA"
-  },
-  {
-    "name": "Lady Bird Lake",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Lady+Bird+Lake/data=!4m2!3m1!1s0x8644b50e720134c3:0x9eb67ecc9e2fcb81",
-    "text": "KMZ · Natur & Parks",
-    "query": "Lady Bird Lake USA"
-  },
-  {
-    "name": "Texas State Capitol",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Texas+State+Capitol/data=!4m2!3m1!1s0x8644b5a014ac8dcf:0xcb6f5722a795d039",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Texas State Capitol USA"
-  },
-  {
-    "name": "Sixth Street Historic District",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Sixth Street Historic District USA"
-  },
-  {
-    "name": "Sahara Lounge",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Sahara Lounge USA"
-  },
-  {
-    "name": "C-Boy's Heart & Soul",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/C-Boy's+Heart+%26+Soul/data=!4m2!3m1!1s0x8644b4fad65e90c9:0x1c94863d87a40907",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "C-Boy's Heart & Soul USA"
-  },
-  {
-    "name": "Saxon Pub",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Saxon Pub USA"
-  },
-  {
-    "name": "Elephant Room",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Elephant Room USA"
-  },
-  {
-    "name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live) USA"
-  },
-  {
-    "name": "The Continental Club",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/The+Continental+Club/data=!4m2!3m1!1s0x8644b4fdbac94625:0x9a4922e26f855ca4",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "The Continental Club USA"
-  },
-  {
-    "name": "Antone's Nightclub",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Antone's+Nightclub/data=!4m2!3m1!1s0x8644b5091bd69d65:0x945d683a5e34b71f",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Antone's Nightclub USA"
-  },
-  {
-    "name": "Medicine Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Medicine+Park/data=!4m2!3m1!1s0x87ad1d0076492bdf:0xd92dcfcf63c71c04",
-    "text": "KMZ · Natur & Parks",
-    "query": "Medicine Park USA"
-  },
-  {
-    "name": "US Army Artillery Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/US+Army+Artillery+Museum/data=!4m2!3m1!1s0x87ad1b8d3d04382d:0xdc55a5fa198b00ca",
-    "text": "KMZ · Museen",
-    "query": "US Army Artillery Museum USA"
-  },
-  {
-    "name": "Museum of the Great Plains",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5",
-    "text": "KMZ · Museen",
-    "query": "Museum of the Great Plains USA"
-  },
-  {
-    "name": "The Holy City of the Wichitas",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4",
-    "text": "KMZ · Natur & Parks",
-    "query": "The Holy City of the Wichitas USA"
-  },
-  {
-    "name": "Longhorn Mountain",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Longhorn+Mountain/data=!4m2!3m1!1s0x87ac58cb25af27f5:0x695925e045747bc0",
-    "text": "KMZ · Natur & Parks",
-    "query": "Longhorn Mountain USA"
-  },
-  {
-    "name": "Mt Scott",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Mt+Scott/data=!4m2!3m1!1s0x87acfcd42346881b:0x62b6b01c6cbc6417",
-    "text": "KMZ · Natur & Parks",
-    "query": "Mt Scott USA"
-  },
-  {
-    "name": "Turkey Mountain",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Turkey+Mountain/data=!4m2!3m1!1s0x87b694888ec40eab:0xcc78fe7ce4650ce9",
-    "text": "KMZ · Natur & Parks",
-    "query": "Turkey Mountain USA"
-  },
-  {
-    "name": "The Cave House",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+Cave+House/data=!4m2!3m1!1s0x87b6eb0c7ee4974f:0x1c42f0d89d48dd7a",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The Cave House USA"
-  },
-  {
-    "name": "Center of the Universe",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Center+of+the+Universe/data=!4m2!3m1!1s0x87b6eb82821d7b43:0xa2fbfaea775fca17",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Center of the Universe USA"
-  },
-  {
-    "name": "Gilcrease Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c",
-    "text": "KMZ · Museen",
-    "query": "Gilcrease Museum USA"
-  },
-  {
-    "name": "Cyrus Avery Centennial Plaza",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Cyrus Avery Centennial Plaza USA"
-  },
-  {
-    "name": "Shops at Mother Road Market",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Shops at Mother Road Market USA"
-  },
-  {
-    "name": "Gathering Place",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Gathering+Place/data=!4m2!3m1!1s0x87b6edd0d5e789ad:0xc560003ab2a3d697",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Gathering Place USA"
-  },
-  {
-    "name": "Philbrook Museum of Art",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012",
-    "text": "KMZ · Museen",
-    "query": "Philbrook Museum of Art USA"
-  },
-  {
-    "name": "Golden Driller Statue",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Golden Driller Statue USA"
-  },
-  {
-    "name": "Blue Whale of Catoosa",
-    "category": "Route 66 & Roadside",
-    "type": "route66",
-    "url": "https://www.google.com/maps/place/Blue+Whale+of+Catoosa/data=!4m2!3m1!1s0x87b6f5f5af1d471d:0x6f018baa1950a1e2",
-    "text": "KMZ · Route 66 & Roadside",
-    "query": "Blue Whale of Catoosa USA"
-  },
-  {
-    "name": "Route 66 Neon Sign Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Route+66+Neon+Sign+Park/data=!4m2!3m1!1s0x87b6ebd1f4082901:0xead0a1a24809e26f",
-    "text": "KMZ · Natur & Parks",
-    "query": "Route 66 Neon Sign Park USA"
-  },
-  {
-    "name": "Ted Drewes Frozen Custard",
-    "category": "Essen & BBQ",
-    "type": "food",
-    "url": "https://www.google.com/maps/place/Ted+Drewes+Frozen+Custard/data=!4m2!3m1!1s0x87d8ca0d4a93c1b3:0x822a7d0e38f70a59",
-    "text": "KMZ · Essen & BBQ",
-    "query": "Ted Drewes Frozen Custard USA"
-  },
-  {
-    "name": "The St. Louis Wheel",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "The St. Louis Wheel USA"
-  },
-  {
-    "name": "Anheuser-Busch St. Louis Brewery",
-    "category": "Destillerien & Brauereien",
-    "type": "distillery",
-    "url": "https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b",
-    "text": "KMZ · Destillerien & Brauereien",
-    "query": "Anheuser-Busch St. Louis Brewery USA"
-  },
-  {
-    "name": "Missouri Botanical Garden",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080",
-    "text": "KMZ · Natur & Parks",
-    "query": "Missouri Botanical Garden USA"
-  },
-  {
-    "name": "Saint Louis Zoo",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Saint+Louis+Zoo/data=!4m2!3m1!1s0x87d8b55ccc04062d:0x6075080197e8e830",
-    "text": "KMZ · Natur & Parks",
-    "query": "Saint Louis Zoo USA"
-  },
-  {
-    "name": "Forest Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Forest+Park/data=!4m2!3m1!1s0x87d8b5469178c4c9:0x9d27c5026db294aa",
-    "text": "KMZ · Natur & Parks",
-    "query": "Forest Park USA"
-  },
-  {
-    "name": "City Museum",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/City+Museum/data=!4m2!3m1!1s0x87d8b33dc2801e55:0xc97c4420308aca04",
-    "text": "KMZ · Museen",
-    "query": "City Museum USA"
-  },
-  {
-    "name": "Museum at the Gateway Arch",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156",
-    "text": "KMZ · Museen",
-    "query": "Museum at the Gateway Arch USA"
-  },
-  {
-    "name": "Gateway Arch",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Gateway Arch USA"
-  },
-  {
-    "name": "Kingston Mines",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Kingston+Mines/data=!4m2!3m1!1s0x880fd305919cbff1:0x719a19cc064f264a",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Kingston Mines USA"
-  },
-  {
-    "name": "House of Blues Chicago",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "House of Blues Chicago USA"
-  },
-  {
-    "name": "Buddy Guy's Legends",
-    "category": "Kneipen & Musik",
-    "type": "music",
-    "url": "https://www.google.com/maps/place/Buddy+Guy's+Legends/data=!4m2!3m1!1s0x880e2c98ff384575:0xe0fa16c26ad26915",
-    "text": "KMZ · Kneipen & Musik",
-    "query": "Buddy Guy's Legends USA"
-  },
-  {
-    "name": "Lincoln Park Zoo",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db",
-    "text": "KMZ · Natur & Parks",
-    "query": "Lincoln Park Zoo USA"
-  },
-  {
-    "name": "Grant Park",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Grant+Park/data=!4m2!3m1!1s0x880e2c9fabc8820f:0xe897c144f1557e1d",
-    "text": "KMZ · Natur & Parks",
-    "query": "Grant Park USA"
-  },
-  {
-    "name": "Chicago River Boat Architecture Tours",
-    "category": "Natur & Parks",
-    "type": "nature",
-    "url": "https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180",
-    "text": "KMZ · Natur & Parks",
-    "query": "Chicago River Boat Architecture Tours USA"
-  },
-  {
-    "name": "Griffin Museum of Science and Industry",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306",
-    "text": "KMZ · Museen",
-    "query": "Griffin Museum of Science and Industry USA"
-  },
-  {
-    "name": "Field Museum of Natural History",
-    "category": "Museen",
-    "type": "museum",
-    "url": "https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da",
-    "text": "KMZ · Museen",
-    "query": "Field Museum of Natural History USA"
-  },
-  {
-    "name": "360 Chicago",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "360 Chicago USA"
-  },
-  {
-    "name": "Cloud Gate",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Cloud Gate USA"
-  },
-  {
-    "name": "Navy Pier",
-    "category": "Sehenswürdigkeiten",
-    "type": "sight",
-    "url": "https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc",
-    "text": "KMZ · Sehenswürdigkeiten",
-    "query": "Navy Pier USA"
   }
 ];
-
-
-const KMZ_COORD_OVERRIDES = {
-  "Buckingham-Brunnen": [-87.61892, 41.87579],
-  "citizenM Chicago Downtown": [-87.62572, 41.88698],
-  "citizenM Austin Downtown": [-97.7447, 30.2690]
-};
-
-function correctedKmzQuery(item) {
-  const hints = {
-    "Buckingham-Brunnen": "Buckingham Fountain Chicago Grant Park IL",
-    "citizenM Chicago Downtown": "citizenM Chicago Downtown 80 East Wacker Place Chicago IL",
-    "citizenM Austin Downtown": "citizenM Austin Downtown 617 Colorado Street Austin TX",
-    "HoteLumiere at The Arch": "HoteLumiere at The Arch St Louis MO",
-    "The Mayo Hotel": "The Mayo Hotel Tulsa OK",
-    "Apache Casino Hotel": "Apache Casino Hotel Lawton OK",
-    "The Range at Austin": "The Range at Austin TX"
-  };
-  if (hints[item.name]) return hints[item.name];
-  if (item.type === 'hotel') return item.name + ' hotel Route 66 Chicago St Louis Tulsa Lawton Austin';
-  if (item.type === 'route66') return item.name + ' Route 66 Missouri Oklahoma Illinois';
-  if (item.type === 'music') return item.name + ' music bar Chicago St Louis Tulsa Austin';
-  return item.query || item.name;
-}
-
-function deriveKmzType(item) {
-  // Die Kategorie kommt direkt aus der KMZ-/Google-Maps-Beschreibung bzw. aus klaren Namensmustern.
-  return item.type || 'sight';
-}
-
-function kmzLabel(item, type) {
-  const labels = {
-    sight: 'Sehenswürdigkeiten',
-    route66: 'Route 66 & Roadside',
-    music: 'Kneipen & Musik',
-    food: 'Essen & BBQ',
-    breakfast: 'Frühstück',
-    distillery: 'Destillerien & Brauereien',
-    nature: 'Natur & Parks',
-    museum: 'Museen',
-    western: 'Western & Boots',
-    toys: 'Spielzeug',
-    hotel: 'Hotels'
-  };
-  return 'KMZ · ' + (item.category || labels[type] || 'Ziel');
-}
 
 async function geocodeImportedPoints(token) {
   const results = [];
   for (const item of csvImportedPoints) {
     try {
-      const type = deriveKmzType(item);
-      let center = KMZ_COORD_OVERRIDES[item.name] || item.coords || null;
-      if (!center) {
-        const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
-          encodeURIComponent(correctedKmzQuery(item)) +
-          '.json?limit=1&country=us&bbox=' + CSV_ROUTE_BBOX + '&proximity=-95.37,38.85&language=de&access_token=' + token;
-        const response = await fetch(url);
-        const data = await response.json();
-        const feature = data && data.features && data.features[0];
-        center = feature && feature.center ? feature.center : null;
-      }
-      if (center) {
-        // Die KMZ enthält Google-Places ohne Koordinaten. Mapbox-Geocoding kann bei generischen Namen
-        // falsche Treffer weit abseits der Reiseroute liefern. Solche Treffer werden nicht angezeigt.
-        if (!KMZ_COORD_OVERRIDES[item.name] && !isNearRoute(center, 0.95)) {
-          console.warn('KMZ-Ziel außerhalb der Route übersprungen:', item.name, center);
-          continue;
-        }
-        results.push({
+      const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
+        encodeURIComponent(item.query || item.name) +
+        '.json?limit=1&country=us&bbox=' + CSV_ROUTE_BBOX + '&proximity=-95.37,38.85&language=de&access_token=' + token;
+      const response = await fetch(url);
+      const data = await response.json();
+      const feature = data && data.features && data.features[0];
+      if (feature && feature.center) {
+        const newPoint = {
           name: item.name,
-          type: type,
-          coords: center,
-          text: kmzLabel(item, type),
-          category: item.category || '',
+          type: item.type,
+          coords: feature.center,
+          text: item.text,
+          category: item.category,
           url: item.url,
           imported: true
-        });
+        };
+        // Alle KMZ-Ziele werden übernommen. Die Google-My-Maps-Liste ist bereits kuratiert;
+        // die bbox im Geocoding verhindert nur falsche Treffer an Ost-/Westküste.
+        results.push(newPoint);
       } else {
-        console.warn('Kein Geocoding-Treffer für KMZ-Ziel:', item.name);
+        console.warn('Kein Geocoding-Treffer in Routennähe für:', item.name);
       }
     } catch (err) {
       console.warn('Geocoding fehlgeschlagen:', item.name, err);
@@ -1960,17 +2007,12 @@ async function geocodeImportedPoints(token) {
 }
 
 const colors = {
-  sight:'#097138',
-  route66:'#097138',
-  music:'#097138',
-  food:'#097138',
-  breakfast:'#097138',
-  distillery:'#097138',
-  nature:'#097138',
-  museum:'#097138',
-  western:'#097138',
-  toys:'#097138',
-  hotel:'#097138'
+  must:'#4f98a3',
+  music:'#d19900',
+  food:'#6daa45',
+  hidden:'#dd6974',
+  distillery:'#a86fdf',
+  hotel:'#4da3ff'
 };
 const fallback = document.getElementById('fallback');
 
@@ -2028,6 +2070,10 @@ function startMap(){
 
     function filterExpression(filter){
       if (filter === 'all') return null;
+      if (filter === 'top-music') return ['==', ['get', 'isTopMusic'], true];
+      if (filter === 'top-must') return ['==', ['get', 'isTopMust'], true];
+      if (filter === 'top-food') return ['==', ['get', 'isTopFood'], true];
+      if (filter === 'csv') return ['==', ['get', 'imported'], true];
       return ['==', ['get', 'type'], filter];
     }
 
@@ -2048,9 +2094,15 @@ function startMap(){
 
     map.on('load', async function(){
       const importedPoints = await geocodeImportedPoints(mapboxgl.accessToken);
-      const allPoints = importedPoints;
+      const importedNames = new Set(importedPoints.map(function(p){ return String(p.name || '').trim().toLowerCase(); }));
+      const extraMusicBars = (window.musicBars || []).filter(function(p){
+        return p && p.name && p.coords && !importedNames.has(String(p.name).trim().toLowerCase());
+      }).map(function(p){
+        return Object.assign({ imported: false, url: '' }, p, { type: 'music', category: 'Musik / Bars' });
+      });
+      const allPoints = points.concat(importedPoints, extraMusicBars);
       const csvCountEl = document.getElementById('csvCount');
-      if (csvCountEl) csvCountEl.textContent = importedPoints.length + ' KMZ-Ziele geladen';
+      if (csvCountEl) csvCountEl.textContent = importedPoints.length + ' KMZ-Ziele + ' + extraMusicBars.length + ' Musik/Bars geladen';
       placesGeoJson = {
         type: 'FeatureCollection',
         features: allPoints.map(function(p){
@@ -2096,16 +2148,11 @@ function startMap(){
           'circle-color': [
             'match',
             ['get', 'type'],
-            'sight', colors.sight,
-            'route66', colors.route66,
+            'must', colors.must,
             'music', colors.music,
             'food', colors.food,
-            'breakfast', colors.breakfast,
+            'hidden', colors.hidden,
             'distillery', colors.distillery,
-            'nature', colors.nature,
-            'museum', colors.museum,
-            'western', colors.western,
-            'toys', colors.toys,
             'hotel', colors.hotel,
             '#4f98a3'
           ],
