@@ -63,7 +63,7 @@ td{color:#ddd}
 <body>
 <header>
   <h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
-  <p>From Chicago to Austin</p>
+  <p>From Chicago to Austin · inklusive importierter CSV-Ziele</p>
   <div class="legend">
     <span><i class="dot" style="background:#4f98a3"></i>Highlights</span>
     <span><i class="dot" style="background:#d19900"></i>Musik &amp; Gear</span>
@@ -764,6 +764,1178 @@ const points = [
 {name:'Andalusia Whiskey Co.',type:'distillery',coords:[-98.4463,30.0717],text:'Hill Country'}
 ];
 
+
+// Zusätzliche Ziele aus der CSV-Datei "USA 2026 4.csv".
+// Da die CSV keine Koordinaten enthält, werden diese Orte beim Laden über Mapbox Geocoding aufgelöst.
+const csvImportedPoints = [
+  {
+    "name": "Rhine Hall Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Rhine+Hall+Distillery/data=!4m2!3m1!1s0x880e2d281063bac9:0xe073227cfd5ad1f4",
+    "text": "CSV · Destillerie",
+    "query": "Rhine Hall Distillery USA"
+  },
+  {
+    "name": "Wolf Point Distilling",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Wolf+Point+Distilling/data=!4m2!3m1!1s0x880e2dc47ac68b67:0xbdb1707e50391477",
+    "text": "CSV · Destillerie",
+    "query": "Wolf Point Distilling USA"
+  },
+  {
+    "name": "Square One Brewery & Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Square+One+Brewery+%26+Distillery/data=!4m2!3m1!1s0x87d8b37145198191:0x717614de0ec78272",
+    "text": "CSV · Destillerie",
+    "query": "Square One Brewery & Distillery USA"
+  },
+  {
+    "name": "StilL 630 Distillery",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/StilL+630+Distillery/data=!4m2!3m1!1s0x87d8b30425efb323:0x744172944ae407ef",
+    "text": "CSV · Destillerie",
+    "query": "StilL 630 Distillery USA"
+  },
+  {
+    "name": "Dulce Vida Spirits",
+    "category": "Destillerie",
+    "type": "distillery",
+    "url": "https://www.google.com/maps/place/Dulce+Vida+Spirits/data=!4m2!3m1!1s0x865b46207b15f59f:0xec3c7ae3994dac8d",
+    "text": "CSV · Destillerie",
+    "query": "Dulce Vida Spirits USA"
+  },
+  {
+    "name": "Vitek's BBQ",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Vitek's+BBQ/data=!4m2!3m1!1s0x864f8231185d7ffd:0x60376158c64c02ec",
+    "text": "CSV · Food",
+    "query": "Vitek's BBQ USA"
+  },
+  {
+    "name": "Riscky's BAR-B-Q",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Riscky's+BAR-B-Q/data=!4m2!3m1!1s0x864e76a6e78e8a2b:0x319f079669fb068e",
+    "text": "CSV · Food",
+    "query": "Riscky's BAR-B-Q USA"
+  },
+  {
+    "name": "Arcadia Round Barn",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Arcadia+Round+Barn/data=!4m2!3m1!1s0x87b22717060aadc3:0xe639764d37d17016",
+    "text": "CSV · Food",
+    "query": "Arcadia Round Barn USA"
+  },
+  {
+    "name": "Jubelt's Bakery & Restaurant",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Jubelt's+Bakery+%26+Restaurant/data=!4m2!3m1!1s0x8875a2e0c4593b8d:0x42a76ce5f5e3c86c",
+    "text": "CSV · Food",
+    "query": "Jubelt's Bakery & Restaurant USA"
+  },
+  {
+    "name": "The Ariston Cafe",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/The+Ariston+Cafe/data=!4m2!3m1!1s0x8875a2e12882dc63:0x44da7c1b9d53c9e6",
+    "text": "CSV · Food",
+    "query": "The Ariston Cafe USA"
+  },
+  {
+    "name": "Cozy Dog Drive In",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Cozy+Dog+Drive+In/data=!4m2!3m1!1s0x887539122a4c5241:0x27e23eaee638d5cd",
+    "text": "CSV · Food",
+    "query": "Cozy Dog Drive In USA"
+  },
+  {
+    "name": "Henry's Drive-In",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Henry's+Drive-In/data=!4m2!3m1!1s0x880e33f67167351d:0x9cceb7646777ddc5",
+    "text": "CSV · Food",
+    "query": "Henry's Drive-In USA"
+  },
+  {
+    "name": "Rock Cafe",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Rock+Cafe/data=!4m2!3m1!1s0x87b158b740722ad7:0x5badc84a5f2e1c5d",
+    "text": "CSV · Food",
+    "query": "Rock Cafe USA"
+  },
+  {
+    "name": "Crabbys Seafood Bar & Grill",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Crabbys+Seafood+Bar+%26+Grill/data=!4m2!3m1!1s0x87c91101ff0df65b:0xb3d34d379161f19a",
+    "text": "CSV · Food",
+    "query": "Crabbys Seafood Bar & Grill USA"
+  },
+  {
+    "name": "Reds Giant Hamburg",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Red%E2%80%99s+Giant+Hamburg/data=!4m2!3m1!1s0x87cf63a0dd4f35db:0xdc58ddc3c85fb600",
+    "text": "CSV · Food",
+    "query": "Reds Giant Hamburg USA"
+  },
+  {
+    "name": "Missouri Hick Barbeque",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Missouri+Hick+Barbeque/data=!4m2!3m1!1s0x87dbce700bc0104d:0xfce95e4aff69f9d",
+    "text": "CSV · Food",
+    "query": "Missouri Hick Barbeque USA"
+  },
+  {
+    "name": "Ted Drewes Frozen Custard",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Ted+Drewes+Frozen+Custard/data=!4m2!3m1!1s0x87d8ca0d4a93c1b3:0x822a7d0e38f70a59",
+    "text": "CSV · Food",
+    "query": "Ted Drewes Frozen Custard USA"
+  },
+  {
+    "name": "Anheuser-Busch St. Louis Brewery",
+    "category": "Food",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Anheuser-Busch+St.+Louis+Brewery/data=!4m2!3m1!1s0x87d8b391032e5d43:0x686ba289f592bf6b",
+    "text": "CSV · Food",
+    "query": "Anheuser-Busch St. Louis Brewery USA"
+  },
+  {
+    "name": "Pho 360",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Pho+360/data=!4m2!3m1!1s0x87ad1f180240a9b1:0xaaac18316526e13d",
+    "text": "CSV · Frühstück",
+    "query": "Pho 360 USA"
+  },
+  {
+    "name": "Boomarang Diner - Lawton",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Boomarang+Diner+-+Lawton/data=!4m2!3m1!1s0x87ad18cd9ed6397f:0x37ba1dfd70b05738",
+    "text": "CSV · Frühstück",
+    "query": "Boomarang Diner - Lawton USA"
+  },
+  {
+    "name": "Ann's Country Kitchen",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Ann's+Country+Kitchen/data=!4m2!3m1!1s0x87acfd0a3f4eccd9:0x6b9505698c687d36",
+    "text": "CSV · Frühstück",
+    "query": "Ann's Country Kitchen USA"
+  },
+  {
+    "name": "Country Cafe",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Country+Cafe/data=!4m2!3m1!1s0x87ad1f12bc8b3d09:0xb605560141f53ed4",
+    "text": "CSV · Frühstück",
+    "query": "Country Cafe USA"
+  },
+  {
+    "name": "Caroline",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Caroline/data=!4m2!3m1!1s0x8644b509e7e92743:0x38cd855b7c17b277",
+    "text": "CSV · Frühstück",
+    "query": "Caroline USA"
+  },
+  {
+    "name": "Phoebe's Downtown",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Phoebe's+Downtown/data=!4m2!3m1!1s0x8644b509f2e104af:0xd75b5b57ab771900",
+    "text": "CSV · Frühstück",
+    "query": "Phoebe's Downtown USA"
+  },
+  {
+    "name": "Dilly Diner",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Dilly+Diner/data=!4m2!3m1!1s0x87b6eb7f6d9eac8f:0x196ac564737e5781",
+    "text": "CSV · Frühstück",
+    "query": "Dilly Diner USA"
+  },
+  {
+    "name": "Tally's Good Food Café",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Tally's+Good+Food+Caf%C3%A9/data=!4m2!3m1!1s0x87b6ed125902cd5d:0xe0b8e9361ec87098",
+    "text": "CSV · Frühstück",
+    "query": "Tally's Good Food Café USA"
+  },
+  {
+    "name": "Wildberry Pancakes & Cafe",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Wildberry+Pancakes+%26+Cafe/data=!4m2!3m1!1s0x880e2ca61afe006f:0x952fc2ea4e453f15",
+    "text": "CSV · Frühstück",
+    "query": "Wildberry Pancakes & Cafe USA"
+  },
+  {
+    "name": "Chili Mac's Diner",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Chili+Mac's+Diner/data=!4m2!3m1!1s0x87d8b31e9b3bd023:0xd4cbae0b4ed34f0c",
+    "text": "CSV · Frühstück",
+    "query": "Chili Mac's Diner USA"
+  },
+  {
+    "name": "Cherry Street Kitchen and Catering",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Cherry+Street+Kitchen+and+Catering/data=!4m2!3m1!1s0x87b6ec998e80d30b:0x7538129255bdf71f",
+    "text": "CSV · Frühstück",
+    "query": "Cherry Street Kitchen and Catering USA"
+  },
+  {
+    "name": "Lou Mitchell's",
+    "category": "Frühstück",
+    "type": "food",
+    "url": "https://www.google.com/maps/place/Lou+Mitchell's/data=!4m2!3m1!1s0x880e2cc19f7a7309:0x313c4c01a977c832",
+    "text": "CSV · Frühstück",
+    "query": "Lou Mitchell's USA"
+  },
+  {
+    "name": "Buckingham-Brunnen",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Buckingham-Brunnen/data=!4m2!3m1!1s0x880e2ca005fd8e87:0x2440022c9be1ae59",
+    "text": "CSV · Highlight",
+    "query": "Buckingham-Brunnen USA"
+  },
+  {
+    "name": "The Range at Austin",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Range+at+Austin/data=!4m2!3m1!1s0x8644b3338d6c0729:0x54f471a5d3cb11ee",
+    "text": "CSV · Highlight",
+    "query": "The Range at Austin USA"
+  },
+  {
+    "name": "Chain of Rocks Bridge",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Chain+of+Rocks+Bridge/data=!4m2!3m1!1s0x87d8b316ce607b8f:0xddeb6aef0927308b",
+    "text": "CSV · Highlight",
+    "query": "Chain of Rocks Bridge USA"
+  },
+  {
+    "name": "Downtown Fort Worth",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Downtown+Fort+Worth/data=!4m2!3m1!1s0x864e7169d7c19c23:0xcc37b6f11c62ddcc",
+    "text": "CSV · Highlight",
+    "query": "Downtown Fort Worth USA"
+  },
+  {
+    "name": "Fort Worth Stockyards",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Fort+Worth+Stockyards/data=!4m2!3m1!1s0x864e76a42759fe4d:0x475f2ff64a820fcb",
+    "text": "CSV · Highlight",
+    "query": "Fort Worth Stockyards USA"
+  },
+  {
+    "name": "Soulsby Service Station",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Soulsby+Service+Station/data=!4m2!3m1!1s0x8875967f7954413f:0x132fdd9996dbcbc4",
+    "text": "CSV · Highlight",
+    "query": "Soulsby Service Station USA"
+  },
+  {
+    "name": "Lauterbach Muffler Man (Lauterbach Giant)",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lauterbach+Muffler+Man+(Lauterbach+Giant)/data=!4m2!3m1!1s0x88753998b2ee7bb1:0xfab82ef17a7bc4c3",
+    "text": "CSV · Highlight",
+    "query": "Lauterbach Muffler Man (Lauterbach Giant) USA"
+  },
+  {
+    "name": "Litchfield Museum & Route 66 Welcome Center",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Litchfield+Museum+%26+Route+66+Welcome+Center/data=!4m2!3m1!1s0x8875a3493f51c29f:0x3af03ad20108af4c",
+    "text": "CSV · Highlight",
+    "query": "Litchfield Museum & Route 66 Welcome Center USA"
+  },
+  {
+    "name": "Austin Bat Tours",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Austin+Bat+Tours/data=!4m2!3m1!1s0x8644b5a09f19eedf:0xcd55f894cc1c89eb",
+    "text": "CSV · Highlight",
+    "query": "Austin Bat Tours USA"
+  },
+  {
+    "name": "Covert Park at Mount Bonnell",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Covert+Park+at+Mount+Bonnell/data=!4m2!3m1!1s0x8644cac8a719cb79:0xadf624e6d0d96bfd",
+    "text": "CSV · Highlight",
+    "query": "Covert Park at Mount Bonnell USA"
+  },
+  {
+    "name": "McKinney Falls State Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/McKinney+Falls+State+Park/data=!4m2!3m1!1s0x8644b3be3538b38b:0xfb83098f6001c693",
+    "text": "CSV · Highlight",
+    "query": "McKinney Falls State Park USA"
+  },
+  {
+    "name": "Pops on 66",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pops+on+66/data=!4m2!3m1!1s0x87b2273d5d95a8d3:0x8f8c85c15796a7c4",
+    "text": "CSV · Highlight",
+    "query": "Pops on 66 USA"
+  },
+  {
+    "name": "Southfork Ranch",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Southfork+Ranch/data=!4m2!3m1!1s0x864c1ae5447c4855:0x204b14436c5b4964",
+    "text": "CSV · Highlight",
+    "query": "Southfork Ranch USA"
+  },
+  {
+    "name": "Pink Elephant Antique Mall",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pink+Elephant+Antique+Mall/data=!4m2!3m1!1s0x8875eb6180749d1b:0x32d2c9d6d95c7dbd",
+    "text": "CSV · Highlight",
+    "query": "Pink Elephant Antique Mall USA"
+  },
+  {
+    "name": "World's Largest Railsplitter Covered Wagon",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/World's+Largest+Railsplitter+Covered+Wagon/data=!4m2!3m1!1s0x880b27e4a792cdc3:0x54947b9014ea4c0f",
+    "text": "CSV · Highlight",
+    "query": "World's Largest Railsplitter Covered Wagon USA"
+  },
+  {
+    "name": "Route 66 Wall Art Photopoint",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Wall+Art+Photopoint/data=!4m2!3m1!1s0x880c6df74ba1ec85:0x4d30fe8583d9d2df",
+    "text": "CSV · Highlight",
+    "query": "Route 66 Wall Art Photopoint USA"
+  },
+  {
+    "name": "Route 66 decommissioned Illinois State police headquarter",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+decommissioned+Illinois+State+police+headquarter/data=!4m2!3m1!1s0x880c71959dd119c1:0x87d80d85b016ce2c",
+    "text": "CSV · Highlight",
+    "query": "Route 66 decommissioned Illinois State police headquarter USA"
+  },
+  {
+    "name": "Route 66 Association of Illinois",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Association+of+Illinois/data=!4m2!3m1!1s0x880c6df735804289:0x86ce6e0288d694d7",
+    "text": "CSV · Highlight",
+    "query": "Route 66 Association of Illinois USA"
+  },
+  {
+    "name": "Gemini Giant",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gemini+Giant/data=!4m2!3m1!1s0x880e7f0000cde9c1:0x3909f9af1819906e",
+    "text": "CSV · Highlight",
+    "query": "Gemini Giant USA"
+  },
+  {
+    "name": "Blues Brothers Copmobile",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Blues+Brothers+Copmobile/data=!4m2!3m1!1s0x880e6504315f67d9:0xe0ee0da453bc27f3",
+    "text": "CSV · Highlight",
+    "query": "Blues Brothers Copmobile USA"
+  },
+  {
+    "name": "Uranus Fudge Factory And General Store - Uranus Missouri",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Uranus+Fudge+Factory+And+General+Store+-+Uranus+Missouri/data=!4m2!3m1!1s0x87dae654c3139c31:0xb48346fe60abadc4",
+    "text": "CSV · Highlight",
+    "query": "Uranus Fudge Factory And General Store - Uranus Missouri USA"
+  },
+  {
+    "name": "Meadow Gold Sign",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Meadow+Gold+Sign/data=!4m2!3m1!1s0x87b6ed2062e9082d:0xc945d60fe3f30fc5",
+    "text": "CSV · Highlight",
+    "query": "Meadow Gold Sign USA"
+  },
+  {
+    "name": "Buck Atom's Cosmic Curios on 66",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Buck+Atom's+Cosmic+Curios+on+66/data=!4m2!3m1!1s0x87b6ed6b8c04dbdb:0xb0ff6bd33c2ddd13",
+    "text": "CSV · Highlight",
+    "query": "Buck Atom's Cosmic Curios on 66 USA"
+  },
+  {
+    "name": "Route 66 Historical Village",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Historical+Village/data=!4m2!3m1!1s0x87b694d272b662e3:0xc8d59373ddadebf6",
+    "text": "CSV · Highlight",
+    "query": "Route 66 Historical Village USA"
+  },
+  {
+    "name": "Bonnie and Clyde Hideout Apartment",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Bonnie+and+Clyde+Hideout+Apartment/data=!4m2!3m1!1s0x87c87b004f1ed2f1:0xa4b8836eadaa3c24",
+    "text": "CSV · Highlight",
+    "query": "Bonnie and Clyde Hideout Apartment USA"
+  },
+  {
+    "name": "Red Oak II",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Red+Oak+II/data=!4m2!3m1!1s0x87c8827dad7b8cb9:0xf888b58e0648e9bf",
+    "text": "CSV · Highlight",
+    "query": "Red Oak II USA"
+  },
+  {
+    "name": "Gary Gay Parita",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gary%E2%80%99s+Gay+Parita/data=!4m2!3m1!1s0x87cf5501aacd774d:0x727288e735069227",
+    "text": "CSV · Highlight",
+    "query": "Gary Gay Parita USA"
+  },
+  {
+    "name": "Meramec Caverns",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Meramec+Caverns/data=!4m2!3m1!1s0x87938e4da527c331:0x73845182e63bf136",
+    "text": "CSV · Highlight",
+    "query": "Meramec Caverns USA"
+  },
+  {
+    "name": "S Congress Ave",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/S+Congress+Ave/data=!4m2!3m1!1s0x8644b4a3a6912777:0x717f415c6ab2fb9d",
+    "text": "CSV · Highlight",
+    "query": "S Congress Ave USA"
+  },
+  {
+    "name": "Barton Springs Pool",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Barton+Springs+Pool/data=!4m2!3m1!1s0x8644ca3d4e6d9977:0xd09efa9cfe432aa6",
+    "text": "CSV · Highlight",
+    "query": "Barton Springs Pool USA"
+  },
+  {
+    "name": "Lady Bird Lake",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lady+Bird+Lake/data=!4m2!3m1!1s0x8644b50e720134c3:0x9eb67ecc9e2fcb81",
+    "text": "CSV · Highlight",
+    "query": "Lady Bird Lake USA"
+  },
+  {
+    "name": "Texas State Capitol",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Texas+State+Capitol/data=!4m2!3m1!1s0x8644b5a014ac8dcf:0xcb6f5722a795d039",
+    "text": "CSV · Highlight",
+    "query": "Texas State Capitol USA"
+  },
+  {
+    "name": "Sixth Street Historic District",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Sixth+Street+Historic+District/data=!4m2!3m1!1s0x8644b5a651f02f6f:0x5e047ec77ab6bec4",
+    "text": "CSV · Highlight",
+    "query": "Sixth Street Historic District USA"
+  },
+  {
+    "name": "Medicine Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Medicine+Park/data=!4m2!3m1!1s0x87ad1d0076492bdf:0xd92dcfcf63c71c04",
+    "text": "CSV · Highlight",
+    "query": "Medicine Park USA"
+  },
+  {
+    "name": "The Holy City of the Wichitas",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Holy+City+of+the+Wichitas/data=!4m2!3m1!1s0x87ace66f39395643:0xe791269c5932c4",
+    "text": "CSV · Highlight",
+    "query": "The Holy City of the Wichitas USA"
+  },
+  {
+    "name": "Longhorn Mountain",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Longhorn+Mountain/data=!4m2!3m1!1s0x87ac58cb25af27f5:0x695925e045747bc0",
+    "text": "CSV · Highlight",
+    "query": "Longhorn Mountain USA"
+  },
+  {
+    "name": "Mt Scott",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Mt+Scott/data=!4m2!3m1!1s0x87acfcd42346881b:0x62b6b01c6cbc6417",
+    "text": "CSV · Highlight",
+    "query": "Mt Scott USA"
+  },
+  {
+    "name": "Turkey Mountain",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Turkey+Mountain/data=!4m2!3m1!1s0x87b694888ec40eab:0xcc78fe7ce4650ce9",
+    "text": "CSV · Highlight",
+    "query": "Turkey Mountain USA"
+  },
+  {
+    "name": "The Cave House",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+Cave+House/data=!4m2!3m1!1s0x87b6eb0c7ee4974f:0x1c42f0d89d48dd7a",
+    "text": "CSV · Highlight",
+    "query": "The Cave House USA"
+  },
+  {
+    "name": "Center of the Universe",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Center+of+the+Universe/data=!4m2!3m1!1s0x87b6eb82821d7b43:0xa2fbfaea775fca17",
+    "text": "CSV · Highlight",
+    "query": "Center of the Universe USA"
+  },
+  {
+    "name": "Cyrus Avery Centennial Plaza",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Cyrus+Avery+Centennial+Plaza/data=!4m2!3m1!1s0x87b6eb6d46c3d463:0x2289fe3e802e77c4",
+    "text": "CSV · Highlight",
+    "query": "Cyrus Avery Centennial Plaza USA"
+  },
+  {
+    "name": "Shops at Mother Road Market",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Shops+at+Mother+Road+Market/data=!4m2!3m1!1s0x87b6ed83181c0f79:0x441f880cd4906ed9",
+    "text": "CSV · Highlight",
+    "query": "Shops at Mother Road Market USA"
+  },
+  {
+    "name": "Gathering Place",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gathering+Place/data=!4m2!3m1!1s0x87b6edd0d5e789ad:0xc560003ab2a3d697",
+    "text": "CSV · Highlight",
+    "query": "Gathering Place USA"
+  },
+  {
+    "name": "Golden Driller Statue",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Golden+Driller+Statue/data=!4m2!3m1!1s0x87b6ed23447a08b3:0xc6c4aeb11c4c15ab",
+    "text": "CSV · Highlight",
+    "query": "Golden Driller Statue USA"
+  },
+  {
+    "name": "Blue Whale of Catoosa",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Blue+Whale+of+Catoosa/data=!4m2!3m1!1s0x87b6f5f5af1d471d:0x6f018baa1950a1e2",
+    "text": "CSV · Highlight",
+    "query": "Blue Whale of Catoosa USA"
+  },
+  {
+    "name": "Route 66 Neon Sign Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Neon+Sign+Park/data=!4m2!3m1!1s0x87b6ebd1f4082901:0xead0a1a24809e26f",
+    "text": "CSV · Highlight",
+    "query": "Route 66 Neon Sign Park USA"
+  },
+  {
+    "name": "The St. Louis Wheel",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/The+St.+Louis+Wheel/data=!4m2!3m1!1s0x87d8b389827ad477:0xbae863d3aad1e4d0",
+    "text": "CSV · Highlight",
+    "query": "The St. Louis Wheel USA"
+  },
+  {
+    "name": "Missouri Botanical Garden",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Missouri+Botanical+Garden/data=!4m2!3m1!1s0x87d8b4ffa9d2cd81:0x60b0c580fcde5080",
+    "text": "CSV · Highlight",
+    "query": "Missouri Botanical Garden USA"
+  },
+  {
+    "name": "Saint Louis Zoo",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Saint+Louis+Zoo/data=!4m2!3m1!1s0x87d8b55ccc04062d:0x6075080197e8e830",
+    "text": "CSV · Highlight",
+    "query": "Saint Louis Zoo USA"
+  },
+  {
+    "name": "Forest Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Forest+Park/data=!4m2!3m1!1s0x87d8b5469178c4c9:0x9d27c5026db294aa",
+    "text": "CSV · Highlight",
+    "query": "Forest Park USA"
+  },
+  {
+    "name": "Gateway Arch",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gateway+Arch/data=!4m2!3m1!1s0x87c0f0607541e5b5:0x79ed2889c696a834",
+    "text": "CSV · Highlight",
+    "query": "Gateway Arch USA"
+  },
+  {
+    "name": "Kingston Mines",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Kingston+Mines/data=!4m2!3m1!1s0x880fd305919cbff1:0x719a19cc064f264a",
+    "text": "CSV · Highlight",
+    "query": "Kingston Mines USA"
+  },
+  {
+    "name": "Lincoln Park Zoo",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Lincoln+Park+Zoo/data=!4m2!3m1!1s0x880fd36b093a9a07:0x940cc06f90294db",
+    "text": "CSV · Highlight",
+    "query": "Lincoln Park Zoo USA"
+  },
+  {
+    "name": "Grant Park",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Grant+Park/data=!4m2!3m1!1s0x880e2c9fabc8820f:0xe897c144f1557e1d",
+    "text": "CSV · Highlight",
+    "query": "Grant Park USA"
+  },
+  {
+    "name": "Chicago River Boat Architecture Tours",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Chicago+River+Boat+Architecture+Tours/data=!4m2!3m1!1s0x880e2baa61d33f6f:0xcd104ab123be0180",
+    "text": "CSV · Highlight",
+    "query": "Chicago River Boat Architecture Tours USA"
+  },
+  {
+    "name": "360 Chicago",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/360+Chicago/data=!4m2!3m1!1s0x880fd3541290b235:0x7314937a7703eb74",
+    "text": "CSV · Highlight",
+    "query": "360 Chicago USA"
+  },
+  {
+    "name": "Cloud Gate",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Cloud+Gate/data=!4m2!3m1!1s0x880e2ca687332bf5:0x64d3fefce3a4a51",
+    "text": "CSV · Highlight",
+    "query": "Cloud Gate USA"
+  },
+  {
+    "name": "Navy Pier",
+    "category": "Highlight",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Navy+Pier/data=!4m2!3m1!1s0x880e2b4d91f12edb:0xd0acdb96b088a4dc",
+    "text": "CSV · Highlight",
+    "query": "Navy Pier USA"
+  },
+  {
+    "name": "citizenM Austin Downtown",
+    "category": "Hotel Austin",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/citizenM+Austin+Downtown/data=!4m2!3m1!1s0x8644b50990be5fb7:0x7a050d9efb486fdf",
+    "text": "CSV · Hotel Austin",
+    "query": "citizenM Austin Downtown USA"
+  },
+  {
+    "name": "citizenM Chicago Downtown",
+    "category": "Hotel Chicago",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/citizenM+Chicago+Downtown/data=!4m2!3m1!1s0x880e2caf171ff11f:0x55c2aeae3345f42d",
+    "text": "CSV · Hotel Chicago",
+    "query": "citizenM Chicago Downtown USA"
+  },
+  {
+    "name": "Apache Casino Hotel",
+    "category": "Hotel Lawton",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/Apache+Casino+Hotel/data=!4m2!3m1!1s0x87ad18f075d8c89f:0x7e87fde400b9c78c",
+    "text": "CSV · Hotel Lawton",
+    "query": "Apache Casino Hotel USA"
+  },
+  {
+    "name": "HoteLumiere at The Arch",
+    "category": "Hotel St.Louis",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/HoteLumiere+at+The+Arch/data=!4m2!3m1!1s0x87d8b2de1e5180df:0xad73449a495463bd",
+    "text": "CSV · Hotel St.Louis",
+    "query": "HoteLumiere at The Arch USA"
+  },
+  {
+    "name": "The Mayo Hotel",
+    "category": "Hotel Tulsa",
+    "type": "hotel",
+    "url": "https://www.google.com/maps/place/The+Mayo+Hotel/data=!4m2!3m1!1s0x87b6eb7a2471e15f:0x372b81241c306b38",
+    "text": "CSV · Hotel Tulsa",
+    "query": "The Mayo Hotel USA"
+  },
+  {
+    "name": "Dr Pepper Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Dr+Pepper+Museum/data=!4m2!3m1!1s0x864f824e1e2ea939:0xa5e80cea97cc5157",
+    "text": "CSV · Museum",
+    "query": "Dr Pepper Museum USA"
+  },
+  {
+    "name": "National Cowboy & Western Heritage Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/National+Cowboy+%26+Western+Heritage+Museum/data=!4m2!3m1!1s0x87b219b49d1ee743:0x434de24e4aeb12cd",
+    "text": "CSV · Museum",
+    "query": "National Cowboy & Western Heritage Museum USA"
+  },
+  {
+    "name": "Wonders Of Wildlife National Museum & Aquarium",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Wonders+Of+Wildlife+National+Museum+%26+Aquarium/data=!4m2!3m1!1s0x87cf637670a0e9b3:0x5f9b3143bc828a7e",
+    "text": "CSV · Museum",
+    "query": "Wonders Of Wildlife National Museum & Aquarium USA"
+  },
+  {
+    "name": "Route 66 Car Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Car+Museum/data=!4m2!3m1!1s0x87cf624ca95c8323:0x8f342cd60f6fd89e",
+    "text": "CSV · Museum",
+    "query": "Route 66 Car Museum USA"
+  },
+  {
+    "name": "Route 66 1903 Courthouse Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+1903+Courthouse+Museum/data=!4m2!3m1!1s0x87dadcf5a6ae65b3:0x543c40823978b2e0",
+    "text": "CSV · Museum",
+    "query": "Route 66 1903 Courthouse Museum USA"
+  },
+  {
+    "name": "Abraham Lincoln Presidential Library",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Abraham+Lincoln+Presidential+Library/data=!4m2!3m1!1s0x887539c3ec790a81:0x2f51299423595cdf",
+    "text": "CSV · Museum",
+    "query": "Abraham Lincoln Presidential Library USA"
+  },
+  {
+    "name": "Wichita Falls Museum of Art",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Wichita+Falls+Museum+of+Art/data=!4m2!3m1!1s0x865320329a8b0495:0x89c378e8f8ae1bea",
+    "text": "CSV · Museum",
+    "query": "Wichita Falls Museum of Art USA"
+  },
+  {
+    "name": "Route 66 Motorheads Bar & Grill",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Motorheads+Bar+%26+Grill,+Museum+and+Entertainment+Complex/data=!4m2!3m1!1s0x88753eea74efffff:0xbf4e5a0c09a372b9",
+    "text": "CSV · Museum",
+    "query": "Route 66 Motorheads Bar & Grill USA"
+  },
+  {
+    "name": "Pontiac Museum Complex",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pontiac+Museum+Complex/data=!4m2!3m1!1s0x880c6df0ca801fdd:0xd33ff2edc10f9b73",
+    "text": "CSV · Museum",
+    "query": "Pontiac Museum Complex USA"
+  },
+  {
+    "name": "Pontiac Oakland Auto Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Pontiac+Oakland+Auto+Museum/data=!4m2!3m1!1s0x880c6df9e465a233:0x4772ed568569e14b",
+    "text": "CSV · Museum",
+    "query": "Pontiac Oakland Auto Museum USA"
+  },
+  {
+    "name": "Historic Rainbow Bridge",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Historic+Rainbow+Bridge/data=!4m2!3m1!1s0x87c80d2777a4ad63:0xac6ff2cd5f835f16",
+    "text": "CSV · Museum",
+    "query": "Historic Rainbow Bridge USA"
+  },
+  {
+    "name": "Route 66 Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Route+66+Museum/data=!4m2!3m1!1s0x87c539a1d1e9a4cd:0xb3ff5b0c42486dc8",
+    "text": "CSV · Museum",
+    "query": "Route 66 Museum USA"
+  },
+  {
+    "name": "US Army Artillery Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/US+Army+Artillery+Museum/data=!4m2!3m1!1s0x87ad1b8d3d04382d:0xdc55a5fa198b00ca",
+    "text": "CSV · Museum",
+    "query": "US Army Artillery Museum USA"
+  },
+  {
+    "name": "Museum of the Great Plains",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Museum+of+the+Great+Plains/data=!4m2!3m1!1s0x87ad1f2ab678391f:0x409b33849b17bab5",
+    "text": "CSV · Museum",
+    "query": "Museum of the Great Plains USA"
+  },
+  {
+    "name": "Gilcrease Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Gilcrease+Museum/data=!4m2!3m1!1s0x87b6ebb5d2cefe81:0xbbe604d82203d26c",
+    "text": "CSV · Museum",
+    "query": "Gilcrease Museum USA"
+  },
+  {
+    "name": "Philbrook Museum of Art",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Philbrook+Museum+of+Art/data=!4m2!3m1!1s0x87b6ecb05f2f5bd1:0x120e5884d709b012",
+    "text": "CSV · Museum",
+    "query": "Philbrook Museum of Art USA"
+  },
+  {
+    "name": "City Museum",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/City+Museum/data=!4m2!3m1!1s0x87d8b33dc2801e55:0xc97c4420308aca04",
+    "text": "CSV · Museum",
+    "query": "City Museum USA"
+  },
+  {
+    "name": "Museum at the Gateway Arch",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Museum+at+the+Gateway+Arch/data=!4m2!3m1!1s0x87df4b4e3ddc0915:0x5a29d86d9a9a156",
+    "text": "CSV · Museum",
+    "query": "Museum at the Gateway Arch USA"
+  },
+  {
+    "name": "Griffin Museum of Science and Industry",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Griffin+Museum+of+Science+and+Industry/data=!4m2!3m1!1s0x880e290a6001df1d:0xfcc2caa7317e306",
+    "text": "CSV · Museum",
+    "query": "Griffin Museum of Science and Industry USA"
+  },
+  {
+    "name": "Field Museum of Natural History",
+    "category": "Museum",
+    "type": "must",
+    "url": "https://www.google.com/maps/place/Field+Museum+of+Natural+History/data=!4m2!3m1!1s0x880e2b7d33304057:0xb51220475f7ec7da",
+    "text": "CSV · Museum",
+    "query": "Field Museum of Natural History USA"
+  },
+  {
+    "name": "Sahara Lounge",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Sahara+Lounge/data=!4m2!3m1!1s0x8644b614ab81b135:0xd2ae0ff6eaef749",
+    "text": "CSV · Music",
+    "query": "Sahara Lounge USA"
+  },
+  {
+    "name": "C-Boy's Heart & Soul",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/C-Boy's+Heart+%26+Soul/data=!4m2!3m1!1s0x8644b4fad65e90c9:0x1c94863d87a40907",
+    "text": "CSV · Music",
+    "query": "C-Boy's Heart & Soul USA"
+  },
+  {
+    "name": "Saxon Pub",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Saxon+Pub/data=!4m2!3m1!1s0x8644b509f555ffcf:0x1fd09c5ee5510623",
+    "text": "CSV · Music",
+    "query": "Saxon Pub USA"
+  },
+  {
+    "name": "Elephant Room",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Elephant+Room/data=!4m2!3m1!1s0x8644b50868729f6b:0xd42e2e4f8ba233c9",
+    "text": "CSV · Music",
+    "query": "Elephant Room USA"
+  },
+  {
+    "name": "Austin City Limits Live (ACL Live & 3TEN ACL Live)",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Austin+City+Limits+Live+(ACL+Live+%26+3TEN+ACL+Live)/data=!4m2!3m1!1s0x8644b50f4ba81beb:0x491ca08c71e16697",
+    "text": "CSV · Music",
+    "query": "Austin City Limits Live (ACL Live & 3TEN ACL Live) USA"
+  },
+  {
+    "name": "The Continental Club",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/The+Continental+Club/data=!4m2!3m1!1s0x8644b4fdbac94625:0x9a4922e26f855ca4",
+    "text": "CSV · Music",
+    "query": "The Continental Club USA"
+  },
+  {
+    "name": "Antone's Nightclub",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Antone's+Nightclub/data=!4m2!3m1!1s0x8644b5091bd69d65:0x945d683a5e34b71f",
+    "text": "CSV · Music",
+    "query": "Antone's Nightclub USA"
+  },
+  {
+    "name": "House of Blues Chicago",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/House+of+Blues+Chicago/data=!4m2!3m1!1s0x880e2cb1cc0795d3:0xc8f8aa77dbaf9849",
+    "text": "CSV · Music",
+    "query": "House of Blues Chicago USA"
+  },
+  {
+    "name": "Buddy Guy's Legends",
+    "category": "Music",
+    "type": "music",
+    "url": "https://www.google.com/maps/place/Buddy+Guy's+Legends/data=!4m2!3m1!1s0x880e2c98ff384575:0xe0fa16c26ad26915",
+    "text": "CSV · Music",
+    "query": "Buddy Guy's Legends USA"
+  },
+  {
+    "name": "The LEGO® Store Chicago",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/The+LEGO%C2%AE+Store+Chicago/data=!4m2!3m1!1s0x880e2cac6e03efd5:0xb2b6ae4adeed487c",
+    "text": "CSV · Spielzeug",
+    "query": "The LEGO® Store Chicago USA"
+  },
+  {
+    "name": "Building Blocks Toy Store",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Building+Blocks+Toy+Store/data=!4m2!3m1!1s0x880fd25a3457b65f:0x9883a83a4e0ae6aa",
+    "text": "CSV · Spielzeug",
+    "query": "Building Blocks Toy Store USA"
+  },
+  {
+    "name": "S & B Candy & Toy",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/S+%26+B+Candy+%26+Toy/data=!4m2!3m1!1s0x87d8b2d866d93227:0xd2802fb744a265c5",
+    "text": "CSV · Spielzeug",
+    "query": "S & B Candy & Toy USA"
+  },
+  {
+    "name": "The Minifig Shop",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/The+Minifig+Shop/data=!4m2!3m1!1s0x87d8cde5dc7686db:0x655c334450a125ad",
+    "text": "CSV · Spielzeug",
+    "query": "The Minifig Shop USA"
+  },
+  {
+    "name": "Imagination Toys Inc",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Imagination+Toys+Inc/data=!4m2!3m1!1s0x87d8ccb97cfb16fb:0xbeb5c6a7920fc6ee",
+    "text": "CSV · Spielzeug",
+    "query": "Imagination Toys Inc USA"
+  },
+  {
+    "name": "Kiddlestix Toy Store",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Kiddlestix+Toy+Store/data=!4m2!3m1!1s0x87b692d7c866f445:0xe173251c0171366b",
+    "text": "CSV · Spielzeug",
+    "query": "Kiddlestix Toy Store USA"
+  },
+  {
+    "name": "Tulsa Toy Depot",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Tulsa+Toy+Depot/data=!4m2!3m1!1s0x87b691e47488b18f:0x6c9a2dfc769e8e8b",
+    "text": "CSV · Spielzeug",
+    "query": "Tulsa Toy Depot USA"
+  },
+  {
+    "name": "Another Planet Comics & Other Stuff",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Another+Planet+Comics+%26+Other+Stuff/data=!4m2!3m1!1s0x87ad1fad4ae3d27f:0xce4c9e561bef3f3b",
+    "text": "CSV · Spielzeug",
+    "query": "Another Planet Comics & Other Stuff USA"
+  },
+  {
+    "name": "Terra Toys",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Terra+Toys/data=!4m2!3m1!1s0x8644cba56b90f9b7:0xed042df397375e3d",
+    "text": "CSV · Spielzeug",
+    "query": "Terra Toys USA"
+  },
+  {
+    "name": "Toy Joy",
+    "category": "Spielzeug",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Toy+Joy/data=!4m2!3m1!1s0x8644b57f7379a59d:0x2c613df415af9483",
+    "text": "CSV · Spielzeug",
+    "query": "Toy Joy USA"
+  },
+  {
+    "name": "Boot Barn",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Boot+Barn/data=!4m2!3m1!1s0x87b68df61a052a69:0x25eec87c203cddbc",
+    "text": "CSV · Stiefel und Western",
+    "query": "Boot Barn USA"
+  },
+  {
+    "name": "Drysdales Western Wear",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Drysdales+Western+Wear/data=!4m2!3m1!1s0x87b68d4d839d45d3:0x507efcfb73d06dac",
+    "text": "CSV · Stiefel und Western",
+    "query": "Drysdales Western Wear USA"
+  },
+  {
+    "name": "Dos Amigos",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Dos+Amigos/data=!4m2!3m1!1s0x87b6f325bfafd593:0x32490aada604d7f",
+    "text": "CSV · Stiefel und Western",
+    "query": "Dos Amigos USA"
+  },
+  {
+    "name": "Red Wing - Lawton",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Red+Wing+-+Lawton,+OK/data=!4m2!3m1!1s0x87ad1e255092ecff:0x2a8eae53ccbfa35f",
+    "text": "CSV · Stiefel und Western",
+    "query": "Red Wing - Lawton USA"
+  },
+  {
+    "name": "Allens Boots",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Allens+Boots/data=!4m2!3m1!1s0x8644b4fc8d157bf3:0x954e1efa2e66082a",
+    "text": "CSV · Stiefel und Western",
+    "query": "Allens Boots USA"
+  },
+  {
+    "name": "Chisos Boot Company",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Chisos+Boot+Company/data=!4m2!3m1!1s0x8644b5c5f08e3c37:0xa628ddb2b355012b",
+    "text": "CSV · Stiefel und Western",
+    "query": "Chisos Boot Company USA"
+  },
+  {
+    "name": "Tecovas",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Tecovas/data=!4m2!3m1!1s0x8644b434b3e0befb:0x9201eb58961ab808",
+    "text": "CSV · Stiefel und Western",
+    "query": "Tecovas USA"
+  },
+  {
+    "name": "Cavender's Western Outfitter",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Cavender's+Western+Outfitter/data=!4m2!3m1!1s0x87ded4eacd2ce0f5:0xdf07a1ab2e97ca48",
+    "text": "CSV · Stiefel und Western",
+    "query": "Cavender's Western Outfitter USA"
+  },
+  {
+    "name": "Levine Hat Co.",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Levine+Hat+Co./data=!4m2!3m1!1s0x87d8b33df00c2b53:0x67c49c96993379b6",
+    "text": "CSV · Stiefel und Western",
+    "query": "Levine Hat Co. USA"
+  },
+  {
+    "name": "Alcala's Western Wear",
+    "category": "Stiefel und Western",
+    "type": "hidden",
+    "url": "https://www.google.com/maps/place/Alcala's+Western+Wear/data=!4m2!3m1!1s0x880e2d332d706f89:0xdc61e1d5ec7bbe7c",
+    "text": "CSV · Stiefel und Western",
+    "query": "Alcala's Western Wear USA"
+  }
+];
+
+async function geocodeImportedPoints(token) {
+  const results = [];
+  for (const item of csvImportedPoints) {
+    try {
+      const url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' +
+        encodeURIComponent(item.query || item.name) +
+        '.json?limit=1&country=us&access_token=' + token;
+      const response = await fetch(url);
+      const data = await response.json();
+      const feature = data && data.features && data.features[0];
+      if (feature && feature.center) {
+        results.push({
+          name: item.name,
+          type: item.type,
+          coords: feature.center,
+          text: item.text,
+          category: item.category,
+          url: item.url,
+          imported: true
+        });
+      } else {
+        console.warn('Kein Geocoding-Treffer für:', item.name);
+      }
+    } catch (err) {
+      console.warn('Geocoding fehlgeschlagen:', item.name, err);
+    }
+  }
+  return results;
+}
+
 const colors = {
   must:'#4f98a3',
   music:'#d19900',
@@ -789,7 +1961,7 @@ function startMap(){
 
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    const placesGeoJson = {
+    let placesGeoJson = {
       type: 'FeatureCollection',
       features: points.map(function(p){
         return {
@@ -813,10 +1985,11 @@ function startMap(){
     let activeFilter = 'all';
 
     function popupHtml(props){
+      const link = props.url && props.url.length
+        ? props.url
+        : 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(props.name);
       return '<strong>' + props.name + '</strong><br>' + (props.text || '') +
-        '<br><a class="popup-link" href="https://www.google.com/maps/search/?api=1&query=' +
-        encodeURIComponent(props.name) +
-        '" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a>';
+        '<br><a class="popup-link" href="' + link + '" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a>';
     }
 
     function syncMapButtons(){
@@ -848,7 +2021,33 @@ function startMap(){
       });
     });
 
-    map.on('load', function(){
+    map.on('load', async function(){
+      const importedPoints = await geocodeImportedPoints(mapboxgl.accessToken);
+      const allPoints = points.concat(importedPoints);
+      placesGeoJson = {
+        type: 'FeatureCollection',
+        features: allPoints.map(function(p){
+          return {
+            type: 'Feature',
+            properties: {
+              name: p.name,
+              type: p.type,
+              text: p.text || '',
+              category: p.category || '',
+              url: p.url || '',
+              imported: !!p.imported,
+              isTopMusic: topMusicGear.has(p.name),
+              isTopMust: topMust.has(p.name),
+              isTopFood: topFood.has(p.name)
+            },
+            geometry: {
+              type: 'Point',
+              coordinates: p.coords
+            }
+          };
+        })
+      };
+
       map.addSource('places', {
         type: 'geojson',
         data: placesGeoJson
@@ -911,7 +2110,7 @@ function startMap(){
       applyFilter();
 
       const bounds = new mapboxgl.LngLatBounds();
-      points.forEach(function(p){ bounds.extend(p.coords); });
+      allPoints.forEach(function(p){ bounds.extend(p.coords); });
       map.fitBounds(bounds, {padding: 50, maxZoom: 10});
 
       const routeStops = [
