@@ -3,65 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Google My Maps</title>
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#111111">
+<title>Route 66 Music Trip</title>
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#070b0f;color:#f6fbff}
-header{padding:18px 22px 14px;background:#091016;border-bottom:1px solid rgba(148,185,195,.22)}
-h1{margin:0;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.04em}
-header p{margin:7px 0 0;color:#74f0ff;font-weight:700}
-.quick-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.quick-links a{padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#f4fbff;text-decoration:none;font-size:13px;font-weight:800}
-.map-wrap{padding:10px;background:#05080b}
-iframe{width:100%;height:78vh;min-height:650px;border:0;border-radius:20px;background:#eef3f4}
-main{max-width:1200px;margin:0 auto;padding:20px}
-.card{background:#111820;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px;margin-bottom:16px}
-.card h2{margin-top:0}
-.note{color:#b9c8ce;font-size:14px;line-height:1.55}
-@media(max-width:760px){iframe{height:68vh;min-height:460px;border-radius:14px}}
+body{margin:0;font-family:Inter,Arial,sans-serif;background:#0b1116;color:#eef6fa}
+header{padding:20px;background:#111820;border-bottom:1px solid rgba(255,255,255,.1)}
+h1{margin:0;font-size:34px}
+p{color:#9fb4be}
+iframe{width:100%;height:72vh;border:0;border-radius:18px;background:#eef3f4}
+.map-wrap{padding:12px}
+main{max-width:1400px;margin:auto;padding:20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:#111820;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:18px}
+.card h2{margin-top:0;font-size:22px}
+.card ul{padding-left:18px}
+.card li{margin-bottom:10px;line-height:1.45}
+.tag{display:inline-block;padding:5px 10px;border-radius:999px;background:#1a73e8;color:white;font-size:12px;font-weight:700;margin-bottom:12px}
 </style>
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister()));
-}
-if ('caches' in window) {
-  caches.keys().then(keys => keys.forEach(key => caches.delete(key)));
-}
-</script>
 </head>
 <body>
+
 <header>
-  <h1>Route 66 Music Trip · Google My Maps</h1>
-  <p>Google My Maps eingebettet · echte Marker und Layer</p>
-  <div class="quick-links">
-    <a href="https://www.google.com/maps/d/edit?mid=1eJ4RuP3k3JT2hsWzQCbHVx7Rg-aadHs&usp=sharing" target="_blank" rel="noopener noreferrer">In Google My Maps öffnen</a>
-    <a href="#hinweis">Hinweis</a>
-  </div>
+<h1>Route 66 Music Trip</h1>
+<p>Google My Maps + Empfehlungen für Blues, Rock, Country & Live Musik</p>
 </header>
 
 <div class="map-wrap">
-  <iframe
-    src="https://www.google.com/maps/d/u/0/embed?mid=1eJ4RuP3k3JT2hsWzQCbHVx7Rg-aadHs&ehbc=2E312F"
-    loading="lazy"
-    allowfullscreen
-    referrerpolicy="no-referrer-when-downgrade">
-  </iframe>
+<iframe
+src="https://www.google.com/maps/d/u/0/embed?mid=1eJ4RuP3k3JT2hsWzQCbHVx7Rg-aadHs&ehbc=2E312F"
+loading="lazy"
+allowfullscreen>
+</iframe>
 </div>
 
 <main>
-  <section class="card" id="hinweis">
-    <h2>Hinweis</h2>
-    <p class="note">
-      Diese Version nutzt den offiziellen Google-My-Maps-Embed-Link mit <code>/maps/d/u/0/embed</code>.
-      Kategorien werden direkt in Google My Maps als Layer gepflegt und erscheinen im Kartenfenster.
-    </p>
-    <p class="note">
-      Falls die Basiskarte weiterhin grau bleibt: Die Karte in My Maps öffnen, unten „Basiskarte“ auf Standard/Karte stellen,
-      speichern und danach diese Seite mit Cmd+Shift+R bzw. Strg+F5 hart neu laden.
-    </p>
-  </section>
+<h2>Top Musik / Bars Empfehlungen</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="tag">Chicago</div>
+<h2>Top Empfehlungen</h2>
+<ul>
+<li><strong>Buddy Guy's Legends</strong> – ikonischer Bluesclub</li>
+<li><strong>Kingston Mines</strong> – legendäre Late-Night-Blues Sessions</li>
+<li><strong>Blue Chicago</strong> – echter Chicago Blues</li>
+<li><strong>House of Blues</strong> – große Live Acts</li>
+<li><strong>Carol's Pub</strong> – Country & Honky Tonk</li>
+<li><strong>Rosa's Lounge</strong> – authentischer Blues</li>
+<li><strong>Reggies</strong> – Rock / Americana</li>
+<li><strong>The Hideout</strong> – Alternative Country</li>
+<li><strong>AliveOne</strong> – Jam Sessions</li>
+<li><strong>Empty Bottle</strong> – Indie / Rock</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="tag">St. Louis</div>
+<h2>Top Empfehlungen</h2>
+<ul>
+<li><strong>Broadway Oyster Bar</strong> – Blues / Jam</li>
+<li><strong>Blueberry Hill Duck Room</strong> – Chuck Berry Legende</li>
+<li><strong>Old Rock House</strong> – Americana / Rock</li>
+<li><strong>BB's Jazz Blues and Soups</strong> – Blues & Jazz</li>
+<li><strong>Hammerstone's</strong> – Soulard Blues</li>
+<li><strong>Venice Cafe</strong> – kreative Musikszene</li>
+<li><strong>Off Broadway</strong> – Folk / Americana</li>
+<li><strong>1860 Saloon</strong> – Blues Bar</li>
+<li><strong>The Honky Tonk STL</strong> – Country</li>
+<li><strong>The House Of Soul</strong> – Soul / Blues</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="tag">Tulsa</div>
+<h2>Top Empfehlungen</h2>
+<ul>
+<li><strong>Mercury Lounge</strong> – Route66 Vibes</li>
+<li><strong>Cain's Ballroom</strong> – historische Country Venue</li>
+<li><strong>The Colony</strong> – Open Stage</li>
+<li><strong>Soundpony</strong> – lokale Musikszene</li>
+<li><strong>LowDown</strong> – Blues / Jazz</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="tag">Austin</div>
+<h2>Top Empfehlungen</h2>
+<ul>
+<li><strong>The Continental Club</strong> – Austin Klassiker</li>
+<li><strong>Antone's</strong> – legendärer Bluesclub</li>
+<li><strong>The White Horse</strong> – Honky Tonk</li>
+<li><strong>Broken Spoke</strong> – Texas Country</li>
+<li><strong>Saxon Pub</strong> – Songwriter</li>
+<li><strong>C-Boy's Heart & Soul</strong> – Soul / Blues</li>
+<li><strong>Hole in the Wall</strong> – Rock Dive Bar</li>
+<li><strong>Stubb's Bar-B-Q</strong> – Konzerte & BBQ</li>
+<li><strong>Mohawk Austin</strong> – Indie / Rock</li>
+<li><strong>Gruene Hall</strong> – legendäre Dance Hall</li>
+</ul>
+</div>
+
+</div>
 </main>
+
 </body>
 </html>
