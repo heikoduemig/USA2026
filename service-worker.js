@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-pwa-final-v2';
+const CACHE_NAME = 'route66-pwa-route-filter-v3';
 
 const PRECACHE_URLS = [
   './',
