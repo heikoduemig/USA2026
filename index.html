@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Interaktive Karte</title>
+<title>Route 66 Music Trip · Interaktive Karte v24</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#111111">
 <style>
@@ -39,11 +39,22 @@ th{background:rgba(255,255,255,.075);color:#fff}td{color:#dce7ea}tbody tr:last-c
 .place-row strong{display:block;color:#fff}.place-row span{display:block;color:#b9c8ce;font-size:13px;margin-top:3px}.place-row a{padding:7px 10px;border-radius:999px;background:#1a73e8;color:white;text-decoration:none;font-size:12px;font-weight:900}
 .gm-style .gm-style-iw-c{color:#111}
 @media(max-width:760px){header{padding:16px 14px}#map{height:62vh;min-height:430px;border-radius:15px}main{padding:14px 10px 28px}.section{padding:16px;border-radius:18px}table{display:block;overflow-x:auto;white-space:nowrap}}
+
+.city-block{
+  margin:0 0 18px;
+}
+.city-block h3{
+  margin:0 0 10px;
+  color:#8ef4ff;
+  font-size:22px;
+  letter-spacing:-.02em;
+}
+
 </style>
 </head>
 <body>
 <header>
-  <h1>Route 66 Music Trip · Interaktive Karte</h1>
+  <h1>Route 66 Music Trip · Interaktive Karte v24</h1>
   <p>Google Places API · eigene Popups · Google-Maps-Links · Kategorien</p>
   <nav class="nav">
     <a href="#karte">Karte</a><a href="#fahrplan">Timeline / Fahrplan</a><a href="#hotels">Hotels</a><a href="#musicbars">MusicBars</a><a href="#alle">Alle Orte</a>
@@ -70,15 +81,15 @@ th{background:rgba(255,255,255,.075);color:#fff}td{color:#dce7ea}tbody tr:last-c
     <div class="meta">Timeline / Fahrplan</div>
     <h2>Reiseübersicht</h2>
     <p class="note">Die Marker werden beim ersten Laden über Google Places aufgelöst und lokal im Browser zwischengespeichert.</p>
-    <table><thead><tr><th>Datum</th><th>Ort / Strecke</th><th>Übernachtung / Status</th><th>Plan</th></tr></thead><tbody><tr><td>14.05.2026</td><td><strong>Chicago</strong></td><td>Ankunft 12:55 CDT · LH 430</td><td>Leichtes Programm: Hotel, Riverwalk, Blues/Musik optional.</td></tr>
-<tr><td>15.05.2026</td><td><strong>Chicago</strong></td><td>citizenM Downtown</td><td>Chicago Music Exchange, Bluesclubs, Wicker Park / Logan Square.</td></tr>
-<tr><td>16.05.2026</td><td><strong>Chicago → St. Louis</strong></td><td>Roadtrip-Start</td><td>Route 66 Start, Gemini Giant, Pontiac, Cozy Dog, Ankunft St. Louis.</td></tr>
-<tr><td>17.05.2026</td><td><strong>St. Louis</strong></td><td>Hotel Lumière at the Arch</td><td>Gateway Arch, Soulard, Cherokee Street, Musik am Abend.</td></tr>
-<tr><td>18.05.2026</td><td><strong>St. Louis → Tulsa</strong></td><td>Lange Route-66-Etappe</td><td>Chain of Rocks, Meramec Caverns, Cuba Murals, Blue Whale.</td></tr>
-<tr><td>19.05.2026</td><td><strong>Tulsa</strong></td><td>The Mayo Hotel</td><td>Woody Guthrie Center, Cain’s Ballroom, Mercury Lounge, Route 66.</td></tr>
-<tr><td>20.05.2026</td><td><strong>Lawton / Wichita Falls</strong></td><td>Apache Casino Hotel</td><td>Übergangstag, optional Wichita Mountains / lokale Bars.</td></tr>
-<tr><td>21.05.2026</td><td><strong>Austin</strong></td><td>citizenM Downtown</td><td>Lange Anfahrt, South Congress, lockerer Musikabend.</td></tr>
-<tr><td>22.05.2026</td><td><strong>Austin</strong></td><td>Austin-Tag</td><td>Continental Club, Antone’s, BBQ, South Congress, Honky Tonk.</td></tr></tbody></table>
+    <table><thead><tr><th>Datum</th><th>Ort / Strecke</th><th>Abfahrt / Ankunft</th><th>Ca. km</th><th>Plan / Stopps</th></tr></thead><tbody><tr><td>14.05.2026</td><td><strong>Chicago</strong><br>Flugankunft → citizenM Downtown</td><td>Ankunft 12:55 CDT · Hotel ca. 14:30</td><td>ca. 30 km Transfer</td><td>Leichtes Programm: Riverwalk, Millennium Park, Blues/Musik optional.</td></tr>
+<tr><td>15.05.2026</td><td><strong>Chicago</strong><br>Stadttag</td><td>Start ca. 09:30 · Abend offen</td><td>lokal</td><td>Chicago Music Exchange, Wicker Park, Logan Square, Bluesclubs.</td></tr>
+<tr><td>16.05.2026</td><td><strong>Chicago → St. Louis</strong><br>Route-66-Start</td><td>Abfahrt ca. 08:00 · Ankunft ca. 18:30</td><td>ca. 480 km</td><td>Route 66 Begin Sign, Gemini Giant, Pontiac Route 66 Museum, Cozy Dog Drive-In.</td></tr>
+<tr><td>17.05.2026</td><td><strong>St. Louis</strong><br>Stadttag · Hotel Lumière at the Arch</td><td>Start ca. 09:30 · Abend offen</td><td>lokal</td><td>Gateway Arch, Citygarden, Cherokee Street, Soulard, Live-Musik.</td></tr>
+<tr><td>18.05.2026</td><td><strong>St. Louis → Tulsa</strong><br>Lange Route-66-Etappe</td><td>Abfahrt ca. 08:00 · Ankunft ca. 20:00</td><td>ca. 630 km</td><td>Chain of Rocks Bridge, Meramec Caverns, Cuba Murals, Route 66 Neon Park, Blue Whale.</td></tr>
+<tr><td>19.05.2026</td><td><strong>Tulsa</strong><br>Stadttag · The Mayo Hotel</td><td>Start ca. 10:00 · Abend offen</td><td>lokal</td><td>Cyrus Avery Plaza, Woody Guthrie Center, Cain’s Ballroom, Mercury Lounge.</td></tr>
+<tr><td>20.05.2026</td><td><strong>Tulsa → Lawton / Wichita Falls</strong><br>Übergangstag · Apache Casino Hotel</td><td>Abfahrt ca. 09:00 · Ankunft ca. 14:30–15:30</td><td>ca. 340–430 km</td><td>Wichita Falls kurzer Stopp optional, danach Lawton / Wichita Mountains bei Zeit.</td></tr>
+<tr><td>21.05.2026</td><td><strong>Lawton → Austin</strong><br>Langer Reisetag · citizenM Austin Downtown</td><td>Abfahrt ca. 07:30 · Ankunft ca. 18:30–20:00</td><td>ca. 900+ km</td><td>Fokus auf Strecke; abends South Congress, Continental Club oder Antone’s locker.</td></tr>
+<tr><td>22.05.2026</td><td><strong>Austin</strong><br>Austin-Tag / Abreisetag nach Plan</td><td>Flexibel</td><td>lokal</td><td>Continental Club, Antone’s, The White Horse, BBQ, Waterloo Records, South Congress.</td></tr></tbody></table>
   </section>
 
   <section class="section" id="hotels">
@@ -215,24 +226,57 @@ function renderMarkers(filter="all") {
   setStatus(`${markers.length} Marker angezeigt`);
 }
 
+
+function cityForPlace(p) {
+  const t = `${p.name || ""} ${p.address || ""} ${p.formattedAddress || ""} ${p.query || ""}`.toLowerCase();
+  if (t.includes("chicago") || t.includes("illinois")) return "Chicago";
+  if (t.includes("st. louis") || t.includes("saint louis") || t.includes("missouri")) return "St. Louis";
+  if (t.includes("tulsa")) return "Tulsa";
+  if (t.includes("lawton") || t.includes("wichita falls") || t.includes("medicine park")) return "Lawton / Wichita Falls";
+  if (t.includes("austin") || t.includes("new braunfels") || t.includes("gruene")) return "Austin";
+  return "Unterwegs / Route 66";
+}
+
+function renderCityGrouped(container, places) {
+  const cityOrder = ["Chicago", "St. Louis", "Tulsa", "Lawton / Wichita Falls", "Austin", "Unterwegs / Route 66"];
+  const grouped = {};
+  places.forEach(p => {
+    const city = cityForPlace(p);
+    if (!grouped[city]) grouped[city] = [];
+    grouped[city].push(p);
+  });
+
+  container.innerHTML = cityOrder
+    .filter(city => grouped[city] && grouped[city].length)
+    .map(city => `
+      <section class="city-block">
+        <h3>${city}</h3>
+        <div class="list">
+          ${grouped[city].sort((a,b) => a.name.localeCompare(b.name)).map(row).join("")}
+        </div>
+      </section>
+    `).join("");
+}
+
 function renderLists() {
   const hotelGrid = document.getElementById("hotelGrid");
   const musicList = document.getElementById("musicList");
   const placeList = document.getElementById("placeList");
 
-  function row(p) {
+  window.row = function row(p) {
     const maps = p.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.resolvedName || p.name)}&query_place_id=${p.placeId}` : p.googleMapsUrl;
     return `<div class="place-row"><div><strong>${p.name}</strong><span>${categoryLabel(p.category)}${p.note ? " · " + p.note : ""}</span></div><a href="${maps}" target="_blank" rel="noopener noreferrer">Maps</a></div>`;
   }
 
-  hotelGrid.innerHTML = resolvedPlaces.filter(p=>p.category==="hotel").map(p => {
+  hotelGrid.innerHTML = resolvedPlaces.filter(p=>p.category==="hotel").sort((a,b)=>cityForPlace(a).localeCompare(cityForPlace(b))).map(p => {
     const maps = p.placeId ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.resolvedName || p.name)}&query_place_id=${p.placeId}` : p.googleMapsUrl;
-    return `<article class="card"><div class="tag">Hotel</div><h3>${p.name}</h3><p>${p.formattedAddress || p.address || ""}</p><a class="button" href="${maps}" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a></article>`;
+    return `<article class="card"><div class="tag">${cityForPlace(p)}</div><h3>${p.name}</h3><p>${p.formattedAddress || p.address || ""}</p><a class="button" href="${maps}" target="_blank" rel="noopener noreferrer">In Google Maps öffnen</a></article>`;
   }).join("");
 
-  musicList.innerHTML = resolvedPlaces.filter(p=>p.category==="music").map(row).join("");
-  placeList.innerHTML = resolvedPlaces.map(row).join("");
+  renderCityGrouped(musicList, resolvedPlaces.filter(p=>p.category==="music"));
+  renderCityGrouped(placeList, resolvedPlaces);
 }
+
 
 async function initMap() {
   map = new google.maps.Map(document.getElementById("map"), {
