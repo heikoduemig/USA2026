@@ -1,7 +1,6 @@
 // Zusätzliche Musik-/Bar-Empfehlungen für die Route-66-Webkarte.
-// Wird in index.html geladen und der Kategorie/Filter "Musik / Bars" zugeordnet.
+// Alle Einträge liegen im Filter "Musik / Bars".
 window.musicBars = [
-  // Chicago
   { name: "Buddy Guy's Legends", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6307, 41.8675], text: "Musik / Bars · Chicago Blues Club" },
   { name: "Kingston Mines", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6490, 41.9281], text: "Musik / Bars · Legendärer Blues Club" },
   { name: "Blue Chicago", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6318, 41.8921], text: "Musik / Bars · Chicago Blues" },
@@ -12,8 +11,6 @@ window.musicBars = [
   { name: "Rosa's Lounge", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.7072, 41.9091], text: "Musik / Bars · Authentic Chicago Blues" },
   { name: "Empty Bottle", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.7017, 41.9028], text: "Musik / Bars · Indie / Rock / Alternative" },
   { name: "AliveOne", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6637, 41.9397], text: "Musik / Bars · Jam Bar / Live Music" },
-
-  // St. Louis
   { name: "Broadway Oyster Bar", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.1913, 38.6195], text: "Musik / Bars · Blues / Jam / Rock" },
   { name: "Blueberry Hill Duck Room", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.3078, 38.6552], text: "Musik / Bars · Legendary Music Venue" },
   { name: "Old Rock House", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.1989, 38.6184], text: "Musik / Bars · Rock / Americana" },
@@ -24,19 +21,13 @@ window.musicBars = [
   { name: "1860 Saloon", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.1988, 38.6106], text: "Musik / Bars · Soulard Blues" },
   { name: "The Honky Tonk STL", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.1880, 38.6240], text: "Musik / Bars · Country / Honky Tonk" },
   { name: "The House Of Soul", type: "music", category: "Musik / Bars", city: "St. Louis", coords: [-90.1984, 38.6313], text: "Musik / Bars · Soul / Blues" },
-
-  // Tulsa
   { name: "Mercury Lounge", type: "music", category: "Musik / Bars", city: "Tulsa", coords: [-95.9841, 36.1478], text: "Musik / Bars · Country / Blues" },
   { name: "Cain's Ballroom", type: "music", category: "Musik / Bars", city: "Tulsa", coords: [-95.9924, 36.1601], text: "Musik / Bars · Historic Country Venue" },
   { name: "The Colony", type: "music", category: "Musik / Bars", city: "Tulsa", coords: [-95.9485, 36.1276], text: "Musik / Bars · Open Stage / Songwriter" },
   { name: "Soundpony", type: "music", category: "Musik / Bars", city: "Tulsa", coords: [-95.9890, 36.1549], text: "Musik / Bars · Alternative / Local Scene" },
   { name: "LowDown", type: "music", category: "Musik / Bars", city: "Tulsa", coords: [-95.9895, 36.1542], text: "Musik / Bars · Jazz / Blues" },
-
-  // Lawton / Wichita Falls
   { name: "Medicine Park Tavern", type: "music", category: "Musik / Bars", city: "Lawton", coords: [-98.3950, 34.7305], text: "Musik / Bars · Local Music Bar" },
   { name: "Apache Casino Event Center", type: "music", category: "Musik / Bars", city: "Lawton", coords: [-98.3877, 34.6085], text: "Musik / Bars · Casino Concert Venue" },
-
-  // Austin
   { name: "The Continental Club", type: "music", category: "Musik / Bars", city: "Austin", coords: [-97.7498, 30.2475], text: "Musik / Bars · Austin Rock / Blues" },
   { name: "Antone's", type: "music", category: "Musik / Bars", city: "Austin", coords: [-97.7432, 30.2672], text: "Musik / Bars · Legendary Blues Club" },
   { name: "The White Horse", type: "music", category: "Musik / Bars", city: "Austin", coords: [-97.7219, 30.2607], text: "Musik / Bars · Honky Tonk / Country" },

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-pwa-kmz-v11';
+const CACHE_NAME = 'route66-pwa-kmz-v13';
 
 const PRECACHE_URLS = [
   './',
