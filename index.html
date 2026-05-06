@@ -9,61 +9,54 @@
 <link rel="apple-touch-icon" href="assets/icon-192.png">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css">
 <style>
-html,body{margin:0;padding:0;font-family:Arial,sans-serif;background:#111;color:#f5f5f5;scroll-behavior:smooth}
-html{scroll-padding-top:190px}
-header{padding:16px 18px;background:#1b1b1b;border-bottom:1px solid #333;position:sticky;top:0;z-index:10}
-h1{margin:0 0 6px 0;font-size:22px}
-header p{margin:0;color:#cfcfcf;font-size:14px;line-height:1.45}
-#map{height:72vh;min-height:520px}
-.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;font-size:13px}
-.legend span{display:flex;align-items:center;gap:6px}
-.dot{width:10px;height:10px;border-radius:50%}
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
-.quick-links{display:flex;flex-wrap:wrap;gap:8px}
-.quick-links a{display:inline-block;padding:8px 10px;border-radius:10px;background:#1d1d1d;border:1px solid #333;color:#f1f1f1;text-decoration:none;font-size:13px}
-.quick-links a:hover{background:#2a2a2a}
-.filters{display:flex;flex-wrap:wrap;gap:8px}
-.map-filter-btn{padding:8px 10px;border-radius:999px;border:1px solid #35545a;background:#16282d;color:#dff7fb;font-size:13px;cursor:pointer}
-.map-filter-btn.active{background:#4f98a3;color:#071417;border-color:#4f98a3}
-.map-filter-btn:not(.active){opacity:.58}
-.map-wrap{position:relative}
-.map-filter-panel{position:absolute;top:14px;left:14px;z-index:5;display:flex;flex-wrap:wrap;gap:8px;max-width:min(92vw,900px);padding:10px;border-radius:12px;background:rgba(17,17,17,.86);backdrop-filter:blur(8px);border:1px solid #2f2f2f;align-items:center}
-.map-filter-panel span{font-size:12px;color:#bfcfd3;margin-right:6px}
-.mapboxgl-popup-content{color:#111 !important;background:#fff !important;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.4}
-.mapboxgl-popup-content strong{color:#000 !important}
-.mapboxgl-popup-tip{border-top-color:#fff !important;border-bottom-color:#fff !important}
-.popup-link{display:inline-block;margin-top:4px;font-size:12px;color:#1d4ed8;text-decoration:underline}
-#fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9;font-size:14px}
-main{max-width:1450px;margin:0 auto;padding:18px}
-.plan,.day{background:#181818;border:1px solid #2b2b2b;border-radius:14px;padding:16px;margin-bottom:16px;scroll-margin-top:190px}
-.day h2,.plan h2{margin:0 0 6px 0;font-size:22px}
-.meta{color:#9fd1d8;font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.card{background:#202020;border:1px solid #333;border-radius:12px;padding:14px}
-.card h3{margin:0 0 8px 0;font-size:16px;color:#fff}
-.card ul{margin:0;padding-left:18px}
-.card li{margin-bottom:6px;color:#d5d5d5;line-height:1.45}
-.links a,.route-links a{display:inline-block;margin:6px 8px 0 0;padding:8px 10px;border-radius:10px;background:#22343a;color:#dff7fb;text-decoration:none;font-size:13px}
-.links a:hover,.route-links a:hover{background:#2e4c54}
-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
-th,td{border:1px solid #333;padding:10px;vertical-align:top;text-align:left}
-th{background:#202020;color:#fff}
-td{color:#ddd}
-.note{font-size:13px;color:#bcbcbc;margin-top:8px}
-@media (max-width:1100px){.grid{grid-template-columns:1fr 1fr}}
-@media (max-width:760px){
-  #map{height:56vh;min-height:360px}
-  main{padding:14px}
-  .grid{grid-template-columns:1fr}
-  .day h2,.plan h2{font-size:20px}
-  table{font-size:13px}
+
+:root{
+  --bg:#070b0f;
+  --panel:rgba(12,18,24,.82);
+  --panel-solid:#111820;
+  --panel-soft:rgba(20,30,39,.72);
+  --line:rgba(148,185,195,.22);
+  --text:#f6fbff;
+  --muted:#a8bac2;
+  --cyan:#46d6e6;
+  --cyan-2:#74f0ff;
+  --gold:#f3bd2f;
+  --green:#95d166;
+  --rose:#ee7680;
+  --purple:#b982f2;
+  --blue:#4da3ff;
+  --shadow:0 18px 60px rgba(0,0,0,.45);
 }
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:radial-gradient(circle at 20% -10%,rgba(70,214,230,.16),transparent 36%),radial-gradient(circle at 90% 5%,rgba(179,130,242,.12),transparent 34%),var(--bg);color:var(--text);scroll-behavior:smooth}
+html{scroll-padding-top:180px}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.05),transparent 28%,transparent 68%,rgba(70,214,230,.05));z-index:-1}
+header{padding:18px 22px 14px;background:linear-gradient(180deg,rgba(9,12,16,.97),rgba(9,12,16,.88));border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);box-shadow:0 10px 35px rgba(0,0,0,.36)}
+h1{margin:0;font-size:clamp(22px,2.4vw,34px);letter-spacing:-.04em;line-height:1.05;font-weight:900;text-shadow:0 8px 30px rgba(70,214,230,.12)}
+header p{margin:7px 0 0;color:var(--cyan-2);font-size:15px;line-height:1.45;font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;font-size:13px;color:#e6f6f8}
+.legend span{display:flex;align-items:center;gap:7px;white-space:nowrap;font-weight:700}.dot{width:11px;height:11px;border-radius:50%;box-shadow:0 0 14px currentColor}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}.quick-links{display:flex;flex-wrap:wrap;gap:8px}.quick-links a{display:inline-flex;align-items:center;gap:6px;padding:9px 12px;border-radius:999px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);color:#f4fbff;text-decoration:none;font-size:13px;font-weight:800;box-shadow:inset 0 1px rgba(255,255,255,.08);transition:.2s ease}.quick-links a:hover{background:rgba(70,214,230,.16);border-color:rgba(70,214,230,.5);transform:translateY(-1px)}
+.map-wrap{position:relative;padding:10px;background:#05080b;border-bottom:1px solid var(--line)}
+#map{height:72vh;min-height:620px;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow)}
+.map-wrap:after{content:"";position:absolute;inset:10px;border-radius:20px;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(116,240,255,.08),inset 0 -80px 120px rgba(0,0,0,.25)}
+.map-filter-panel{position:absolute;top:24px;left:24px;z-index:5;display:flex;flex-wrap:wrap;gap:8px;max-width:min(68vw,920px);padding:10px;border-radius:16px;background:rgba(5,9,13,.74);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);align-items:center;box-shadow:0 15px 45px rgba(0,0,0,.34)}
+.map-filter-panel span{font-size:12px;color:#d8eef2;margin-right:4px;font-weight:900;text-transform:uppercase;letter-spacing:.07em}.map-filter-btn{padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.055);color:#f4fbff;font-size:13px;cursor:pointer;font-weight:800;transition:.2s ease}.map-filter-btn.active{background:linear-gradient(135deg,var(--cyan),#2d8da4);color:#031014;border-color:rgba(116,240,255,.65);box-shadow:0 0 20px rgba(70,214,230,.28)}.map-filter-btn:not(.active){opacity:.76}.map-filter-btn:hover{transform:translateY(-1px);opacity:1}
+.map-sidecard{position:absolute;right:24px;top:90px;z-index:4;width:min(310px,calc(100vw - 48px));background:rgba(5,9,13,.75);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(16px);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.map-sidecard h2{font-size:16px;margin:0 0 10px;color:#fff;letter-spacing:-.01em}.route-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}.route-list li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;color:#dcecef;font-size:13px;line-height:1.25}.route-list b{display:block;color:#80f4ff;font-size:13px}.route-list i{width:20px;height:20px;border-radius:999px;background:linear-gradient(135deg,var(--cyan),#2d8da4);display:grid;place-items:center;color:#041014;font-style:normal;font-size:11px;font-weight:900;box-shadow:0 0 16px rgba(70,214,230,.35)}
+.trip-strip{max-width:1500px;margin:14px auto 0;padding:0 16px;display:grid;grid-template-columns:repeat(9,minmax(120px,1fr));gap:1px}.trip-strip a{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08);color:#dff7fb;text-decoration:none;padding:12px 10px;min-height:64px;font-size:13px;display:flex;flex-direction:column;justify-content:center}.trip-strip a:first-child{border-radius:14px 0 0 14px}.trip-strip a:last-child{border-radius:0 14px 14px 0}.trip-strip b{color:#fff}.trip-strip span{color:var(--cyan-2);font-size:12px;margin-bottom:2px}
+#fallback{display:none;padding:16px;background:#241f1f;border-top:1px solid #4a3c3c;color:#ffd9d9;font-size:14px}
+main{max-width:1500px;margin:0 auto;padding:20px 18px 32px}.plan,.day{background:linear-gradient(180deg,rgba(17,24,31,.86),rgba(11,16,22,.86));border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:22px;margin-bottom:18px;scroll-margin-top:190px;box-shadow:0 14px 45px rgba(0,0,0,.24);backdrop-filter:blur(10px)}.day h2,.plan h2{margin:0 0 10px;font-size:clamp(21px,2vw,29px);letter-spacing:-.035em}.meta{color:#8eeaf5;font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px;font-weight:900}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:17px;box-shadow:inset 0 1px rgba(255,255,255,.06)}.card h3{margin:0 0 10px;font-size:16px;color:#fff;letter-spacing:-.01em}.card ul{margin:0;padding-left:18px}.card li{margin-bottom:7px;color:#d6e3e7;line-height:1.48}.links a,.route-links a{display:inline-flex;align-items:center;margin:8px 7px 0 0;padding:9px 11px;border-radius:999px;background:rgba(70,214,230,.12);border:1px solid rgba(70,214,230,.24);color:#dffbff;text-decoration:none;font-size:13px;font-weight:800}.links a:hover,.route-links a:hover{background:rgba(70,214,230,.22)}
+table{width:100%;border-collapse:separate;border-spacing:0;margin-top:14px;font-size:14px;overflow:hidden;border-radius:16px;border:1px solid rgba(255,255,255,.1)}th,td{border-bottom:1px solid rgba(255,255,255,.09);padding:12px;vertical-align:top;text-align:left}th{background:rgba(255,255,255,.075);color:#fff}td{color:#dce7ea}tbody tr:last-child td{border-bottom:0}.note{font-size:13px;color:#b9c8ce;margin-top:10px}.mapboxgl-popup-content{color:#eefbff !important;background:rgba(7,11,15,.94) !important;border:1px solid rgba(116,240,255,.28);border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.45;box-shadow:0 18px 50px rgba(0,0,0,.45);backdrop-filter:blur(12px)}.mapboxgl-popup-content strong{color:#81f5ff !important}.mapboxgl-popup-tip{border-top-color:rgba(7,11,15,.94) !important;border-bottom-color:rgba(7,11,15,.94) !important}.popup-link{display:inline-block;margin-top:7px;font-size:12px;color:#89eefa;text-decoration:none;font-weight:900}.mapboxgl-ctrl-logo,.mapboxgl-ctrl-attrib{filter:invert(1) hue-rotate(160deg);opacity:.8}
+@media (max-width:1200px){.grid{grid-template-columns:1fr 1fr}.trip-strip{grid-template-columns:repeat(3,1fr)}.map-sidecard{display:none}.map-filter-panel{max-width:calc(100vw - 48px)}}
+@media (max-width:760px){header{padding:15px 14px}#map{height:62vh;min-height:430px;border-radius:16px}.map-wrap{padding:7px}.map-filter-panel{position:static;margin:8px 0 0;max-width:none;border-radius:16px}.trip-strip{grid-template-columns:1fr 1fr;padding:0 8px}.trip-strip a{border-radius:12px !important}.grid{grid-template-columns:1fr}main{padding:14px 10px 26px}.plan,.day{padding:16px;border-radius:18px}table{font-size:13px;display:block;overflow-x:auto;white-space:nowrap}.day h2,.plan h2{font-size:22px}}
+
 </style>
 </head>
 <body>
 <header>
   <h1>Route 66 Music Trip · Mapbox, Tagesguide und Fahrplan</h1>
-  <p>From Chicago to Austin · CSV-Ziele gefiltert entlang der Route</p>
+  <p>From Chicago to Austin · Route 66 Music Trip · CSV-Ziele entlang der Route</p>
   <div class="legend">
     <span><i class="dot" style="background:#4f98a3"></i>Highlights</span>
     <span><i class="dot" style="background:#d19900"></i>Musik &amp; Gear</span>
@@ -104,7 +97,29 @@ td{color:#ddd}
     <button class="map-filter-btn" data-map-filter="top-must">Top Highlights</button>
     <button class="map-filter-btn" data-map-filter="top-food">Top Food</button>
   </div>
+  <aside class="map-sidecard" aria-label="Route Übersicht">
+    <h2>Chicago → Austin</h2>
+    <ul class="route-list">
+      <li><i>1</i><span><b>Chicago, IL</b>Blues, Skyline & Route 66 Start</span></li>
+      <li><i>2</i><span><b>St. Louis, MO</b>Gateway Arch & Live Music</span></li>
+      <li><i>3</i><span><b>Tulsa, OK</b>Music History & Mother Road</span></li>
+      <li><i>4</i><span><b>Lawton / Wichita Falls</b>Übergangsetappe & Natur</span></li>
+      <li><i>5</i><span><b>Austin, TX</b>Live Music Capital</span></li>
+    </ul>
+  </aside>
 </div>
+
+<nav class="trip-strip" aria-label="Reisetage">
+  <a href="#day-chicago-arrival"><span>14.05.</span><b>Chicago</b>Ankunft</a>
+  <a href="#day-chicago"><span>15.05.</span><b>Chicago</b>Stay</a>
+  <a href="#day-stl-drive"><span>16.05.</span><b>St. Louis</b>Drive</a>
+  <a href="#day-stl"><span>17.05.</span><b>St. Louis</b>Stay</a>
+  <a href="#day-tulsa-drive"><span>18.05.</span><b>Tulsa</b>Drive</a>
+  <a href="#day-tulsa"><span>19.05.</span><b>Tulsa</b>Stay</a>
+  <a href="#day-lawton"><span>20.05.</span><b>Falls / Lawton</b>Drive</a>
+  <a href="#day-austin-drive"><span>21.05.</span><b>Austin</b>Drive</a>
+  <a href="#day-austin"><span>22.05.</span><b>Austin</b>Stay</a>
+</nav>
 
 <div id="fallback">Die Karte konnte nicht geladen werden. Bitte die Datei direkt im Browser öffnen.</div>
 
@@ -2009,7 +2024,7 @@ function startMap(){
 
     const map = new mapboxgl.Map({
       container:'map',
-      style:'mapbox://styles/mapbox/streets-v12',
+      style:'mapbox://styles/mapbox/dark-v11',
       center:[-95.6,36.2],
       zoom:4
     });
@@ -2132,8 +2147,8 @@ function startMap(){
             'hotel', colors.hotel,
             '#4f98a3'
           ],
-          'circle-stroke-width': 1.5,
-          'circle-stroke-color': '#111',
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#05080b',
           'circle-opacity': 0.96
         }
       });
@@ -2186,7 +2201,7 @@ function startMap(){
             type:'line',
             source:'route',
             layout:{'line-cap':'round','line-join':'round'},
-            paint:{'line-color':'#0f3638','line-width':7,'line-opacity':0.55}
+            paint:{'line-color':'#021114','line-width':10,'line-opacity':0.8}
           }, 'places-layer');
         }
         if (!map.getLayer('route-line')) {
@@ -2195,7 +2210,7 @@ function startMap(){
             type:'line',
             source:'route',
             layout:{'line-cap':'round','line-join':'round'},
-            paint:{'line-color':'#4f98a3','line-width':4}
+            paint:{'line-color':'#46d6e6','line-width':5,'line-opacity':0.95}
           }, 'places-layer');
         }
       }
