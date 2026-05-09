@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Interaktive Karte v24</title>
+<title>Route 66 Music Trip · Mobile Tagesansicht v26</title>
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#071018">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <style>
 :root{
   --bg:#070b0f;--panel:#111820;--panel2:#17232d;--line:rgba(148,185,195,.22);
@@ -139,6 +141,53 @@ header{padding:14px 18px 12px}.app-subtitle{margin:6px 0 0;color:#74f0ff;font-we
 .today-card{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;background:linear-gradient(135deg,rgba(70,214,230,.12),rgba(26,115,232,.16));border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:16px;box-shadow:var(--shadow)}.today-card h2{margin:0;font-size:clamp(24px,3vw,38px);letter-spacing:-.04em}.today-card p{margin:7px 0 0;color:#c9d8dd}.today-facts{display:grid;gap:8px}.fact{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.1);border-radius:15px;padding:10px}.fact b{display:block;color:#8ef4ff;font-size:12px;text-transform:uppercase;letter-spacing:.08em}.fact span{display:block;margin-top:3px;color:#fff;font-weight:800}.quick-sections{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}.quick-card{background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px}.quick-card h3{margin:0 0 10px;color:#8ef4ff}.quick-card ul{margin:0;padding-left:18px;color:#e6f2f5;line-height:1.45}.quick-card li{margin:5px 0}.map-wrap{padding-top:12px}#map{height:52vh;min-height:380px}.map-layer-panel{top:14px}.section details{border-radius:18px;overflow:hidden}.section summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}.section summary::-webkit-details-marker{display:none}.section summary:after{content:'Aufklappen';font-size:12px;color:#8ef4ff;font-weight:900}.section details[open] summary:after{content:'Minimieren'}.section.collapsible{padding:0}.section.collapsible details{padding:18px 20px}.section.open-default{padding:20px}.day-note{color:#a8bac2;margin:10px 0 0}.empty-hint{color:#a8bac2;background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.13);border-radius:14px;padding:12px}.place-row a.secondary{background:rgba(255,255,255,.08)}
 @media(max-width:760px){header{position:relative}.day-hero{position:relative;padding:12px 10px}.today-card{grid-template-columns:1fr;border-radius:18px;padding:13px}.today-facts{grid-template-columns:1fr 1fr}.quick-sections{grid-template-columns:1fr;gap:10px}.map-layer-panel{position:static}.map-wrap{padding:10px}#map{height:48vh;min-height:330px}.place-row{grid-template-columns:1fr}.place-row a{width:max-content}.section.open-default{padding:14px}.section.collapsible details{padding:15px}}
 
+
+/* --- Mobile-/iPad-Optimierung v26 --- */
+:root{--safe-bottom:env(safe-area-inset-bottom,0px);--safe-top:env(safe-area-inset-top,0px)}
+body{padding-bottom:calc(76px + var(--safe-bottom))}
+a,button,summary{touch-action:manipulation;-webkit-tap-highlight-color:rgba(70,214,230,.18)}
+button,a.button,.place-row a,.nav a,.filters button{min-height:42px}
+header{padding-top:calc(12px + var(--safe-top));}
+header h1{font-size:clamp(22px,4vw,34px)}
+.app-subtitle{font-size:14px;line-height:1.35}
+.nav{scrollbar-width:none}.nav::-webkit-scrollbar,.day-tabs::-webkit-scrollbar,.map-filters::-webkit-scrollbar{display:none}
+.day-hero{top:0;box-shadow:0 10px 32px rgba(0,0,0,.22)}
+.day-tabs{scroll-snap-type:x proximity;overscroll-behavior-x:contain}
+.day-tabs button{scroll-snap-align:start;min-height:44px;font-size:13px;padding-inline:14px}
+.quick-card{min-height:100%;}
+.quick-card h3{font-size:17px;display:flex;align-items:center;gap:8px}
+.quick-card ul{list-style:none;padding:0}.quick-card li{position:relative;margin:8px 0;padding:10px 11px 10px 30px;border-radius:13px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+.quick-card li:before{content:'•';position:absolute;left:12px;color:#8ef4ff;font-weight:900}.quick-card li:first-child{background:rgba(70,214,230,.12);border-color:rgba(70,214,230,.24)}
+.mobile-quick-jump{display:none}
+.map-wrap{border-radius:0 0 24px 24px}.status{max-width:calc(100% - 30px);left:15px;bottom:15px}
+.place-row{min-height:66px}.place-row strong{font-size:15px;line-height:1.25}.place-row span{line-height:1.35}.place-row a{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;font-size:13px}
+.section h2{line-height:1.1}.section summary{min-height:64px}.section summary:after{padding:7px 10px;border-radius:999px;background:rgba(70,214,230,.10)}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;grid-template-columns:repeat(5,1fr);gap:4px;padding:8px 8px calc(8px + var(--safe-bottom));background:rgba(5,9,13,.92);border-top:1px solid rgba(255,255,255,.12);backdrop-filter:blur(18px)}
+.bottom-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;border-radius:16px;color:#dff8ff;text-decoration:none;font-size:11px;font-weight:900;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+.bottom-nav a span{font-size:18px;line-height:1}.bottom-nav a:active{transform:translateY(1px);background:rgba(70,214,230,.14)}
+
+@media (min-width:761px) and (max-width:1180px){
+  main{padding-inline:18px}.quick-sections{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.today-card{grid-template-columns:1fr}.today-facts{grid-template-columns:repeat(3,1fr)}
+  #map{height:46vh;min-height:390px}.list{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section.open-default{padding:18px}.section.collapsible details{padding:18px}
+}
+@media(max-width:760px){
+  html{scroll-padding-top:14px} body{font-size:15px;background:var(--bg);padding-bottom:calc(82px + var(--safe-bottom))}
+  header{position:relative;padding:12px 12px 8px} header h1{font-size:24px}.app-subtitle{font-size:13px}.nav{display:none}
+  .day-hero{position:relative;padding:10px 10px 12px;border-bottom-color:rgba(255,255,255,.08)}
+  .day-tabs{margin-inline:-10px;padding:0 10px 10px}.day-tabs button{font-size:12px;min-height:46px;padding:10px 13px;border-radius:16px}.day-tabs button.active{box-shadow:0 8px 20px rgba(26,115,232,.25)}
+  .today-card{gap:10px;padding:14px;border-radius:20px}.today-card h2{font-size:24px}.today-card p{font-size:14px}.today-facts{grid-template-columns:1fr 1fr;gap:8px}.fact{padding:10px;border-radius:14px}.fact b{font-size:10px}.fact span{font-size:13px;line-height:1.25}
+  .quick-sections{grid-template-columns:1fr;gap:10px;margin-top:10px}.quick-card{padding:13px;border-radius:17px}.quick-card h3{font-size:16px;margin-bottom:8px}.quick-card li{font-size:14px;margin:7px 0;padding:9px 10px 9px 28px}
+  .mobile-quick-jump{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.mobile-quick-jump a{min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;text-decoration:none;font-size:12px;font-weight:900}
+  .map-wrap{padding:8px 8px 10px;border-radius:0}#map{height:38vh;min-height:285px;border-radius:18px}.map-layer-panel{padding:8px;border-radius:16px;margin-bottom:7px}.map-layer-panel span{display:none}.map-filters{gap:7px}.map-filters button{min-height:40px;padding:9px 11px;border-radius:14px;font-size:12px}
+  main{padding:12px 9px 24px}.section{margin-bottom:12px}.section.open-default{padding:14px;border-radius:18px}.section.collapsible details{padding:13px 14px}.section h2{font-size:22px;margin-bottom:8px}.meta{font-size:10px;margin-bottom:5px}.note{font-size:14px}
+  .list,.grid{grid-template-columns:1fr;gap:9px}.place-row{grid-template-columns:1fr;gap:9px;padding:12px;border-radius:16px;background:rgba(255,255,255,.055)}.place-row a{width:100%;min-height:44px}.place-row select{max-width:100%;width:100%;min-height:40px}.card{padding:14px;border-radius:17px}.card h3{font-size:18px}.card p{font-size:14px}.button{width:100%;min-height:46px}
+  .city-block h3{font-size:18px;margin:6px 0 8px}.status{font-size:12px;padding:8px 10px;border-radius:12px}
+  .bottom-nav{display:grid}
+}
+@media(max-width:380px){.today-facts{grid-template-columns:1fr}.mobile-quick-jump{grid-template-columns:1fr 1fr}.day-tabs button{font-size:11px;padding-inline:11px}}
+@media(orientation:landscape) and (max-height:520px){#map{height:70vh}.quick-sections{grid-template-columns:repeat(3,1fr)}.bottom-nav{display:none}body{padding-bottom:12px}}
+
 </style>
 </head>
 <body>
@@ -158,6 +207,11 @@ header{padding:14px 18px 12px}.app-subtitle{margin:6px 0 0;color:#74f0ff;font-we
     <article class="quick-card"><h3>Pflichttermine</h3><div id="todayMandatory"></div></article>
     <article class="quick-card"><h3>Top Highlights</h3><div id="todayHighlights"></div></article>
     <article class="quick-card"><h3>MusicBars</h3><div id="todayMusic"></div></article>
+  </div>
+  <div class="mobile-quick-jump">
+    <a href="#pflichttermine">Fixes</a>
+    <a href="#highlights">Highlights</a>
+    <a href="#musicbars">MusicBars</a>
   </div>
 </section>
 
@@ -566,6 +620,14 @@ async function initMap() {
 }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY&libraries=places&callback=initMap"></script>
+<nav class="bottom-nav" aria-label="Schnellnavigation">
+  <a href="#tag"><span>☀️</span>Tag</a>
+  <a href="#karte"><span>🗺️</span>Karte</a>
+  <a href="#pflichttermine"><span>📌</span>Fixes</a>
+  <a href="#highlights"><span>⭐</span>Top</a>
+  <a href="#musicbars"><span>🎸</span>Music</a>
+</nav>
+
 <script>
 document.addEventListener("click", function(e) {
   const a = e.target.closest('a[href^="#"]');
