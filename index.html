@@ -218,6 +218,31 @@ font-size:11px;font-weight:900;letter-spacing:.04em
 #map{height:32vh!important}
 }
 
+
+/* --- v28 Fahrplan & Route Cleanup --- */
+.fahrplan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+.leg-card{
+  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;padding:15px;
+  border-left:4px solid #46d6e6;
+}
+.leg-card h3{margin:0 0 8px;font-size:18px;line-height:1.2}
+.leg-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.leg-pill{background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:9px}
+.leg-pill b{display:block;color:#8ef4ff;font-size:10px;text-transform:uppercase;letter-spacing:.08em}
+.leg-pill span{display:block;margin-top:3px;color:#fff;font-weight:800;font-size:13px}
+.leg-stops{margin:10px 0 0;padding-left:18px;color:#dce7ea;line-height:1.45}
+.leg-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.leg-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 12px;border-radius:999px;background:#1a73e8;color:#fff;text-decoration:none;font-size:12px;font-weight:900}
+.priority-must{background:rgba(255,180,0,.22)!important;color:#ffe08a!important}
+@media(max-width:760px){
+  .fahrplan-grid{grid-template-columns:1fr;gap:10px}
+  .leg-card{padding:13px;border-radius:17px}
+  .leg-meta{grid-template-columns:1fr 1fr}
+  .leg-actions a{width:100%;border-radius:14px}
+}
+
 </style>
 </head>
 <body>
@@ -225,7 +250,7 @@ font-size:11px;font-weight:900;letter-spacing:.04em
   <h1>Route 66 Music Trip</h1>
   <p class="app-subtitle">Tagesansicht für unterwegs · Pflichttermine · Highlights · MusicBars</p>
   <nav class="nav">
-    <a href="#tag">Heute</a><a href="#karte">Karte</a><a href="#pflichttermine">Pflichttermine</a><a href="#highlights">Top Highlights</a><a href="#musicbars">MusicBars</a><a href="#hotels">Hotels</a><a href="#food">Food</a><a href="#distilleries">Distilleries</a><a href="#route66">Route66 Stops</a><a href="#sonstiges">Sonstiges</a>
+    <a href="#tag">Heute</a><a href="#karte">Karte</a><a href="#fahrplan">Fahrplan</a><a href="#fahrplan">Fahrplan</a><a href="#pflichttermine">Pflichttermine</a><a href="#highlights">Top Highlights</a><a href="#musicbars">MusicBars</a><a href="#hotels">Hotels</a><a href="#food">Food</a><a href="#distilleries">Distilleries</a><a href="#route66">Route66 Stops</a><a href="#sonstiges">Sonstiges</a>
   </nav>
   <div class="editor-tools"><button onclick="resetCategoryEdits()">Kategorien zurücksetzen</button><button onclick="clearResolvedCache()">Orte neu auflösen</button></div>
 </header>
@@ -269,6 +294,14 @@ font-size:11px;font-weight:900;letter-spacing:.04em
 </div>
 
 <main>
+
+<section class="section open-default fahrplan-section" id="fahrplan">
+  <div class="meta">Fahrplan</div>
+  <h2>Etappen, Abfahrten & Ankünfte</h2>
+  <p class="note">Plan für eine entspannte Route mit realistischen Pausen. Zeiten sind Empfehlungen und können je nach Verkehr, Fotostopps und Essen angepasst werden.</p>
+  <div class="fahrplan-grid" id="fahrplanGrid"></div>
+</section>
+
   <section class="section open-default" id="pflichttermine"><div class="meta">Pflichttermine</div><h2>Fixe Termine & Tagesplan</h2><div id="mandatoryList"></div></section>
   <section class="section open-default" id="highlights"><div class="meta">Top Highlights</div><h2>Highlights für den gewählten Tag</h2><div id="highlightList"></div></section>
   <section class="section open-default" id="musicbars"><div class="meta">MusicBars</div><h2>MusicBars für den gewählten Tag</h2><div id="musicList"></div></section>
@@ -685,59 +718,155 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
+
+
 <script>
-function toggleMap(){
-  document.querySelector('.map-wrap').classList.toggle('map-collapsed');
+function toggleMap(){document.querySelector('.map-wrap')?.classList.toggle('map-collapsed');}
+
+const routePlanV28 = [
+  {
+    date:"14.05.2026", title:"Ankunft Chicago",
+    route:"Flughafen Chicago → citizenM Chicago Downtown",
+    depart:"nach Landung 12:55", arrive:"ca. 14:30–15:30", distance:"ca. 30 km",
+    focus:"Ankommen, Hotel, Riverwalk / Millennium Park locker",
+    stops:["Hotel Check-in","Chicago Riverwalk","Millennium Park"],
+    maps:"https://www.google.com/maps/dir/?api=1&destination=citizenM+Chicago+Downtown"
+  },
+  {
+    date:"15.05.2026", title:"Chicago Stadttag",
+    route:"Chicago Downtown · Blues · Music Stores",
+    depart:"ca. 09:30", arrive:"Abend offen", distance:"lokal",
+    focus:"Blues, Musik, Stadtspaziergang",
+    stops:["Millennium Park","Chicago Music Exchange","Buddy Guy's Legends oder Kingston Mines"],
+    maps:"https://www.google.com/maps/search/?api=1&query=Chicago+Music+Exchange"
+  },
+  {
+    date:"16.05.2026", title:"Chicago → St. Louis",
+    route:"Route 66 Start · Illinois Classics",
+    depart:"ca. 08:00", arrive:"ca. 18:30–19:30", distance:"ca. 480 km",
+    focus:"Erster großer Route-66-Tag mit 3–4 guten Stopps",
+    stops:["Route 66 Begin Sign","Gemini Giant / Wilmington","Pontiac Route 66 Museum","Cozy Dog Drive-In"],
+    maps:"https://www.google.com/maps/dir/?api=1&origin=Chicago&destination=St.+Louis&waypoints=Pontiac+Route+66+Museum%7CCozy+Dog+Drive+In"
+  },
+  {
+    date:"17.05.2026", title:"St. Louis Stadttag",
+    route:"Gateway Arch · Soulard · Live-Musik",
+    depart:"ca. 09:30", arrive:"Abend offen", distance:"lokal",
+    focus:"Gateway Arch, Stadt, Blues/Jazz am Abend",
+    stops:["Gateway Arch","Citygarden","Soulard","Broadway Oyster Bar oder BB's Jazz Blues and Soups"],
+    maps:"https://www.google.com/maps/search/?api=1&query=Gateway+Arch+St.+Louis"
+  },
+  {
+    date:"18.05.2026", title:"St. Louis → Tulsa",
+    route:"Missouri Route 66 · Blue Whale · Tulsa",
+    depart:"ca. 08:00", arrive:"ca. 19:30–20:30", distance:"ca. 630 km",
+    focus:"Lange Etappe, nur die besten Stopps einplanen",
+    stops:["Chain of Rocks Bridge","Meramec Caverns optional","Route 66 Mural City Cuba","Blue Whale of Catoosa"],
+    maps:"https://www.google.com/maps/dir/?api=1&origin=St.+Louis&destination=Tulsa&waypoints=Chain+of+Rocks+Bridge%7CBlue+Whale+of+Catoosa"
+  },
+  {
+    date:"19.05.2026", title:"Tulsa Stadttag",
+    route:"Tulsa · Route 66 · Cain's Ballroom",
+    depart:"ca. 10:00", arrive:"Abend offen", distance:"lokal",
+    focus:"Route-66-Historie und Musik",
+    stops:["Cyrus Avery Centennial Plaza","Buck Atom's Cosmic Curios","Cain's Ballroom","Mercury Lounge"],
+    maps:"https://www.google.com/maps/search/?api=1&query=Cain's+Ballroom+Tulsa"
+  },
+  {
+    date:"20.05.2026", title:"Tulsa → Lawton",
+    route:"Oklahoma City / Arcadia optional · Lawton",
+    depart:"ca. 09:00", arrive:"ca. 15:00–16:00", distance:"ca. 340–430 km",
+    focus:"Übergangstag, nicht überladen",
+    stops:["Pops 66 optional","Arcadia Round Barn optional","Apache Casino Hotel","Medicine Park bei Zeit"],
+    maps:"https://www.google.com/maps/dir/?api=1&origin=Tulsa&destination=Apache+Casino+Hotel+Lawton"
+  },
+  {
+    date:"21.05.2026", title:"Lawton → Austin",
+    route:"Texas Transfer · langer Fahrtag",
+    depart:"ca. 07:30", arrive:"ca. 18:30–20:00", distance:"ca. 900+ km",
+    focus:"Fahrtag mit wenigen Stopps, abends Austin locker",
+    stops:["Früh losfahren","Pausen alle 2–2,5 Stunden","citizenM Austin Downtown","Continental Club / Antone's optional"],
+    maps:"https://www.google.com/maps/dir/?api=1&origin=Lawton&destination=citizenM+Austin+Downtown"
+  },
+  {
+    date:"22.05.2026", title:"Austin",
+    route:"Austin · South Congress · Musik",
+    depart:"flexibel", arrive:"flexibel", distance:"lokal",
+    focus:"Musik, BBQ, South Congress",
+    stops:["South Congress","Barton Springs Pool","The Continental Club","Antone's oder The White Horse"],
+    maps:"https://www.google.com/maps/search/?api=1&query=South+Congress+Austin"
+  }
+];
+
+const essentialHighlightsV28 = [
+  {name:"Route 66 Begin Sign", why:"Symbolischer Start der Reise", url:"https://www.google.com/maps/search/?api=1&query=Route+66+Begin+Sign+Chicago"},
+  {name:"Pontiac Route 66 Museum", why:"Einer der besten Route-66-Stopps in Illinois", url:"https://www.google.com/maps/search/?api=1&query=Pontiac+Route+66+Museum"},
+  {name:"Gateway Arch", why:"Unverzichtbares St.-Louis-Wahrzeichen", url:"https://www.google.com/maps/search/?api=1&query=Gateway+Arch+St.+Louis"},
+  {name:"Chain of Rocks Bridge", why:"Historischer Route-66-Klassiker bei St. Louis", url:"https://www.google.com/maps/search/?api=1&query=Chain+of+Rocks+Bridge"},
+  {name:"Blue Whale of Catoosa", why:"Ikonischer Route-66-Fotostopp vor Tulsa", url:"https://www.google.com/maps/search/?api=1&query=Blue+Whale+of+Catoosa"},
+  {name:"Cain's Ballroom", why:"Legendäre Musikgeschichte in Tulsa", url:"https://www.google.com/maps/search/?api=1&query=Cain's+Ballroom+Tulsa"},
+  {name:"Buck Atom's Cosmic Curios", why:"Starker Route-66-Neon-/Foto-Stopp in Tulsa", url:"https://www.google.com/maps/search/?api=1&query=Buck+Atom's+Cosmic+Curios+on+66"},
+  {name:"South Congress Avenue", why:"Austin-Klassiker für Shops, Food und Atmosphäre", url:"https://www.google.com/maps/search/?api=1&query=South+Congress+Austin"},
+  {name:"The Continental Club", why:"Pflichtstopp für Live-Musik in Austin", url:"https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin"},
+  {name:"Barton Springs Pool", why:"Austin-Highlight zum Runterkommen", url:"https://www.google.com/maps/search/?api=1&query=Barton+Springs+Pool"}
+];
+
+const essentialMusicBarsV28 = [
+  {name:"Buddy Guy's Legends", city:"Chicago", url:"https://www.google.com/maps/search/?api=1&query=Buddy+Guy's+Legends+Chicago"},
+  {name:"Kingston Mines", city:"Chicago", url:"https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago"},
+  {name:"Blue Chicago", city:"Chicago", url:"https://www.google.com/maps/search/?api=1&query=Blue+Chicago"},
+  {name:"Broadway Oyster Bar", city:"St. Louis", url:"https://www.google.com/maps/search/?api=1&query=Broadway+Oyster+Bar+St.+Louis"},
+  {name:"BB's Jazz Blues and Soups", city:"St. Louis", url:"https://www.google.com/maps/search/?api=1&query=BB's+Jazz+Blues+and+Soups"},
+  {name:"Cain's Ballroom", city:"Tulsa", url:"https://www.google.com/maps/search/?api=1&query=Cain's+Ballroom+Tulsa"},
+  {name:"Mercury Lounge", city:"Tulsa", url:"https://www.google.com/maps/search/?api=1&query=Mercury+Lounge+Tulsa"},
+  {name:"The Continental Club", city:"Austin", url:"https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin"},
+  {name:"Antone's", city:"Austin", url:"https://www.google.com/maps/search/?api=1&query=Antone's+Austin"},
+  {name:"The White Horse", city:"Austin", url:"https://www.google.com/maps/search/?api=1&query=The+White+Horse+Austin"}
+];
+
+function renderFahrplanV28(){
+  const grid = document.getElementById('fahrplanGrid');
+  if(!grid) return;
+  grid.innerHTML = routePlanV28.map(leg => `
+    <article class="leg-card">
+      <div class="priority-badge priority-must">${leg.date}</div>
+      <h3>${leg.title}</h3>
+      <p class="note"><strong>${leg.route}</strong><br>${leg.focus}</p>
+      <div class="leg-meta">
+        <div class="leg-pill"><b>Abfahrt</b><span>${leg.depart}</span></div>
+        <div class="leg-pill"><b>Ankunft</b><span>${leg.arrive}</span></div>
+        <div class="leg-pill"><b>Strecke</b><span>${leg.distance}</span></div>
+        <div class="leg-pill"><b>Typ</b><span>${leg.distance === "lokal" ? "Stadttag" : "Fahrtag"}</span></div>
+      </div>
+      <ul class="leg-stops">${leg.stops.map(s => `<li>${s}</li>`).join('')}</ul>
+      <div class="leg-actions"><a href="${leg.maps}" target="_blank">Route in Google Maps</a></div>
+    </article>
+  `).join('');
 }
 
-const topHighlights = [
-  {name:"Gateway Arch", url:"https://maps.google.com/?q=Gateway+Arch"},
-  {name:"Cadillac Ranch", url:"https://maps.google.com/?q=Cadillac+Ranch"},
-  {name:"Blue Whale of Catoosa", url:"https://maps.google.com/?q=Blue+Whale+of+Catoosa"},
-  {name:"Meramec Caverns", url:"https://maps.google.com/?q=Meramec+Caverns"},
-  {name:"Pontiac Route 66 Museum", url:"https://maps.google.com/?q=Pontiac+Route+66+Museum"},
-  {name:"Chain of Rocks Bridge", url:"https://maps.google.com/?q=Chain+of+Rocks+Bridge"},
-  {name:"Pops 66", url:"https://maps.google.com/?q=Pops+66+Arcadia"},
-  {name:"Barton Springs Pool", url:"https://maps.google.com/?q=Barton+Springs+Pool"},
-  {name:"South Congress Austin", url:"https://maps.google.com/?q=South+Congress+Austin"},
-  {name:"Wonders of Wildlife Museum", url:"https://maps.google.com/?q=Wonders+of+Wildlife+Museum"}
-];
-
-const topMusicBars = [
-  {name:"Buddy Guy's Legends", url:"https://maps.google.com/?q=Buddy+Guy's+Legends"},
-  {name:"Kingston Mines", url:"https://maps.google.com/?q=Kingston+Mines"},
-  {name:"Blue Chicago", url:"https://maps.google.com/?q=Blue+Chicago"},
-  {name:"Cain's Ballroom", url:"https://maps.google.com/?q=Cain's+Ballroom"},
-  {name:"Mercury Lounge Tulsa", url:"https://maps.google.com/?q=Mercury+Lounge+Tulsa"},
-  {name:"The Continental Club", url:"https://maps.google.com/?q=The+Continental+Club+Austin"},
-  {name:"Antone's Austin", url:"https://maps.google.com/?q=Antone's+Austin"},
-  {name:"The White Horse", url:"https://maps.google.com/?q=The+White+Horse+Austin"},
-  {name:"Gruene Hall", url:"https://maps.google.com/?q=Gruene+Hall"},
-  {name:"Broadway Oyster Bar", url:"https://maps.google.com/?q=Broadway+Oyster+Bar"}
-];
-
-function renderTopLists(){
+function renderEssentialsV28(){
   const hl = document.getElementById('highlightList');
-  const music = document.getElementById('musicList');
-
   if(hl){
-    hl.innerHTML = topHighlights.map(p => `
+    hl.innerHTML = essentialHighlightsV28.map(p => `
       <div class="place-row category-highlight">
         <div>
-          <div class="priority-badge priority-top">TOP HIGHLIGHT</div>
+          <div class="priority-badge priority-must">MUST SEE</div>
           <strong>${p.name}</strong>
+          <span>${p.why}</span>
         </div>
         <a href="${p.url}" target="_blank">Google Maps</a>
       </div>
     `).join('');
   }
-
+  const music = document.getElementById('musicList');
   if(music){
-    music.innerHTML = topMusicBars.map(p => `
+    music.innerHTML = essentialMusicBarsV28.map(p => `
       <div class="place-row category-music">
         <div>
           <div class="priority-badge priority-top">TOP MUSICBAR</div>
           <strong>${p.name}</strong>
+          <span>${p.city}</span>
         </div>
         <a href="${p.url}" target="_blank">Google Maps</a>
       </div>
@@ -745,7 +874,25 @@ function renderTopLists(){
   }
 }
 
-window.addEventListener('load', renderTopLists);
+function removeOffRouteNoiseV28(){
+  const offRouteWords = [
+    "Los Angeles","San Francisco","San Diego","Sacramento","Las Vegas","Nevada","California","Kalifornien",
+    "Phoenix","Tucson","Arizona","Albuquerque","New Mexico","Salt Lake City","Denver","Utah","Colorado"
+  ];
+  if(Array.isArray(window.ALL_PLACES)){
+    window.ALL_PLACES = window.ALL_PLACES.filter(p => !offRouteWords.some(w => JSON.stringify(p).toLowerCase().includes(w.toLowerCase())));
+  }
+  if(Array.isArray(window.places)){
+    window.places = window.places.filter(p => !offRouteWords.some(w => JSON.stringify(p).toLowerCase().includes(w.toLowerCase())));
+  }
+}
+
+window.addEventListener('load', () => {
+  renderFahrplanV28();
+  renderEssentialsV28();
+  removeOffRouteNoiseV28();
+  setTimeout(removeOffRouteNoiseV28, 800);
+});
 </script>
 
 </body>
