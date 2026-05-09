@@ -188,6 +188,36 @@ header h1{font-size:clamp(22px,4vw,34px)}
 @media(max-width:380px){.today-facts{grid-template-columns:1fr}.mobile-quick-jump{grid-template-columns:1fr 1fr}.day-tabs button{font-size:11px;padding-inline:11px}}
 @media(orientation:landscape) and (max-height:520px){#map{height:70vh}.quick-sections{grid-template-columns:repeat(3,1fr)}.bottom-nav{display:none}body{padding-bottom:12px}}
 
+
+/* --- v27 compact travel assistant --- */
+header{display:none!important}
+.day-hero{position:sticky;top:0;z-index:30;padding-top:14px}
+.today-card{padding:14px}
+.map-toggle-wrap{display:flex;gap:10px;margin-top:10px}
+.map-toggle-btn{
+display:flex;align-items:center;justify-content:center;
+min-height:46px;padding:10px 14px;border-radius:16px;
+background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+color:#fff;font-weight:900;text-decoration:none;cursor:pointer
+}
+.map-collapsed #map{height:0!important;min-height:0!important;overflow:hidden}
+.map-collapsed .status{display:none}
+.priority-badge{
+display:inline-flex;align-items:center;gap:6px;
+padding:5px 10px;border-radius:999px;
+font-size:11px;font-weight:900;letter-spacing:.04em
+}
+.priority-must{background:rgba(255,180,0,.18);color:#ffd76a}
+.priority-top{background:rgba(70,214,230,.18);color:#8ef4ff}
+.category-music{border-left:4px solid #9b5cff}
+.category-food{border-left:4px solid #ff9f43}
+.category-hotel{border-left:4px solid #4ea8ff}
+.category-highlight{border-left:4px solid #46d6e6}
+@media(max-width:760px){
+.day-hero{padding:12px 10px}
+#map{height:32vh!important}
+}
+
 </style>
 </head>
 <body>
@@ -208,7 +238,11 @@ header h1{font-size:clamp(22px,4vw,34px)}
     <article class="quick-card"><h3>Top Highlights</h3><div id="todayHighlights"></div></article>
     <article class="quick-card"><h3>MusicBars</h3><div id="todayMusic"></div></article>
   </div>
-  <div class="mobile-quick-jump">
+  <div class="map-toggle-wrap">
+<button class="map-toggle-btn" onclick="toggleMap()">🗺️ Karte öffnen/minimieren</button>
+<a class="map-toggle-btn" href="https://maps.google.com" target="_blank">📍 Google Maps</a>
+</div>
+<div class="mobile-quick-jump">
     <a href="#pflichttermine">Fixes</a>
     <a href="#highlights">Highlights</a>
     <a href="#musicbars">MusicBars</a>
@@ -650,5 +684,69 @@ if ('serviceWorker' in navigator) {
   });
 }
 </script>
+
+<script>
+function toggleMap(){
+  document.querySelector('.map-wrap').classList.toggle('map-collapsed');
+}
+
+const topHighlights = [
+  {name:"Gateway Arch", url:"https://maps.google.com/?q=Gateway+Arch"},
+  {name:"Cadillac Ranch", url:"https://maps.google.com/?q=Cadillac+Ranch"},
+  {name:"Blue Whale of Catoosa", url:"https://maps.google.com/?q=Blue+Whale+of+Catoosa"},
+  {name:"Meramec Caverns", url:"https://maps.google.com/?q=Meramec+Caverns"},
+  {name:"Pontiac Route 66 Museum", url:"https://maps.google.com/?q=Pontiac+Route+66+Museum"},
+  {name:"Chain of Rocks Bridge", url:"https://maps.google.com/?q=Chain+of+Rocks+Bridge"},
+  {name:"Pops 66", url:"https://maps.google.com/?q=Pops+66+Arcadia"},
+  {name:"Barton Springs Pool", url:"https://maps.google.com/?q=Barton+Springs+Pool"},
+  {name:"South Congress Austin", url:"https://maps.google.com/?q=South+Congress+Austin"},
+  {name:"Wonders of Wildlife Museum", url:"https://maps.google.com/?q=Wonders+of+Wildlife+Museum"}
+];
+
+const topMusicBars = [
+  {name:"Buddy Guy's Legends", url:"https://maps.google.com/?q=Buddy+Guy's+Legends"},
+  {name:"Kingston Mines", url:"https://maps.google.com/?q=Kingston+Mines"},
+  {name:"Blue Chicago", url:"https://maps.google.com/?q=Blue+Chicago"},
+  {name:"Cain's Ballroom", url:"https://maps.google.com/?q=Cain's+Ballroom"},
+  {name:"Mercury Lounge Tulsa", url:"https://maps.google.com/?q=Mercury+Lounge+Tulsa"},
+  {name:"The Continental Club", url:"https://maps.google.com/?q=The+Continental+Club+Austin"},
+  {name:"Antone's Austin", url:"https://maps.google.com/?q=Antone's+Austin"},
+  {name:"The White Horse", url:"https://maps.google.com/?q=The+White+Horse+Austin"},
+  {name:"Gruene Hall", url:"https://maps.google.com/?q=Gruene+Hall"},
+  {name:"Broadway Oyster Bar", url:"https://maps.google.com/?q=Broadway+Oyster+Bar"}
+];
+
+function renderTopLists(){
+  const hl = document.getElementById('highlightList');
+  const music = document.getElementById('musicList');
+
+  if(hl){
+    hl.innerHTML = topHighlights.map(p => `
+      <div class="place-row category-highlight">
+        <div>
+          <div class="priority-badge priority-top">TOP HIGHLIGHT</div>
+          <strong>${p.name}</strong>
+        </div>
+        <a href="${p.url}" target="_blank">Google Maps</a>
+      </div>
+    `).join('');
+  }
+
+  if(music){
+    music.innerHTML = topMusicBars.map(p => `
+      <div class="place-row category-music">
+        <div>
+          <div class="priority-badge priority-top">TOP MUSICBAR</div>
+          <strong>${p.name}</strong>
+        </div>
+        <a href="${p.url}" target="_blank">Google Maps</a>
+      </div>
+    `).join('');
+  }
+}
+
+window.addEventListener('load', renderTopLists);
+</script>
+
 </body>
 </html>
