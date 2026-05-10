@@ -1385,7 +1385,18 @@ function groupForPlace(p){
   if (p.category === "music") return "music";
   if (p.category === "food") return "food";
   if (p.category === "distillery") return "distillery";
-  if (p.category === "sight" || p.category === "hidden") return looksRoute66(p) ? "route66" : "highlight";
+
+  const isToyStore = /spielzeug/i.test(p.note || "");
+  const isLegoStore = /lego/i.test(p.name || "");
+
+  // Spielzeugläden und LEGO Stores bleiben auf der Karte,
+  // erscheinen aber nicht mehr unter Highlights / Sehenswürdigkeiten.
+  if (isToyStore || isLegoStore) return "other";
+
+  if (p.category === "sight" || p.category === "hidden") {
+    return looksRoute66(p) ? "route66" : "highlight";
+  }
+
   if (looksRoute66(p)) return "route66";
   return "other";
 }
