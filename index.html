@@ -1196,78 +1196,12 @@ tbody tr:last-child td {
     height: 70vh;
   }
 
-  .quick-sections {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .bottom-nav {
-    display: none;
-  }
-}
-</style>
-</head>
-<body>
-<header>
-  <h1>Route 66 Music Trip</h1>
-  <p class="app-subtitle">Tagesansicht v33 · Pflichttermine · Highlights · MusicBars</p>
-  <nav class="nav">
-    <a href="#tag">Heute</a><a href="#karte">Karte</a><a href="#fahrplan">Fahrplan</a><a href="#pflichttermine">Pflichttermine</a><a href="#highlights">Top Highlights</a><a href="#musicbars">MusicBars</a><a href="#hotels">Hotels</a><a href="#food">Food</a><a href="#distilleries">Distilleries</a><a href="#route66">Route66 Stops</a><a href="#sonstiges">Sonstiges</a>
-  </nav>
-  <div class="editor-tools"><button onclick="resetCategoryEdits()">Kategorien zurücksetzen</button><button onclick="clearResolvedCache()">Orte neu auflösen</button></div>
-</header>
-
-<section class="day-hero" id="tag">
-  <div class="day-tabs" id="dayTabs"></div>
-  <div id="dayOverview" class="today-card"></div>
-  <div class="quick-sections">
-    <article class="quick-card"><h3>Pflichttermine</h3><div id="todayMandatory"></div></article>
-    <article class="quick-card"><h3>Top Highlights</h3><div id="todayHighlights"></div></article>
-    <article class="quick-card"><h3>MusicBars</h3><div id="todayMusic"></div></article>
-  </div>
-  <div class="map-toggle-wrap">
-<button class="map-toggle-btn" onclick="toggleMap()">🗺️ Karte öffnen/minimieren</button>
-<a class="map-toggle-btn" href="https://maps.app.goo.gl/H57aFyUcHksxyvDs7?g_st=ac" target="_blank">📍 Google Maps</a>
-</div>
-<div class="mobile-quick-jump">
-    <a href="#pflichttermine">Fixes</a>
-    <a href="#highlights">Highlights</a>
-    <a href="#musicbars">MusicBars</a>
-  </div>
-</section>
-
-<div class="map-wrap" id="karte">
-  <div class="map-layer-panel">
-    <span>Layer:</span>
-    <div class="filters map-filters">
-      <button class="active" data-filter="all">Alle</button>
-      <button data-filter="hotel">Hotels</button>
-      <button data-filter="mandatory">Pflichttermine</button>
-      <button data-filter="highlight">Top Highlights</button>
-      <button data-filter="food">Food</button>
-      <button data-filter="music">MusicBars</button>
-      <button data-filter="distillery">Distilleries</button>
-      <button data-filter="route66">Route66 Stops</button>
-      <button data-filter="other">Sonstiges</button>
-    </div>
-  </div>
-  <div id="map"></div>
-  <div class="status" id="status">Starte Karte…</div>
-</div>
-
-<main>
-
-
-<section class="section open-default fahrplan-section" id="fahrplan">
+  .quick-sections <section class="section open-default fahrplan-section" id="fahrplan">
 
 
   <div class="meta">Fahrplan</div>
   <h2>Etappen, Abfahrten & Ankünfte</h2>
-  <p class="note">Plan für eine entspannte Route mit realistischen Pausen. Zeiten sind Empfehlungen und können je nach Verkehr, Fotostopps und Essen angepasst werden.</p>
-  <div class="fahrplan-grid" id="fahrplanGrid"></div>
-</section>
-
-  <section class="section open-default" id="pflichttermine"><div class="meta">Pflichttermine</div><h2>Fixe Termine & Tagesplan</h2><div id="mandatoryList"></div></section>
-  <section class="section open-default" id="highlights"><div class="meta">Top Highlights</div><h2>Highlights für den gewählten Tag</h2><div id="highlightList"></div></section>
+  <p class="note">Plan für eine entspannte Route mit realistischen Pausen. Zeiten<section class="section open-default" id="highlights"><div class="meta">Top Highlights</div><h2>Highlights für den gewählten Tag</h2><div id="highlightList"></div></section>
   <section class="section open-default" id="musicbars"><div class="meta">MusicBars</div><h2>MusicBars für den gewählten Tag</h2><div id="musicList"></div></section>
 
   <section class="section collapsible" id="hotels"><details><summary><div><div class="meta">Hotels</div><h2>Hotels</h2></div></summary><div class="grid" id="hotelGrid"></div></details></section>
@@ -1405,7 +1339,7 @@ function categoryLabel(c) {
 }
 
 function groupLabel(g){
-  return {hotel:"Hotels", mandatory:"Pflichttermine", highlight:"Top Highlights", food:"Food", music:"MusicBars", distillery:"Distilleries", route66:"Route66 Stops", other:"Sonstiges"}[g] || "Sonstiges";
+  return {hotel:"Hotels", mandatory:"", highlight:"Top Highlights", food:"Food", music:"MusicBars", distillery:"Distilleries", route66:"Route66 Stops", other:"Sonstiges"}[g] || "Sonstiges";
 }
 
 
