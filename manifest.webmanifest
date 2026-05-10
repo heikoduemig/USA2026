@@ -1,6 +1,6 @@
 {
-  "name": "Route 66 Music Trip",
-  "short_name": "Route66",
+  "name": "Route 66 Music Trip v31",
+  "short_name": "Route66 v31",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
