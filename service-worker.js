@@ -1,6 +1,6 @@
-const CACHE_NAME = 'route66-trip-v32';
+const CACHE_NAME = 'route66-trip-v33';
 const APP_SHELL = [
-  './', './index.html', './manifest.webmanifest', './routeData.v32.js', './musicBars.js'
+  './', './index.html', './manifest.webmanifest', './routeData.v33.js', './musicBars.js'
 ];
 
 const SHOULD_NOT_CACHE = request => {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Mobile Tagesansicht v32</title>
+<title>Route 66 Music Trip · Mobile Tagesansicht v33</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#071018">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -506,7 +506,7 @@ html,body{max-width:100%;overflow-x:hidden}
 }
 
 
-/* --- v32 Anchor Fix: Zielbereiche werden nicht mehr von der oberen Navigation überdeckt --- */
+/* --- v33 Anchor Fix: Zielbereiche werden nicht mehr von der oberen Navigation überdeckt --- */
 :root{
   --anchor-offset-desktop: 120px;
   --anchor-offset-mobile: 18px;
@@ -571,9 +571,9 @@ html{
 <body>
 <header>
   <h1>Route 66 Music Trip</h1>
-  <p class="app-subtitle">Tagesansicht v32 · Pflichttermine · Highlights · MusicBars</p>
+  <p class="app-subtitle">Tagesansicht v33 · Pflichttermine · Highlights · MusicBars</p>
   <nav class="nav">
-    <a href="#tag">Heute</a><a href="#karte">Karte</a><a href="#strategie">Strategie</a><a href="#fahrplan">Fahrplan</a><a href="#pflichttermine">Pflichttermine</a><a href="#highlights">Top Highlights</a><a href="#musicbars">MusicBars</a><a href="#hotels">Hotels</a><a href="#food">Food</a><a href="#distilleries">Distilleries</a><a href="#route66">Route66 Stops</a><a href="#sonstiges">Sonstiges</a>
+    <a href="#tag">Heute</a><a href="#karte">Karte</a><a href="#fahrplan">Fahrplan</a><a href="#pflichttermine">Pflichttermine</a><a href="#highlights">Top Highlights</a><a href="#musicbars">MusicBars</a><a href="#hotels">Hotels</a><a href="#food">Food</a><a href="#distilleries">Distilleries</a><a href="#route66">Route66 Stops</a><a href="#sonstiges">Sonstiges</a>
   </nav>
   <div class="editor-tools"><button onclick="resetCategoryEdits()">Kategorien zurücksetzen</button><button onclick="clearResolvedCache()">Orte neu auflösen</button></div>
 </header>
@@ -618,7 +618,6 @@ html{
 
 <main>
 
-<section class="section open-default" id="strategie"><div class="meta">Strategie</div><h2>So bekommt ihr die besten Sehenswürdigkeiten entspannt unter</h2><div id="strategyList" class="grid"></div></section>
 
 <section class="section open-default fahrplan-section" id="fahrplan">
 
@@ -640,18 +639,29 @@ html{
   <section class="section collapsible" id="sonstiges"><details><summary><div><div class="meta">Sonstiges</div><h2>Sonstiges</h2></div></summary><div id="otherList"></div></details></section>
 </main>
 
-<script src="./routeData.v32.js"></script>
+<script src="./routeData.v33.js"></script>
 <script src="./musicBars.js"></script>
 <script>
 const API_KEY = "AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY";
-const RAW_PLACES = window.RAW_PLACES || [];
+
+function isExcludedRouteOutlier(p){
+  const t = `${p?.name||""} ${p?.note||""} ${p?.description||""} ${p?.address||""} ${p?.formattedAddress||""} ${p?.query||""}`.toLowerCase();
+  return t.includes("16825 d st")
+    || t.includes("victorville")
+    || t.includes("92395")
+    || t.includes("12 western ave")
+    || t.includes("kennebunk")
+    || t.includes("04043");
+}
+let RAW_PLACES = (window.RAW_PLACES || []).filter(p => !isExcludedRouteOutlier(p));
 const DAY_PLAN = window.DAY_PLAN || [];
 let selectedDayId = (DAY_PLAN[0] && DAY_PLAN[0].id) || "";
 if (Array.isArray(window.musicBars)) {
   const existingNames = new Set(RAW_PLACES.map(p => (p.name || "").toLowerCase()));
   window.musicBars.forEach(p => {
     if (!existingNames.has((p.name || "").toLowerCase())) {
-      RAW_PLACES.push({...p, category:"music", query:`${p.name} ${p.city || ""}`});
+      const item = {...p, category:"music", query:`${p.name} ${p.city || ""}`};
+      if(!isExcludedRouteOutlier(item)) RAW_PLACES.push(item);
     }
   });
 }
@@ -659,7 +669,7 @@ if (Array.isArray(window.musicBars)) {
 let map, service, infoWindow;
 let markers = [];
 let resolvedPlaces = [];
-const cacheKey = "route66ResolvedPlacesV32";
+const cacheKey = "route66ResolvedPlacesV33";
 
 try{
   localStorage.removeItem("route66ResolvedPlacesV33");
@@ -667,7 +677,7 @@ try{
 }catch(e){}
 
 
-const categoryEditKey = "route66CategoryOverridesV32";
+const categoryEditKey = "route66CategoryOverridesV33";
 
 function getCategoryOverrides() {
   try { return JSON.parse(localStorage.getItem(categoryEditKey) || "{}"); }
@@ -816,8 +826,8 @@ async function resolveAllPlaces() {
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     try {
-      resolvedPlaces = JSON.parse(cached);
-      setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`);
+      resolvedPlaces = JSON.parse(cached).filter(p => !isExcludedRouteOutlier(p));
+      setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`) ;
       return;
     } catch(e) {}
   }
@@ -825,7 +835,7 @@ async function resolveAllPlaces() {
   for (let i=0; i<RAW_PLACES.length; i++) {
     setStatus(`Löse Orte auf… ${i+1} / ${RAW_PLACES.length}`);
     const p = await searchPlace(RAW_PLACES[i]);
-    resolvedPlaces.push(p);
+    if(!isExcludedRouteOutlier(p)) resolvedPlaces.push(p);
     await new Promise(r => setTimeout(r, 110));
   }
   localStorage.setItem(cacheKey, JSON.stringify(resolvedPlaces));
@@ -1030,8 +1040,8 @@ async function initMap() {
 </script>
 <nav class="bottom-nav" aria-label="Schnellnavigation">
   <a href="#tag"><span>☀️</span>Heute</a>
-  <a href="#strategie"><span>🧭</span>Strategie</a>
   <a href="#karte"><span>🗺️</span>Karte</a>
+  <a href="#fahrplan"><span>🚗</span>Plan</a>
   <a href="#highlights"><span>⭐</span>Top</a>
   <a href="#musicbars"><span>🎸</span>Music</a>
 </nav>
@@ -1065,32 +1075,17 @@ if ('serviceWorker' in navigator) {
 <script>
 function toggleMap(){document.querySelector('.map-wrap')?.classList.toggle('map-collapsed');}
 
-const routePlanV32 = window.routePlanV32 || [];
-const essentialHighlightsV32 = window.essentialHighlightsV32 || [];
-const essentialMusicBarsV32 = window.essentialMusicBarsV32 || [];
-const travelStrategyV32 = window.travelStrategyV32 || [];
-
-
-function renderStrategyV32(){
-  const box = document.getElementById('strategyList');
-  if(!box) return;
-  box.innerHTML = travelStrategyV32.map((s, i) => `
-    <article class="card">
-      <div class="priority-badge ${i < 2 ? 'priority-must' : 'priority-top'}">REGEL ${i+1}</div>
-      <h3>${s}</h3>
-      <p>Diese Regel ist direkt in Tagesplan, Highlights und Fahrplan berücksichtigt.</p>
-    </article>
-  `).join('');
-}
-
-function renderFahrplanV32(){
+const routePlanV33 = window.routePlanV33 || [];
+const essentialHighlightsV33 = window.essentialHighlightsV33 || [];
+const essentialMusicBarsV33 = window.essentialMusicBarsV33 || [];
+function renderFahrplanV33(){
   const grid = document.getElementById('fahrplanGrid');
   if(!grid) return;
-  grid.innerHTML = routePlanV32.map(leg => `
+  grid.innerHTML = routePlanV33.map(leg => `
     <article class="leg-card">
       <div class="priority-badge priority-must">${leg.date}</div>
       <h3>${leg.title}</h3>
-      <p class="note"><strong>${leg.route}</strong><br>${leg.focus}</p><p class="day-note"><strong>Strategie:</strong> ${leg.strategy || "Entspannt planen."}</p>
+      <p class="note"><strong>${leg.route}</strong><br>${leg.focus}</p>
       <div class="leg-meta">
         <div class="leg-pill"><b>Abfahrt</b><span>${leg.depart}</span></div>
         <div class="leg-pill"><b>Ankunft</b><span>${leg.arrive}</span></div>
@@ -1103,10 +1098,10 @@ function renderFahrplanV32(){
   `).join('');
 }
 
-function renderEssentialsV32(){
+function renderEssentialsV33(){
   const hl = document.getElementById('highlightList');
   if(hl){
-    hl.innerHTML = essentialHighlightsV32.map(p => `
+    hl.innerHTML = essentialHighlightsV33.map(p => `
       <div class="place-row category-highlight">
         <div>
           <div class="priority-badge priority-must">MUST SEE</div>
@@ -1119,7 +1114,7 @@ function renderEssentialsV32(){
   }
   const music = document.getElementById('musicList');
   if(music){
-    music.innerHTML = essentialMusicBarsV32.map(p => `
+    music.innerHTML = essentialMusicBarsV33.map(p => `
       <div class="place-row category-music">
         <div>
           <div class="priority-badge priority-top">TOP MUSICBAR</div>
@@ -1132,7 +1127,7 @@ function renderEssentialsV32(){
   }
 }
 
-function removeOffRouteNoiseV32(){
+function removeOffRouteNoiseV33(){
   const offRouteWords = [
     "Los Angeles","San Francisco","San Diego","Sacramento","Las Vegas","Nevada","California","Kalifornien",
     "Phoenix","Tucson","Arizona","Albuquerque","New Mexico","Salt Lake City","Denver","Utah","Colorado"
@@ -1146,11 +1141,10 @@ function removeOffRouteNoiseV32(){
 }
 
 window.addEventListener('load', () => {
-  renderStrategyV32();
-  renderFahrplanV32();
-  renderEssentialsV32();
-  removeOffRouteNoiseV32();
-  setTimeout(removeOffRouteNoiseV32, 800);
+    renderFahrplanV33();
+  renderEssentialsV33();
+  removeOffRouteNoiseV33();
+  setTimeout(removeOffRouteNoiseV33, 800);
 });
 </script>
 
