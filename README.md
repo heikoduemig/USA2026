@@ -1,33 +1,28 @@
-# Route 66 Music Trip · GitHub Paket v37
+# Route 66 Music Trip · GitHub Paket v38
 
-Dieses Paket baut auf deiner vorhandenen Webapp auf und enthält `route66MustStops.js`.
+Dieses Paket enthält die aktuelle Webapp inklusive `route66MustStops.js`.
 
-## Änderung v37
+## Änderungen in v38
 
-Die zusätzlichen Must-Stops aus `route66MustStops.js` für den Abschnitt **14.05.–22.05.2026 / Chicago → St. Louis → Tulsa → Lawton → Austin** wurden entfernt.
+- `route66MustStops.js` ist eingebunden.
+- Zusätzliche Must-Stops vor Austin wurden entfernt:
+  - Chicago
+  - St. Louis
+  - Tulsa
+  - Lawton
+  - Austin
+- Übrig bleiben Zusatz-Stops ab Texas / New Mexico / Arizona / Kalifornien.
+- `service-worker.js` nutzt einen neuen Cache-Namen:
+  - `route66-trip-v38-clean-cache`
+- `route66MustStops.js` ist im App-Shell-Cache enthalten.
 
-Damit erscheinen diese Zusatz-Stops nicht mehr in der Route-66-Liste und nicht mehr als Marker auf der Karte.
+## Wichtig nach Upload auf GitHub Pages
 
-Entfernt aus dem Zusatzpaket:
-- Gemini Giant
-- Dell Rhea's Chicken Basket
-- Cozy Dog Drive In
-- Ambler's Texaco Gas Station
-- Cuba Route 66 Murals
-- Wagon Wheel Motel
-- World's Largest Rocking Chair
-- Uranus Fudge Factory And General Store
-- Blue Whale of Catoosa
-- Rock Cafe
-- Golden Driller
-- Pops 66
+Falls alte Marker noch sichtbar sind:
 
-## Weiterhin enthalten
+1. Website einmal hart neu laden.
+2. Bei Chrome: DevTools → Application → Service Workers → Unregister.
+3. Danach `Clear storage` ausführen.
+4. Seite neu öffnen.
 
-Die westlichen Route-66-Zusatzstops ab Texas Panhandle / New Mexico / Arizona / California bleiben enthalten, z. B. Cadillac Ranch, Blue Swallow Motel, Wigwam Motel, Roy's Motel & Café und Santa Monica Route 66 End Sign.
-
-## Upload auf GitHub
-
-Alle Dateien aus diesem Ordner ins Repository hochladen oder bestehende Dateien ersetzen.
-
-Wichtig: Nach dem Upload im Browser einmal hart neu laden, weil der Service Worker auf `route66-trip-v37-optimized` aktualisiert wurde.
+Durch die neue Cache-Version sollten normale Besucher automatisch die neue Version erhalten.
