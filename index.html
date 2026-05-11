@@ -1272,6 +1272,29 @@ tbody tr:last-child td {
 
 <script src="./routeData.v35.js"></script>
 <script src="./musicBars.js"></script>
+<script src="./route66MustStops.js"></script>
+<script>
+(function(){
+  const extra = Array.isArray(window.route66MustStops) ? window.route66MustStops : [];
+  if (!Array.isArray(window.RAW_PLACES)) window.RAW_PLACES = [];
+  const existing = new Set(window.RAW_PLACES.map(p => (p.name || '').toLowerCase().trim()));
+  const mapped = extra
+    .filter(p => p && p.name && !existing.has(p.name.toLowerCase().trim()))
+    .map(p => ({
+      name: p.name,
+      note: p.text || '',
+      description: p.text || '',
+      address: `${p.name} ${p.city || ''}`.trim(),
+      category: p.type || p.category || 'sight',
+      city: p.city || '',
+      coords: p.coords,
+      googleMapsUrl: p.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((p.name || '') + ' ' + (p.city || ''))}`,
+      query: `${p.name} ${p.city || ''}`.trim(),
+      text: p.text || ''
+    }));
+  window.RAW_PLACES = [...window.RAW_PLACES, ...mapped];
+})();
+</script>
 <script>
 const API_KEY = "AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY";
 
@@ -1882,28 +1905,6 @@ window.addEventListener('load', () => {
 })();
 </script>
 
-<script src="route66MustStops.js"></script>
-
-<script>
-(function(){
- const extra = Array.isArray(window.route66MustStops) ? window.route66MustStops : [];
- if(!window.RAW_PLACES || !extra.length) return;
- const existing = new Set(window.RAW_PLACES.map(p => (p.name||'').toLowerCase()));
- const mapped = extra.filter(p => !existing.has((p.name||'').toLowerCase())).map(p => ({
-   name: p.name,
-   note: p.text || '',
-   description: p.text || '',
-   address: `${p.name} ${p.city || ''}`.trim(),
-   category: p.type || 'sight',
-   city: p.city || '',
-   coords: p.coords,
-   googleMapsUrl: p.googleMapsUrl || '',
-   query: `${p.name} ${p.city || ''}`.trim(),
-   text: p.text || ''
- }));
- window.RAW_PLACES = [...window.RAW_PLACES, ...mapped];
-})();
-</script>
-
 </body>
 </html>
+
