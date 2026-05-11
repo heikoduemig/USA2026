@@ -1667,6 +1667,37 @@ function row(p) {
 
 
 
+
+const PLACE_ALIASES = {
+  "millennium park": "Millennium Park / Cloud Gate",
+  "360 chicago observation deck": "360 CHICAGO Observation Deck",
+  "wicker park": "Wicker Park",
+  "logan square": "Logan Square",
+  "lou mitchells": "Lou Mitchell's",
+  "route 66 begin sign": "Route 66 Begin Sign",
+  "chicago music exchange": "Chicago Music Exchange",
+  "kingston mines": "Kingston Mines",
+  "buddy guys legends": "Buddy Guy's Legends",
+  "rosas lounge": "Rosa's Lounge",
+  "gateway arch": "Gateway Arch",
+  "citygarden": "Citygarden",
+  "soulard": "Soulard",
+  "bbs jazz blues and soups": "BB's Jazz Blues and Soups",
+  "venice cafe": "Venice Cafe",
+  "blue whale": "Blue Whale of Catoosa",
+  "rock cafe": "Rock Cafe",
+  "golden driller": "Golden Driller",
+  "pops 66": "Pops 66",
+  "cyrus avery plaza": "Cyrus Avery Plaza",
+  "woody guthrie center": "Woody Guthrie Center",
+  "medicine park": "Medicine Park",
+  "south congress": "South Congress",
+  "waterloo records": "Waterloo Records",
+  "congress bridge bats": "Congress Avenue Bridge Bats",
+  "franklin barbecue": "Franklin Barbecue",
+  "veracruz all natural": "Veracruz All Natural"
+};
+
 function normalizePlaceName(v){
   return (v || "").toLowerCase()
     .replace(/observation deck/g,"")
@@ -1699,19 +1730,35 @@ function findResolvedPlaceByLabel(label){
   const candidates = splitCandidateLabels(label);
   const allCandidates = candidates.length ? candidates : [label];
 
-  for (const c of allCandidates) {
-    const n = normalizePlaceName(c);
+  for (const rawCandidate of allCandidates) {
+    const alias = PLACE_ALIASES[normalizePlaceName(rawCandidate)] || rawCandidate;
+    const n = normalizePlaceName(alias);
     if (!n) continue;
 
-    const exact = resolvedPlaces.find(p => normalizePlaceName(p.name || "") === n);
-    if (exact) return exact;
+    // exact normalized name
+    let found = resolvedPlaces.find(p =>
+      normalizePlaceName(p.name || "") === n
+    );
+    if (found) return found;
 
-    const partial = resolvedPlaces.find(p => {
-      const name = normalizePlaceName(p.name || "");
-      const hay = normalizePlaceName(`${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`);
-      return name.includes(n) || n.includes(name) || hay.includes(n);
+    // exact alias in query/address
+    found = resolvedPlaces.find(p => {
+      const hay = normalizePlaceName(
+        `${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`
+      );
+      return hay.includes(n);
     });
-    if (partial) return partial;
+    if (found) return found;
+
+    // fuzzy token matching
+    const tokens = n.split(" ").filter(Boolean);
+    found = resolvedPlaces.find(p => {
+      const hay = normalizePlaceName(
+        `${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`
+      );
+      return tokens.every(t => hay.includes(t));
+    });
+    if (found) return found;
   }
 
   return null;
@@ -1729,7 +1776,7 @@ function focusPlaceOnMap(label){
   if (mapWrap) mapWrap.classList.remove("map-collapsed");
 
   if (!p || !map || !p.lat || !p.lng) {
-    setStatus(`Kein Kartenmarker gefunden · ${label}`);
+    setStatus(`⚠️ Kein Kartenmarker gefunden · ${label}`);
     console.warn("Kein Kartenmarker gefunden:", label, p);
     return false;
   }

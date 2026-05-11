@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-trip-v46-click-fix';
+const CACHE_NAME = 'route66-trip-v47-link-audit';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './routeData.v35.js', './musicBars.js', './route66MustStops.js'
 ];
