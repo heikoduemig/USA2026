@@ -1,22 +1,25 @@
-# Route66 GitHub Paket v51
+# Route66 GitHub Paket v52
 
-Austin Top Highlights erweitert:
+Austin Highlights massiv erweitert.
+
+Austin zeigt jetzt deutlich mehr Karten:
+- South Congress
 - Texas State Capitol
 - Lady Bird Lake
+- Congress Bridge Bats
 - Mount Bonnell
 - Covert Park at Mount Bonnell
-- Cathedral of Junk
-- Waterloo Records
-- Peter Pan Mini Golf
-- Museum of the Weird
-- Rainey Street
 - Greetings From Austin Mural
 - Zilker Park
+- Rainey Street
+- Waterloo Records
+- Cathedral of Junk
+- Peter Pan Mini Golf
+- Museum of the Weird
+- ACL Live at The Moody Theater
 - The Continental Club
 - Antone's
 - Broken Spoke
 
-Die Highlights erscheinen jetzt:
-- oben im Top-Highlights Bereich
-- in der Karte
-- und bleiben klickbar.
+Cache-Version:
+route66-trip-v52-austin-maxed
