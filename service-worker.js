@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-trip-v59-kingston-no-lookup';
+const CACHE_NAME = 'route66-trip-v60-tulsa-combined';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './routeData.v35.js', './musicBars.js', './route66MustStops.js'
 ];

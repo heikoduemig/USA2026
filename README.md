@@ -1,14 +1,15 @@
-# Route66 GitHub Paket v59
+# Route66 GitHub Paket v60
 
-Fix:
-- Kingston Mines wird nicht mehr über Google Places gesucht.
-- Kingston Mines hat jetzt feste Koordinaten in Chicago:
-  2548 N Halsted St, Chicago, IL
-- RouteData, musicBars und route66MustStops sind alle korrigiert.
-- Neuer App-Cache:
-  route66ResolvedPlacesV59
-- Neuer Service-Worker-Cache:
-  route66-trip-v59-kingston-no-lookup
+Neu:
+- Tulsa wurde wie Chicago und Austin zu einem gemeinsamen Termin zusammengeführt:
+  `19.–20.05 · Tulsa`
+- Der bisherige separate 20.05-Termin wurde integriert.
+- Enthalten sind jetzt gesammelt:
+  - Tulsa Route-66 Highlights
+  - Oklahoma Route-66 Stops
+  - MusicBars
+  - flexible Stops Richtung Lawton
+- Header bleibt Top 5, unten Top 10.
 
-Wichtig:
-Nach Upload bitte einmal Hard Reload / Service Worker refresh machen.
+Cache-Version:
+route66-trip-v60-tulsa-combined
