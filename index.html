@@ -1936,8 +1936,8 @@ function renderDayView(){
   document.getElementById("dayOverview").innerHTML = `
     <div><div class="meta">Gewählter Tag</div><h2>${day.label || ""} · ${day.title || ""}</h2><p>${day.route || ""}</p><p class="day-note">${day.time || ""}</p></div>
     <div class="today-facts"><div class="fact"><b>Strecke</b><span>${day.route}</span></div><div class="fact"><b>Distanz</b><span>${day.km}</span></div><div class="fact"><b>Fokus</b><span>${day.city}</span></div></div>`;
-  document.getElementById("todayHighlights").innerHTML = interactiveListHTML(day.highlights);
-  document.getElementById("todayMusic").innerHTML = interactiveListHTML(day.music);
+  document.getElementById("todayHighlights").innerHTML = interactiveListHTML((day.highlights || []).slice(0, 5));
+  document.getElementById("todayMusic").innerHTML = interactiveListHTML((day.music || []).slice(0, 5));
 }
 
 function renderTextList(container, titleItems){
@@ -1956,10 +1956,27 @@ function renderLists() {
 
   const dayPlaces = resolvedPlaces.filter(p=>placeMatchesDay(p, day));
   const hotels = resolvedPlaces.filter(p=>groupForPlace(p)==="hotel");
-  const dayHighlights = dayPlaces.filter(p=>groupForPlace(p)==="highlight" || groupForPlace(p)==="route66");
-  if (highlightList) highlightList.innerHTML = dayHighlights.length ? `<div class="list">${dayHighlights.slice(0,18).map(row).join("")}</div>` : `<p class="empty-hint">Keine passenden Highlights für diesen Tag gefunden. Nutze die Karte oder Route66 Stops.</p>`;
+
+  const orderByDayList = (places, list) => {
+    const wanted = (list || []).map(x => normalizePlaceName(canonicalPlaceLabel(x)));
+    return places.sort((a,b) => {
+      const an = normalizePlaceName(a.name || "");
+      const bn = normalizePlaceName(b.name || "");
+      const ai = wanted.findIndex(w => an.includes(w) || w.includes(an));
+      const bi = wanted.findIndex(w => bn.includes(w) || w.includes(bn));
+      return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
+    });
+  };
+
+  const dayHighlights = orderByDayList(
+    dayPlaces.filter(p=>groupForPlace(p)==="highlight" || groupForPlace(p)==="route66"),
+    day.highlights
+  ).slice(0, 10);
+
+  if (highlightList) highlightList.innerHTML = dayHighlights.length ? `<div class="list">${dayHighlights.map(row).join("")}</div>` : `<p class="empty-hint">Keine passenden Highlights für diesen Tag gefunden. Nutze die Karte oder Route66 Stops.</p>`;
+
   if (musicList) {
-    const dayMusic = dayPlaces.filter(p=>groupForPlace(p)==="music");
+    const dayMusic = orderByDayList(dayPlaces.filter(p=>groupForPlace(p)==="music"), day.music).slice(0, 10);
     musicList.innerHTML = dayMusic.length ? `<div class="list">${dayMusic.map(row).join("")}</div>` : `<p class="empty-hint">Keine MusicBars für diesen Tag gefunden. Empfehlungen stehen oben in der Tageskarte.</p>`;
   }
 

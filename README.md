@@ -1,22 +1,11 @@
-# Route66 GitHub Paket v53
+# Route66 GitHub Paket v54
 
-Fixes:
-- 21.05 und 22.05 Austin sind jetzt zu einem gemeinsamen Austin-Button zusammengefasst:
-  `21.–22.05 · Austin`
-- `undefined` in Tabs/Header wurde behoben.
-- Austin MusicBars Top 10 ergänzt:
-  - The Continental Club
-  - Antone's
-  - The White Horse
-  - Broken Spoke
-  - C-Boy's Heart & Soul
-  - Saxon Pub
-  - Mohawk Austin
-  - Stubb's Bar-B-Q
-  - Hole in the Wall
-  - Gruene Hall
-
-Alle Einträge sind in Tagesliste und Map vorhanden/klickbar.
+Änderung:
+- Im Header/Tagesbereich werden nur noch die Top 5 Highlights angezeigt.
+- Im Header/Tagesbereich werden nur noch die Top 5 MusicBars angezeigt.
+- Unten im Bereich `Top Highlights für den gewählten Tag` werden die Top 10 Highlights angezeigt.
+- Unten im Bereich `MusicBars für den gewählten Tag` werden die Top 10 MusicBars angezeigt.
+- Reihenfolge orientiert sich an den Tageslisten.
 
 Cache-Version:
-route66-trip-v53-austin-combined-music
+route66-trip-v54-header5-bottom10
