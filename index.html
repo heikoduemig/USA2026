@@ -1293,6 +1293,7 @@ tbody tr:last-child td {
       text: p.text || ''
     }));
   window.RAW_PLACES = [...window.RAW_PLACES, ...mapped];
+  window.ALL_PLACES = window.RAW_PLACES;
 })();
 </script>
 <script>
@@ -1852,14 +1853,15 @@ function renderEssentialsV33(){
 function removeOffRouteNoiseV33(){
   const offRouteWords = [
     "Los Angeles","San Francisco","San Diego","Sacramento","Las Vegas","Nevada","California","Kalifornien",
-    "Phoenix","Tucson","Arizona","Albuquerque","New Mexico","Salt Lake City","Denver","Utah","Colorado"
+    "Phoenix","Tucson","Arizona","Albuquerque","New Mexico","Salt Lake City","Denver","Utah","Colorado",
+    "Amarillo","Adrian","Shamrock","Tucumcari","Santa Rosa","Holbrook","Winslow","Oatman","Amboy",
+    "Oro Grande","Newberry Springs","Santa Monica","Meteor Crater","Cadillac Ranch","Wigwam","Roy's Motel",
+    "Blue Swallow","U-Drop Inn","MidPoint","Bagdad Café","Bottle Tree"
   ];
-  if(Array.isArray(window.ALL_PLACES)){
-    window.ALL_PLACES = window.ALL_PLACES.filter(p => !offRouteWords.some(w => JSON.stringify(p).toLowerCase().includes(w.toLowerCase())));
-  }
-  if(Array.isArray(window.places)){
-    window.places = window.places.filter(p => !offRouteWords.some(w => JSON.stringify(p).toLowerCase().includes(w.toLowerCase())));
-  }
+  const clean = p => !offRouteWords.some(w => JSON.stringify(p).toLowerCase().includes(w.toLowerCase()));
+  ["RAW_PLACES","ALL_PLACES","places"].forEach(key => {
+    if(Array.isArray(window[key])) window[key] = window[key].filter(clean);
+  });
 }
 
 window.addEventListener('load', () => {

@@ -1,28 +1,13 @@
-# Route66 GitHub Paket v42
+# Route66 GitHub Paket v43
 
-Neu in v42:
-- 360 CHICAGO Observation Deck ist jetzt im Tagesplan `15.05.2026 · Chicago Stadttag` als Top Highlight eingetragen.
-- `route66MustStops.js` wird jetzt vor dem App-Code geladen und direkt in `window.RAW_PLACES` gemerged.
-- Dadurch erscheinen die Zusatz-Stops nicht nur in der Datei, sondern auch in Liste und Map.
-- Weitere Header-/Tagesplan-Ziele wurden als Map-Stops ergänzt:
-  - Chicago Riverwalk
-  - Millennium Park / Cloud Gate
-  - Route 66 Begin Sign
-  - Chicago Music Exchange
-  - Wicker Park / Logan Square
-  - Gateway Arch
-  - Soulard
-  - Citygarden
-  - Cherokee Street
-  - Totem Pole Park
-  - Cyrus Avery Plaza
-  - Woody Guthrie Center
-  - South Congress
-  - Waterloo Records
-  - Congress Avenue Bridge Bats
-  - Mount Bonnell
-  - Franklin Barbecue
-  - Veracruz All Natural
+Fixes:
+- Off-route Ziele westlich/südwestlich der eigentlichen Reise wurden entfernt.
+- Paket enthält jetzt nur die Reiseroute:
+  Chicago → St. Louis → Tulsa → Lawton → Austin
+- 360 CHICAGO Observation Deck ist als `Top Highlight` eingetragen.
+- 360 CHICAGO ist in `route66MustStops.js` und wird vor dem App-Code in die Map-Daten gemerged.
+- Cache-Version aktualisiert:
+  `route66-trip-v43-chicago-austin-only`
 
-Cache-Version:
-`route66-trip-v42-top-highlight-sync`
+Wichtig:
+Nach dem Upload einmal Hard Reload machen oder Service Worker aktualisieren lassen.

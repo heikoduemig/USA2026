@@ -1,4 +1,4 @@
-// Route 66 Must Stops v42 · inklusive Top-Highlight-Sync
+// Route 66 Must Stops v43 · nur Reiseroute Chicago → Austin
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -7,9 +7,10 @@ window.route66MustStops = [
       -87.6233,
       41.8988
     ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
-    "text": "🔥 PFLICHTTERMIN · Top Highlight · Skyline Aussicht"
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🔥 PFLICHTTERMIN · Top Highlight · Skyline Aussicht",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=360+CHICAGO+Observation+Deck"
   },
   {
     "name": "Gemini Giant",
@@ -177,192 +178,16 @@ window.route66MustStops = [
     "text": "⭕ Historic Round Barn"
   },
   {
-    "name": "Big Texan Steak Ranch",
-    "city": "Amarillo",
-    "coords": [
-      -101.7713,
-      35.1939
-    ],
-    "type": "food",
-    "category": "Essen",
-    "text": "🥩 72oz Steak Challenge"
-  },
-  {
-    "name": "MidPoint Café",
-    "city": "Adrian",
-    "coords": [
-      -102.6686,
-      35.2744
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🛣 Halfway Point"
-  },
-  {
-    "name": "U-Drop Inn",
-    "city": "Shamrock",
-    "coords": [
-      -100.2499,
-      35.214
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🌃 Art-Deco Icon"
-  },
-  {
-    "name": "Blue Swallow Motel",
-    "city": "Tucumcari",
-    "coords": [
-      -103.7229,
-      35.1698
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🌃 Historic Neon Motel"
-  },
-  {
-    "name": "Tucumcari Neon District",
-    "city": "Tucumcari",
-    "coords": [
-      -103.725,
-      35.171
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🌃 Best at Night"
-  },
-  {
-    "name": "Santa Rosa Blue Hole",
-    "city": "Santa Rosa",
-    "coords": [
-      -104.673,
-      34.9387
-    ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
-    "text": "💧 Natural Blue Hole"
-  },
-  {
-    "name": "66 Diner Albuquerque",
-    "city": "Albuquerque",
-    "coords": [
-      -106.6518,
-      35.0844
-    ],
-    "type": "food",
-    "category": "Essen",
-    "text": "🍔 Retro Diner"
-  },
-  {
-    "name": "Wigwam Motel",
-    "city": "Holbrook",
-    "coords": [
-      -110.158,
-      34.9027
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🔥 MUST SEE · Teepee Motel"
-  },
-  {
-    "name": "Jack Rabbit Trading Post",
-    "city": "Joseph City",
-    "coords": [
-      -110.3315,
-      34.9547
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🐇 Here It Is"
-  },
-  {
-    "name": "Standin' on the Corner Park",
-    "city": "Winslow",
-    "coords": [
-      -110.6974,
-      35.0226
-    ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
-    "text": "📸 Famous Photo Spot"
-  },
-  {
-    "name": "Meteor Crater",
-    "city": "Winslow",
-    "coords": [
-      -111.0226,
-      35.0272
-    ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
-    "text": "🌌 Giant Impact Crater"
-  },
-  {
-    "name": "Oatman Wild Burros",
-    "city": "Oatman",
-    "coords": [
-      -114.3833,
-      35.0264
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🫏 Burros on the Streets"
-  },
-  {
-    "name": "Roy's Motel & Café",
-    "city": "Amboy",
-    "coords": [
-      -115.7436,
-      34.5578
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🌅 Sunset Neon Spot"
-  },
-  {
-    "name": "Elmer's Bottle Tree Ranch",
-    "city": "Oro Grande",
-    "coords": [
-      -117.3343,
-      34.5991
-    ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
-    "text": "🍾 Bottle Tree Art"
-  },
-  {
-    "name": "Bagdad Café",
-    "city": "Newberry Springs",
-    "coords": [
-      -116.6437,
-      34.8266
-    ],
-    "type": "food",
-    "category": "Essen",
-    "text": "🎬 Movie Location"
-  },
-  {
-    "name": "Santa Monica Route 66 End Sign",
-    "city": "Santa Monica",
-    "coords": [
-      -118.4965,
-      34.01
-    ],
-    "type": "route66",
-    "category": "Route66 Stops",
-    "text": "🏁 End of Route 66"
-  },
-  {
     "name": "Chicago Riverwalk",
     "city": "Chicago",
     "coords": [
       -87.6277,
       41.8876
     ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
+    "type": "highlight",
+    "category": "Top Highlights",
     "text": "📸 Top Highlight · Architektur & Riverwalk",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chicago+Riverwalk+Chicago"
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chicago+Riverwalk"
   },
   {
     "name": "Millennium Park / Cloud Gate",
@@ -371,10 +196,10 @@ window.route66MustStops = [
       -87.6233,
       41.8826
     ],
-    "type": "sight",
-    "category": "Sehenswürdigkeiten",
+    "type": "highlight",
+    "category": "Top Highlights",
     "text": "📸 Top Highlight · Bean / Millennium Park",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Millennium+Park+/+Cloud+Gate+Chicago"
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Millennium+Park+Cloud+Gate+Chicago"
   },
   {
     "name": "Lou Malnati's Pizzeria",
@@ -434,7 +259,7 @@ window.route66MustStops = [
     "type": "music",
     "category": "Musik / Bars",
     "text": "🎸 Musik-Pflichtstop",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chicago+Music+Exchange+Chicago"
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chicago+Music+Exchange"
   },
   {
     "name": "Wicker Park",
