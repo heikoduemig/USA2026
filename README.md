@@ -1,11 +1,18 @@
-# Route66 GitHub Paket v54
+# Route66 GitHub Paket v55
 
-Änderung:
-- Im Header/Tagesbereich werden nur noch die Top 5 Highlights angezeigt.
-- Im Header/Tagesbereich werden nur noch die Top 5 MusicBars angezeigt.
-- Unten im Bereich `Top Highlights für den gewählten Tag` werden die Top 10 Highlights angezeigt.
-- Unten im Bereich `MusicBars für den gewählten Tag` werden die Top 10 MusicBars angezeigt.
-- Reihenfolge orientiert sich an den Tageslisten.
+Neu:
+- Für alle Reiseziele wurden die Tageslisten aufgefüllt.
+- Header bleibt kompakt mit Top 5 Highlights + Top 5 MusicBars.
+- Unten werden pro gewähltem Tag Top 10 Highlights + Top 10 MusicBars angezeigt.
+- Zusätzliche Map-Ziele ergänzt für:
+  - Chicago
+  - Illinois Route 66
+  - St. Louis
+  - Route St. Louis → Tulsa
+  - Tulsa
+  - Oklahoma / Lawton
+  - Austin
+- Alle neuen Ziele sind als Map-Marker vorhanden und klickbar.
 
 Cache-Version:
-route66-trip-v54-header5-bottom10
+route66-trip-v55-all-destinations-top10

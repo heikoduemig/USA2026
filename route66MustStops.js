@@ -1,4 +1,4 @@
-// Route66 v53 · Austin combined + top music
+// Route66 v55 · top lists expanded for all destinations
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -766,5 +766,353 @@ window.route66MustStops = [
     "category": "Musik / Bars",
     "text": "🤠 Legendäre Texas Dance Hall · Ausflug",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gruene+Hall+New+Braunfels"
+  },
+  {
+    "name": "Architecture Boat Tour",
+    "city": "Chicago",
+    "coords": [
+      -87.6239,
+      41.8872
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏙 Chicago Architektur-Klassiker",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Architecture+Boat+Tour+Chicago"
+  },
+  {
+    "name": "Navy Pier",
+    "city": "Chicago",
+    "coords": [
+      -87.605,
+      41.8917
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🎡 Chicago Klassiker am See",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Navy+Pier+Chicago"
+  },
+  {
+    "name": "Magnificent Mile",
+    "city": "Chicago",
+    "coords": [
+      -87.6244,
+      41.8954
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏙 Chicago Boulevard",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Magnificent+Mile+Chicago"
+  },
+  {
+    "name": "Deep Dish Pizza",
+    "city": "Chicago",
+    "coords": [
+      -87.6322,
+      41.8905
+    ],
+    "type": "food",
+    "category": "Essen",
+    "text": "🍕 Chicago Food Klassiker",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Deep+Dish+Pizza+Chicago"
+  },
+  {
+    "name": "Reggies",
+    "city": "Chicago",
+    "coords": [
+      -87.6245,
+      41.8535
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Rock / Blues / Americana",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Reggies+Chicago"
+  },
+  {
+    "name": "Empty Bottle",
+    "city": "Chicago",
+    "coords": [
+      -87.7017,
+      41.9028
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Indie / Rock / Alternative",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Empty+Bottle+Chicago"
+  },
+  {
+    "name": "Union Station",
+    "city": "St. Louis",
+    "coords": [
+      -90.2074,
+      38.6286
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🚂 Historic Landmark",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Union+Station+St.+Louis"
+  },
+  {
+    "name": "Forest Park",
+    "city": "St. Louis",
+    "coords": [
+      -90.283,
+      38.6395
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🌳 St. Louis Park Klassiker",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Forest+Park+St.+Louis"
+  },
+  {
+    "name": "Cathedral Basilica of Saint Louis",
+    "city": "St. Louis",
+    "coords": [
+      -90.2546,
+      38.642
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "⛪ Mosaik-Kathedrale",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Cathedral+Basilica+of+Saint+Louis+St.+Louis"
+  },
+  {
+    "name": "City Museum",
+    "city": "St. Louis",
+    "coords": [
+      -90.2007,
+      38.6336
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🤠 Verrücktes Stadtmuseum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=City+Museum+St.+Louis"
+  },
+  {
+    "name": "Anheuser-Busch Brewery",
+    "city": "St. Louis",
+    "coords": [
+      -90.2132,
+      38.5987
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🍺 Historische Brauerei",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Anheuser-Busch+Brewery+St.+Louis"
+  },
+  {
+    "name": "Ted Drewes Frozen Custard",
+    "city": "St. Louis",
+    "coords": [
+      -90.3087,
+      38.5893
+    ],
+    "type": "food",
+    "category": "Essen",
+    "text": "🍦 St. Louis Food Klassiker",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Ted+Drewes+Frozen+Custard+St.+Louis"
+  },
+  {
+    "name": "Philbrook Museum of Art",
+    "city": "Tulsa",
+    "coords": [
+      -95.9696,
+      36.1236
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏛 Museum & Garten",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Philbrook+Museum+of+Art+Tulsa"
+  },
+  {
+    "name": "Gathering Place",
+    "city": "Tulsa",
+    "coords": [
+      -95.9908,
+      36.1266
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🌳 Tulsa Park Highlight",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gathering+Place+Tulsa"
+  },
+  {
+    "name": "Tulsa Art Deco District",
+    "city": "Tulsa",
+    "coords": [
+      -95.9928,
+      36.1539
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏙 Art-Deco Architektur",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tulsa+Art+Deco+District+Tulsa"
+  },
+  {
+    "name": "Center of the Universe",
+    "city": "Tulsa",
+    "coords": [
+      -95.9927,
+      36.1581
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🔊 Akustischer Geheimtipp",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Center+of+the+Universe+Tulsa"
+  },
+  {
+    "name": "The Vanguard",
+    "city": "Tulsa",
+    "coords": [
+      -95.9926,
+      36.1593
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Tulsa Live Music",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Vanguard+Tulsa"
+  },
+  {
+    "name": "Tulsa Theater",
+    "city": "Tulsa",
+    "coords": [
+      -95.9974,
+      36.1534
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Historic Theater",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tulsa+Theater+Tulsa"
+  },
+  {
+    "name": "Maggie's Music Box",
+    "city": "Tulsa",
+    "coords": [
+      -95.9719,
+      36.1552
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Local Music Spot",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Maggie's+Music+Box+Tulsa"
+  },
+  {
+    "name": "The Shrine",
+    "city": "Tulsa",
+    "coords": [
+      -95.9887,
+      36.1549
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Local Venue",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Shrine+Tulsa"
+  },
+  {
+    "name": "Hunt Club",
+    "city": "Tulsa",
+    "coords": [
+      -95.9915,
+      36.1589
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Bar & Live Music",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hunt+Club+Tulsa"
+  },
+  {
+    "name": "Oklahoma Route 66 Museum",
+    "city": "Clinton",
+    "coords": [
+      -98.9673,
+      35.5053
+    ],
+    "type": "route66",
+    "category": "Route66 Stops",
+    "text": "🛣 Route 66 Museum",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Oklahoma+Route+66+Museum+Clinton"
+  },
+  {
+    "name": "National Cowboy & Western Heritage Museum",
+    "city": "Oklahoma City",
+    "coords": [
+      -97.4778,
+      35.5355
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🤠 Western Heritage",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=National+Cowboy+%26+Western+Heritage+Museum+Oklahoma+City"
+  },
+  {
+    "name": "Oklahoma City National Memorial",
+    "city": "Oklahoma City",
+    "coords": [
+      -97.5171,
+      35.4726
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏛 Memorial",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Oklahoma+City+National+Memorial+Oklahoma+City"
+  },
+  {
+    "name": "Wichita Mountains Wildlife Refuge",
+    "city": "Lawton",
+    "coords": [
+      -98.7161,
+      34.7106
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏞 Natur-Highlight",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Wichita+Mountains+Wildlife+Refuge+Lawton"
+  },
+  {
+    "name": "Holy City of the Wichitas",
+    "city": "Lawton",
+    "coords": [
+      -98.5779,
+      34.7441
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "⛰ Scenic Stop",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Holy+City+of+the+Wichitas+Lawton"
+  },
+  {
+    "name": "The Deli",
+    "city": "Norman",
+    "coords": [
+      -97.4429,
+      35.2185
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Norman Live Music",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Deli+Norman"
+  },
+  {
+    "name": "The Jones Assembly",
+    "city": "Oklahoma City",
+    "coords": [
+      -97.5296,
+      35.4655
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 OKC Music & Food",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Jones+Assembly+Oklahoma+City"
+  },
+  {
+    "name": "Tower Theatre OKC",
+    "city": "Oklahoma City",
+    "coords": [
+      -97.53,
+      35.4938
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎭 OKC Venue",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tower+Theatre+OKC+Oklahoma+City"
   }
 ];
