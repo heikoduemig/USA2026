@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-trip-v44-day-region-focus';
+const CACHE_NAME = 'route66-trip-v45-clickable-highlights';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './routeData.v35.js', './musicBars.js', './route66MustStops.js'
 ];

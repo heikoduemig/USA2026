@@ -1,12 +1,17 @@
-# Route66 GitHub Paket v44
+# Route66 GitHub Paket v45
 
 Neu:
-- Tagesauswahl zoomt jetzt automatisch auf die passende Zielregion der Map.
-- Beispiel: Auswahl `17.05.2026 · St. Louis` springt direkt in den Bereich St. Louis.
-- Neuer Button: `🎯 Zielregion anzeigen`.
-- Fahrtage nutzen einen größeren Bounds-Ausschnitt entlang der jeweiligen Etappe.
-- Cache-Version aktualisiert:
-  `route66-trip-v44-day-region-focus`
+- Top Highlights und MusicBars im oberen Tagesbereich sind jetzt klickbar.
+- Klick auf einen Eintrag:
+  - öffnet die Karte,
+  - springt direkt zum Ziel,
+  - öffnet den Marker,
+  - zoomt hinein,
+  - und hebt den Marker kurz hervor.
 
-Hinweis:
-Nach Upload auf GitHub Pages bitte einmal hart neu laden, falls der Service Worker noch alte Dateien hält.
+Beispiel:
+- Klick auf `360 CHICAGO Observation Deck`
+→ Marker wird direkt auf der Map fokussiert.
+
+Cache-Version:
+`route66-trip-v45-clickable-highlights`

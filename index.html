@@ -1202,6 +1202,21 @@ tbody tr:last-child td {
     display: none;
   }
 }
+
+.day-place-link{
+  width:100%;
+  background:none;
+  border:none;
+  color:inherit;
+  text-align:left;
+  font:inherit;
+  cursor:pointer;
+  padding:0;
+}
+.day-place-link:hover{
+  opacity:.9;
+}
+
 </style>
 </head>
 <body>
@@ -1650,6 +1665,65 @@ function row(p) {
   return `<div class="place-row"><div><strong>${p.name}</strong><span>${groupLabel(groupForPlace(p))}${p.note ? " · " + p.note : ""}</span></div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><a href="${maps}" target="_blank" rel="noopener noreferrer">Maps</a></div></div>`;
 }
 
+
+function normalizePlaceName(v){
+  return (v || "").toLowerCase()
+    .replace(/observation deck/g,"")
+    .replace(/route\-66/g,"route 66")
+    .replace(/[^a-z0-9]+/g," ")
+    .trim();
+}
+
+function findResolvedPlaceByLabel(label){
+  const n = normalizePlaceName(label);
+  return resolvedPlaces.find(p => {
+    const hay = normalizePlaceName(
+      `${p.name || ""} ${p.query || ""} ${p.address || ""}`
+    );
+    return hay.includes(n) || n.includes(hay);
+  });
+}
+
+function focusPlaceOnMap(label){
+  const p = findResolvedPlaceByLabel(label);
+  if (!p || !map || !p.lat || !p.lng) return;
+
+  const mapWrap = document.querySelector(".map-wrap");
+  if (mapWrap) mapWrap.classList.remove("map-collapsed");
+
+  map.setCenter({lat:p.lat,lng:p.lng});
+  map.setZoom(14);
+
+  const marker = getOrCreateMarker(p);
+
+  google.maps.event.trigger(marker, "click");
+
+  marker.setAnimation(google.maps.Animation.BOUNCE);
+  setTimeout(() => marker.setAnimation(null), 1400);
+
+  setStatus(`Marker fokussiert · ${p.name}`);
+}
+
+function interactiveListHTML(items){
+  if (!items || !items.length) {
+    return `<p class="empty-hint">Für diesen Tag ist hier nichts Fixes hinterlegt.</p>`;
+  }
+
+  return `<ul>${
+    items.map(x => `
+      <li>
+        <button
+          class="day-place-link"
+          onclick="focusPlaceOnMap(${JSON.stringify(x)})"
+          title="Auf Karte anzeigen"
+        >
+          ${x}
+        </button>
+      </li>
+    `).join("")
+  }</ul>`;
+}
+
 function listHTML(items){
   if (!items || !items.length) return `<p class="empty-hint">Für diesen Tag ist hier nichts Fixes hinterlegt.</p>`;
   return `<ul>${items.map(x=>`<li>${x}</li>`).join("")}</ul>`;
@@ -1740,8 +1814,8 @@ function renderDayView(){
   document.getElementById("dayOverview").innerHTML = `
     <div><div class="meta">Gewählter Tag</div><h2>${day.label}.2026 · ${day.title}</h2><p>${day.route}</p><p class="day-note">${day.time}</p></div>
     <div class="today-facts"><div class="fact"><b>Strecke</b><span>${day.route}</span></div><div class="fact"><b>Distanz</b><span>${day.km}</span></div><div class="fact"><b>Fokus</b><span>${day.city}</span></div></div>`;
-  document.getElementById("todayHighlights").innerHTML = listHTML(day.highlights);
-  document.getElementById("todayMusic").innerHTML = listHTML(day.music);
+  document.getElementById("todayHighlights").innerHTML = interactiveListHTML(day.highlights);
+  document.getElementById("todayMusic").innerHTML = interactiveListHTML(day.music);
 }
 
 function renderTextList(container, titleItems){
