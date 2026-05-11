@@ -1,18 +1,16 @@
-# Route66 GitHub Paket v55
+# Route66 GitHub Paket v56
 
 Neu:
-- Für alle Reiseziele wurden die Tageslisten aufgefüllt.
-- Header bleibt kompakt mit Top 5 Highlights + Top 5 MusicBars.
-- Unten werden pro gewähltem Tag Top 10 Highlights + Top 10 MusicBars angezeigt.
-- Zusätzliche Map-Ziele ergänzt für:
-  - Chicago
-  - Illinois Route 66
-  - St. Louis
-  - Route St. Louis → Tulsa
-  - Tulsa
-  - Oklahoma / Lawton
-  - Austin
-- Alle neuen Ziele sind als Map-Marker vorhanden und klickbar.
+- Chicago wurde wie Austin zu einem gemeinsamen Tagesblock zusammengeführt:
+  `14.–15.05 · Chicago`
+- Dadurch wirkt die Navigation kompakter und übersichtlicher.
+- Chicago enthält jetzt gesammelt:
+  - Top Highlights
+  - Route 66 Start
+  - Architektur-Spots
+  - Blues Clubs
+  - Food Highlights
+- Header bleibt bei Top 5 / unten Top 10.
 
 Cache-Version:
-route66-trip-v55-all-destinations-top10
+route66-trip-v56-chicago-combined
