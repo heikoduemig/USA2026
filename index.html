@@ -1666,42 +1666,95 @@ function row(p) {
 }
 
 
+
 function normalizePlaceName(v){
   return (v || "").toLowerCase()
     .replace(/observation deck/g,"")
     .replace(/route\-66/g,"route 66")
+    .replace(/oder/g," ")
+    .replace(/als hauptabend/g,"")
+    .replace(/als alternative/g,"")
+    .replace(/optional/g,"")
+    .replace(/nur wenn noch energie da ist/g,"")
     .replace(/[^a-z0-9]+/g," ")
     .trim();
 }
 
+function splitCandidateLabels(label){
+  const clean = (label || "")
+    .replace(/als Hauptabend/gi,"")
+    .replace(/als Alternative/gi,"")
+    .replace(/nur als lockerer Einstieg/gi,"")
+    .replace(/nur optional/gi,"")
+    .replace(/optional/gi,"")
+    .trim();
+
+  return clean
+    .split(/\s+oder\s+|\/|,| und /i)
+    .map(x => x.trim())
+    .filter(Boolean);
+}
+
 function findResolvedPlaceByLabel(label){
-  const n = normalizePlaceName(label);
-  return resolvedPlaces.find(p => {
-    const hay = normalizePlaceName(
-      `${p.name || ""} ${p.query || ""} ${p.address || ""}`
-    );
-    return hay.includes(n) || n.includes(hay);
-  });
+  const candidates = splitCandidateLabels(label);
+  const allCandidates = candidates.length ? candidates : [label];
+
+  for (const c of allCandidates) {
+    const n = normalizePlaceName(c);
+    if (!n) continue;
+
+    const exact = resolvedPlaces.find(p => normalizePlaceName(p.name || "") === n);
+    if (exact) return exact;
+
+    const partial = resolvedPlaces.find(p => {
+      const name = normalizePlaceName(p.name || "");
+      const hay = normalizePlaceName(`${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`);
+      return name.includes(n) || n.includes(name) || hay.includes(n);
+    });
+    if (partial) return partial;
+  }
+
+  return null;
+}
+
+function focusPlaceOnMapByIndex(index){
+  const label = window.dayClickTargets && window.dayClickTargets[index];
+  if (!label) return false;
+  return focusPlaceOnMap(label);
 }
 
 function focusPlaceOnMap(label){
   const p = findResolvedPlaceByLabel(label);
-  if (!p || !map || !p.lat || !p.lng) return;
-
   const mapWrap = document.querySelector(".map-wrap");
   if (mapWrap) mapWrap.classList.remove("map-collapsed");
 
-  map.setCenter({lat:p.lat,lng:p.lng});
-  map.setZoom(14);
+  if (!p || !map || !p.lat || !p.lng) {
+    setStatus(`Kein Kartenmarker gefunden · ${label}`);
+    console.warn("Kein Kartenmarker gefunden:", label, p);
+    return false;
+  }
+
+  const position = {lat: Number(p.lat), lng: Number(p.lng)};
+  map.setCenter(position);
+  map.setZoom(15);
 
   const marker = getOrCreateMarker(p);
+  marker.setVisible(true);
 
   google.maps.event.trigger(marker, "click");
 
-  marker.setAnimation(google.maps.Animation.BOUNCE);
-  setTimeout(() => marker.setAnimation(null), 1400);
+  if (google.maps.Animation) {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(() => marker.setAnimation(null), 1400);
+  }
 
   setStatus(`Marker fokussiert · ${p.name}`);
+  setTimeout(() => {
+    const el = document.getElementById("karte");
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 120);
+
+  return true;
 }
 
 function interactiveListHTML(items){
@@ -1709,20 +1762,31 @@ function interactiveListHTML(items){
     return `<p class="empty-hint">Für diesen Tag ist hier nichts Fixes hinterlegt.</p>`;
   }
 
+  window.dayClickTargets = window.dayClickTargets || [];
   return `<ul>${
-    items.map(x => `
-      <li>
-        <button
-          class="day-place-link"
-          onclick="focusPlaceOnMap(${JSON.stringify(x)})"
-          title="Auf Karte anzeigen"
-        >
-          ${x}
-        </button>
-      </li>
-    `).join("")
+    items.map(x => {
+      const index = window.dayClickTargets.push(x) - 1;
+      return `
+        <li>
+          <button
+            type="button"
+            class="day-place-link"
+            data-day-target-index="${index}"
+            title="Auf Karte anzeigen"
+          >${x}</button>
+        </li>
+      `;
+    }).join("")
   }</ul>`;
 }
+
+document.addEventListener("click", function(e){
+  const btn = e.target.closest(".day-place-link");
+  if (!btn) return;
+  e.preventDefault();
+  e.stopPropagation();
+  focusPlaceOnMapByIndex(Number(btn.dataset.dayTargetIndex));
+}, true);
 
 function listHTML(items){
   if (!items || !items.length) return `<p class="empty-hint">Für diesen Tag ist hier nichts Fixes hinterlegt.</p>`;
@@ -1810,6 +1874,7 @@ function renderDayTabs(){
 
 function renderDayView(){
   const day = getSelectedDay();
+  window.dayClickTargets = [];
   renderDayTabs();
   document.getElementById("dayOverview").innerHTML = `
     <div><div class="meta">Gewählter Tag</div><h2>${day.label}.2026 · ${day.title}</h2><p>${day.route}</p><p class="day-note">${day.time}</p></div>

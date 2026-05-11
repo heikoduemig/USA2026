@@ -1,17 +1,11 @@
-# Route66 GitHub Paket v45
+# Route66 GitHub Paket v46
 
-Neu:
-- Top Highlights und MusicBars im oberen Tagesbereich sind jetzt klickbar.
-- Klick auf einen Eintrag:
-  - öffnet die Karte,
-  - springt direkt zum Ziel,
-  - öffnet den Marker,
-  - zoomt hinein,
-  - und hebt den Marker kurz hervor.
-
-Beispiel:
-- Klick auf `360 CHICAGO Observation Deck`
-→ Marker wird direkt auf der Map fokussiert.
+Fix:
+- Klick auf Top Highlights / MusicBars im oberen Tagesbereich funktioniert jetzt robuster.
+- Es wird nicht mehr direkt ein String im onclick verwendet.
+- Stattdessen werden Tagesziele intern indexiert und über Event Delegation geöffnet.
+- Der Marker wird fokussiert, geöffnet, gezoomt und kurz animiert.
+- Bei kombinierten Einträgen wie `Kingston Mines oder Buddy Guy's Legends` wird der erste passende Marker geöffnet.
 
 Cache-Version:
-`route66-trip-v45-clickable-highlights`
+`route66-trip-v46-click-fix`
