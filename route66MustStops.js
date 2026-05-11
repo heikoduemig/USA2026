@@ -1,5 +1,16 @@
-// Route 66 Must Stops v39
+// Route 66 Must Stops v40
 window.route66MustStops = [
+  {
+    "name": "360 CHICAGO Observation Deck",
+    "city": "Chicago",
+    "coords": [
+      -87.6243,
+      41.8988
+    ],
+    "type": "sight",
+    "category": "Sehenswürdigkeiten",
+    "text": "🔥 PFLICHTTERMIN · Beste Skyline Aussicht in Chicago"
+  },
   {
     "name": "Gemini Giant",
     "city": "Wilmington",

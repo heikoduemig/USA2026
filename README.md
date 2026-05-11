@@ -1,25 +1,10 @@
-# Route66 GitHub Paket v39
+# Route66 GitHub Paket v40
 
-Enthält:
-- zusätzliche Route-66 Must Stops
-- Photospots
-- Diners
-- Neon Stops
-- Weird Americana
-- Cache-Fix
-- route66MustStops.js integriert
+Neu in v40:
+- 360 CHICAGO Observation Deck als Pflichttermin ergänzt
+- Cache-Version aktualisiert
+- Komplettpaket GitHub-ready
 
-Neue Highlights:
-- Blue Whale of Catoosa
-- Rock Cafe
-- Golden Driller
-- Cuba Murals
-- Cozy Dog
-- Gemini Giant
-- Big Texan Steak Ranch
-- Wigwam Motel
-- Roy's Motel
-- Santa Monica End Sign
-
-Service Worker Cache:
-route66-trip-v39-expanded
+Highlight:
+🔥 360 CHICAGO Observation Deck
+→ Einer der wichtigsten Chicago-Spots der gesamten Reise
