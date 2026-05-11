@@ -1,4 +1,4 @@
-// Route 66 Must Stops v48 · Link-Fix und Chicago Music korrigiert
+// Route66 v50
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -536,5 +536,104 @@ window.route66MustStops = [
     "category": "Musik / Bars",
     "text": "🎸 Authentic Chicago Blues",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Rosa%27s+Lounge+Chicago"
+  },
+  {
+    "name": "Texas State Capitol",
+    "city": "Austin",
+    "coords": [
+      -97.7404,
+      30.2747
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🏛 Monumentales Texas Capitol"
+  },
+  {
+    "name": "Cathedral of Junk",
+    "city": "Austin",
+    "coords": [
+      -97.7637,
+      30.2169
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🤠 Hidden Gem · Verrückte Kunstinstallation"
+  },
+  {
+    "name": "Lady Bird Lake",
+    "city": "Austin",
+    "coords": [
+      -97.7428,
+      30.2621
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🌅 Skyline & Sunset Spot"
+  },
+  {
+    "name": "The Continental Club",
+    "city": "Austin",
+    "coords": [
+      -97.7494,
+      30.2493
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Legendärer Austin Live Music Club"
+  },
+  {
+    "name": "Antone's",
+    "city": "Austin",
+    "coords": [
+      -97.7416,
+      30.2683
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Austin Blues Institution"
+  },
+  {
+    "name": "The White Horse",
+    "city": "Austin",
+    "coords": [
+      -97.7218,
+      30.2613
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🤠 Honky Tonk Geheimtipp"
+  },
+  {
+    "name": "Broken Spoke",
+    "city": "Austin",
+    "coords": [
+      -97.7844,
+      30.2509
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "💃 Historic Texas Dance Hall"
+  },
+  {
+    "name": "Peter Pan Mini Golf",
+    "city": "Austin",
+    "coords": [
+      -97.7602,
+      30.2528
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "⛳ Kultiger Austin Fotospot"
+  },
+  {
+    "name": "Museum of the Weird",
+    "city": "Austin",
+    "coords": [
+      -97.7396,
+      30.2677
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "👽 Weird Austin Klassiker"
   }
 ];

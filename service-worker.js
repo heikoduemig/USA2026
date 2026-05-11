@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-trip-v49-kingston-music-fix';
+const CACHE_NAME = 'route66-trip-v50-austin-expanded';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './routeData.v35.js', './musicBars.js', './route66MustStops.js'
 ];
