@@ -1,4 +1,4 @@
-const CACHE_NAME = 'route66-trip-v63-buttons-leoti-fix';
+const CACHE_NAME = 'route66-trip-v64-chicago-top-highlights';
 const APP_SHELL = [
   './', './index.html', './manifest.webmanifest', './routeData.v35.js', './musicBars.js', './route66MustStops.js'
 ];

@@ -1,13 +1,28 @@
-# Route66 GitHub Paket v63
+# Route66 GitHub Paket v64
 
-Fixes:
-- Die zwei Schnellbuttons sind jetzt im tatsächlich verwendeten Button-Bereich sichtbar:
-  - ⭐ Zu Top Highlights
-  - 🎵 Zu MusicBars
-- Desktop/Workstation: Buttons werden nicht mehr abgeschnitten.
-- Mobile: Buttons bleiben horizontal scrollbar.
-- Off-route Ziel entfernt/gefiltert:
-  `401 S 4th St, Leoti, KS 67861, Vereinigte Staaten`
+Update: Chicago Top Highlights erweitert.
 
-Cache-Version:
-route66-trip-v63-buttons-leoti-fix
+Neu:
+- Unteres Menü / Bereich ⭐ Top Highlights hat für Chicago jetzt deutlich mehr Pflichtspots.
+- Chicago-Block 14.–16.05 enthält jetzt über 20 Highlights für drei Tage.
+- Neue Kartenmarker ergänzt, u. a.:
+  - Willis Tower Skydeck
+  - Art Institute of Chicago
+  - Buckingham Fountain
+  - Lincoln Park Zoo
+  - Wrigley Field
+  - Chinatown Chicago
+  - Fulton Market / West Loop
+  - Museum Campus
+  - Adler Planetarium Skyline View
+  - Oak Street Beach
+  - Lakefront Trail
+- Cache-Version auf `route66-trip-v64-chicago-top-highlights` gesetzt.
+
+Bestehende Fixes bleiben enthalten:
+- Schnellbuttons ⭐ Top Highlights und 🎵 MusicBars sichtbar.
+- Mobile Buttons horizontal scrollbar.
+- Leoti Off-route-Ziel bleibt entfernt/gefiltert.
+
+## Deployment
+Alle Dateien in dein GitHub-Repo kopieren und bestehende Dateien ersetzen. Danach GitHub Pages neu laden. Falls noch alte Daten sichtbar sind: Browser-Cache bzw. PWA-Cache einmal leeren.

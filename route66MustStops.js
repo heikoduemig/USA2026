@@ -1,4 +1,4 @@
-// Route66 v59 · Kingston Mines coordinate hard fix
+// Route66 v64 · Chicago top highlights expansion
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -1115,5 +1115,137 @@ window.route66MustStops = [
     "category": "Musik / Bars",
     "text": "🎭 OKC Venue",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Tower+Theatre+OKC+Oklahoma+City"
-  }
+  },
+{
+  "name": "Willis Tower Skydeck",
+  "city": "Chicago",
+  "coords": [
+    -87.6359,
+    41.8789
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🌆 Pflichtblick · Glasbalkon & Skyline",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Willis+Tower+Skydeck+Chicago"
+},
+{
+  "name": "Art Institute of Chicago",
+  "city": "Chicago",
+  "coords": [
+    -87.6237,
+    41.8796
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🏛 Weltklasse-Museum · Chicago Klassiker",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Art+Institute+of+Chicago"
+},
+{
+  "name": "Buckingham Fountain",
+  "city": "Chicago",
+  "coords": [
+    -87.6189,
+    41.8758
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "⛲ Grant Park Fotostopp",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Buckingham+Fountain+Chicago"
+},
+{
+  "name": "Lincoln Park Zoo",
+  "city": "Chicago",
+  "coords": [
+    -87.6337,
+    41.9211
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🦁 Lincoln Park Klassiker · kostenloser Zoo",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Lincoln+Park+Zoo+Chicago"
+},
+{
+  "name": "Wrigley Field",
+  "city": "Chicago",
+  "coords": [
+    -87.6553,
+    41.9484
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "⚾ Baseball-Ikone · Wrigleyville",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Wrigley+Field+Chicago"
+},
+{
+  "name": "Chinatown Chicago",
+  "city": "Chicago",
+  "coords": [
+    -87.6324,
+    41.8526
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🥟 Food & Neighborhood Stop",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Chinatown+Chicago"
+},
+{
+  "name": "Fulton Market / West Loop",
+  "city": "Chicago",
+  "coords": [
+    -87.652,
+    41.8866
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🍽 Food, Bars & Warehouse-Vibes",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Fulton+Market+West+Loop+Chicago"
+},
+{
+  "name": "Museum Campus",
+  "city": "Chicago",
+  "coords": [
+    -87.617,
+    41.8663
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🏛 Seeufer · Museen · Skylineblick",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Museum+Campus+Chicago"
+},
+{
+  "name": "Adler Planetarium Skyline View",
+  "city": "Chicago",
+  "coords": [
+    -87.6068,
+    41.8664
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "📸 Einer der besten Skyline-Fotospots",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Adler+Planetarium+Skyline+View+Chicago"
+},
+{
+  "name": "Oak Street Beach",
+  "city": "Chicago",
+  "coords": [
+    -87.6233,
+    41.9023
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🏖 Stadtstrand direkt an der Skyline",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Oak+Street+Beach+Chicago"
+},
+{
+  "name": "Lakefront Trail",
+  "city": "Chicago",
+  "coords": [
+    -87.6194,
+    41.8919
+  ],
+  "type": "highlight",
+  "category": "Top Highlights",
+  "text": "🚲 Spaziergang / Bike am Lake Michigan",
+  "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Lakefront+Trail+Chicago"
+}
 ];
