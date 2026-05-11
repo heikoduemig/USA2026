@@ -1217,6 +1217,16 @@ tbody tr:last-child td {
   opacity:.9;
 }
 
+
+.pulse-highlight{
+  animation:pulseGlow 1.8s ease;
+}
+@keyframes pulseGlow{
+  0%{box-shadow:0 0 0 rgba(59,130,246,0);}
+  30%{box-shadow:0 0 35px rgba(59,130,246,.45);}
+  100%{box-shadow:0 0 0 rgba(59,130,246,0);}
+}
+
 </style>
 </head>
 <body>
@@ -2120,6 +2130,20 @@ if ('serviceWorker' in navigator) {
 
 
 <script>
+
+function scrollToSection(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+
+  el.classList.add("pulse-highlight");
+  setTimeout(() => el.classList.remove("pulse-highlight"), 1800);
+}
+
 function toggleMap(){document.querySelector('.map-wrap')?.classList.toggle('map-collapsed');}
 
 const routePlanV33 = window.routePlanV33 || [];
