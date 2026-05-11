@@ -1,4 +1,4 @@
-// Route66 v55 · top lists expanded for all destinations
+// Route66 v59 · Kingston Mines coordinate hard fix
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -517,13 +517,14 @@ window.route66MustStops = [
     "name": "Kingston Mines",
     "city": "Chicago",
     "coords": [
-      -87.649,
-      41.9281
+      -87.6601,
+      41.9316
     ],
     "type": "music",
-    "category": "music",
-    "text": "🎸 Legendärer Blues Club in Chicago",
-    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago"
+    "category": "Musik / Bars",
+    "text": "🎷 Legendäre Late-Night-Blues-Sessions",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago",
+    "address": "2548 N Halsted St, Chicago, IL"
   },
   {
     "name": "Rosa's Lounge",

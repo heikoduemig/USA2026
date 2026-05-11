@@ -2,7 +2,7 @@
 // Alle Einträge liegen im Filter "Musik / Bars".
 window.musicBars = [
   { name: "Buddy Guy's Legends", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6307, 41.8675], text: "Musik / Bars · Chicago Blues Club" },
-  { name: "Kingston Mines", type: "music", category: "music", city: "Chicago", coords: [-87.6490, 41.9281], text: "Musik / Bars · Legendärer Blues Club" },
+  { name: "Kingston Mines", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6601, 41.9316], text: "Musik / Bars · Legendärer Blues Club" },
   { name: "Blue Chicago", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6318, 41.8921], text: "Musik / Bars · Chicago Blues" },
   { name: "House of Blues Chicago", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6296, 41.8892], text: "Musik / Bars · Live Music Venue" },
   { name: "Reggies", type: "music", category: "Musik / Bars", city: "Chicago", coords: [-87.6245, 41.8535], text: "Musik / Bars · Rock / Blues / Americana" },

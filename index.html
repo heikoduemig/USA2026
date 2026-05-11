@@ -1336,12 +1336,13 @@ if (Array.isArray(window.musicBars)) {
     }
   });
 }
+forceKnownPlaceData(RAW_PLACES);
 
 let map, service, infoWindow;
 let markers = new Map();
 let resolvedPlaces = [];
-const cacheKey = "route66ResolvedPlacesV49";
-const categoryEditKey = "route66CategoryOverridesV49";
+const cacheKey = "route66ResolvedPlacesV59";
+const categoryEditKey = "route66CategoryOverridesV59";
 
 function getCategoryOverrides() {
   try { return JSON.parse(localStorage.getItem(categoryEditKey) || "{}"); }
@@ -1357,26 +1358,43 @@ function placeKey(p) {
 }
 
 
-function forceKnownCategories(){
-  const forcedMusic = [
-    "kingston mines",
-    "buddy guy's legends",
-    "rosa's lounge",
-    "green mill",
-    "blue chicago",
-    "house of blues chicago",
-    "the hideout",
-    "carol's pub"
-  ];
-  resolvedPlaces.forEach(p => {
-    const n = (p.name || "").toLowerCase().trim();
-    if (forcedMusic.includes(n)) {
-      p.category = "music";
-      p.type = "music";
-      p.note = p.note || "Musik / Bars";
-      p.text = p.text || "Musik / Bars";
-    }
+
+function forceKnownPlaceData(list = resolvedPlaces){
+  if (!Array.isArray(list)) return;
+
+  const fixed = {
+    "kingston mines": {
+      name: "Kingston Mines",
+      city: "Chicago",
+      lat: 41.9316,
+      lng: -87.6601,
+      coords: [-87.6601, 41.9316],
+      category: "music",
+      type: "music",
+      note: "legendäre Late-Night-Blues-Sessions",
+      text: "Musik / Bars · Legendärer Blues Club",
+      address: "2548 N Halsted St, Chicago, IL",
+      formattedAddress: "2548 N Halsted St, Chicago, IL",
+      query: "Kingston Mines Chicago",
+      googleMapsUrl: "https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago"
+    },
+    "buddy guy's legends": { category: "music", type: "music", city: "Chicago" },
+    "rosa's lounge": { category: "music", type: "music", city: "Chicago" },
+    "green mill": { category: "music", type: "music", city: "Chicago" },
+    "blue chicago": { category: "music", type: "music", city: "Chicago" },
+    "house of blues chicago": { category: "music", type: "music", city: "Chicago" },
+    "the hideout": { category: "music", type: "music", city: "Chicago" },
+    "carol's pub": { category: "music", type: "music", city: "Chicago" }
+  };
+
+  list.forEach(p => {
+    const key = (p.name || "").toLowerCase().trim();
+    if (fixed[key]) Object.assign(p, fixed[key]);
   });
+}
+
+function forceKnownCategories(){
+  forceKnownPlaceData(resolvedPlaces);
 }
 
 function applyCategoryOverrides() {
@@ -1393,7 +1411,8 @@ function changeCategory(key, category) {
   overrides[key] = category;
   saveCategoryOverrides(overrides);
   applyCategoryOverrides();
-  renderMarkers(document.querySelector(".filters button.active")?.dataset.filter || "all");
+
+renderMarkers(document.querySelector(".filters button.active")?.dataset.filter || "all");
   renderLists();
 }
 
@@ -1415,7 +1434,8 @@ function categorySelect(p) {
 function resetCategoryEdits() {
   localStorage.removeItem(categoryEditKey);
   applyCategoryOverrides();
-  renderMarkers("all");
+
+renderMarkers("all");
   renderLists();
   document.querySelectorAll(".filters button").forEach(b=>b.classList.remove("active"));
   document.querySelector('.filters button[data-filter="all"]').classList.add("active");
@@ -1559,7 +1579,7 @@ async function resolveAllPlaces() {
   if (cached) {
     try {
       resolvedPlaces = JSON.parse(cached).filter(p => !isExcludedRouteOutlier(p));
-      forceKnownCategories();
+      forceKnownPlaceData(resolvedPlaces);
       setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`);
       return;
     } catch(e) {}
@@ -1583,6 +1603,7 @@ async function resolveAllPlaces() {
     ...(await resolveInBatches(needsLookup))
   ];
 
+  forceKnownPlaceData(resolvedPlaces);
   try { localStorage.setItem(cacheKey, JSON.stringify(resolvedPlaces)); } catch(e) {}
   setStatus(`Fertig: ${resolvedPlaces.filter(p=>p.lat).length} Orte gefunden`);
 }
@@ -2035,7 +2056,8 @@ async function initMap() {
   renderDayView();
   await resolveAllPlaces();
   applyCategoryOverrides();
-  renderMarkers("all");
+
+renderMarkers("all");
   renderLists();
   setTimeout(() => focusSelectedDayRegionOnMap(), 250);
 
