@@ -1223,6 +1223,7 @@ tbody tr:last-child td {
   </div>
   <div class="map-toggle-wrap">
 <button class="map-toggle-btn" onclick="toggleMap()">🗺️ Karte öffnen/minimieren</button>
+<button class="map-toggle-btn" onclick="focusSelectedDayRegionOnMap()">🎯 Zielregion anzeigen</button>
 <a class="map-toggle-btn" href="https://maps.app.goo.gl/H57aFyUcHksxyvDs7?g_st=ac" target="_blank">📍 Google Maps</a>
 </div>
 <div class="mobile-quick-jump">
@@ -1662,6 +1663,65 @@ function placeMatchesDay(p, day){
 
 function getSelectedDay(){ return DAY_PLAN.find(d=>d.id===selectedDayId) || DAY_PLAN[0]; }
 
+
+function targetRegionForDay(day){
+  const title = `${day.title || ""} ${day.city || ""}`.toLowerCase();
+
+  if (day.id === "2026-05-14" || day.id === "2026-05-15" || title.includes("chicago")) {
+    return { label:"Chicago", center:{lat:41.8890,lng:-87.6298}, zoom:12 };
+  }
+  if (day.id === "2026-05-17" || title.includes("st. louis")) {
+    return { label:"St. Louis", center:{lat:38.6247,lng:-90.1848}, zoom:12 };
+  }
+  if (day.id === "2026-05-19" || title.includes("tulsa")) {
+    return { label:"Tulsa", center:{lat:36.1540,lng:-95.9928}, zoom:12 };
+  }
+  if (day.id === "2026-05-20" || title.includes("lawton")) {
+    return { label:"Lawton / Medicine Park", center:{lat:34.6250,lng:-98.4350}, zoom:10 };
+  }
+  if (day.id === "2026-05-21" || day.id === "2026-05-22" || title.includes("austin")) {
+    return { label:"Austin", center:{lat:30.2672,lng:-97.7431}, zoom:12 };
+  }
+  if (day.id === "2026-05-16") {
+    return { label:"Illinois Route 66 · Chicago → St. Louis", bounds:[
+      {lat:41.88,lng:-87.63},
+      {lat:40.88,lng:-88.63},
+      {lat:39.78,lng:-89.65},
+      {lat:38.62,lng:-90.18}
+    ]};
+  }
+  if (day.id === "2026-05-18") {
+    return { label:"Missouri / Oklahoma Route 66 · St. Louis → Tulsa", bounds:[
+      {lat:38.62,lng:-90.18},
+      {lat:38.06,lng:-91.40},
+      {lat:36.19,lng:-95.75},
+      {lat:36.15,lng:-95.99}
+    ]};
+  }
+
+  return { label: day.title || "Gewählter Tag", center:{lat:39.5,lng:-98.35}, zoom:5 };
+}
+
+function focusSelectedDayRegionOnMap(){
+  if (!map) return;
+  const day = getSelectedDay();
+  const region = targetRegionForDay(day);
+
+  const mapWrap = document.querySelector(".map-wrap");
+  if (mapWrap) mapWrap.classList.remove("map-collapsed");
+
+  if (region.bounds && region.bounds.length) {
+    const bounds = new google.maps.LatLngBounds();
+    region.bounds.forEach(p => bounds.extend(new google.maps.LatLng(p.lat, p.lng)));
+    map.fitBounds(bounds);
+  } else if (region.center) {
+    map.setCenter(region.center);
+    map.setZoom(region.zoom || 12);
+  }
+
+  setStatus(`Zielregion angezeigt · ${region.label}`);
+}
+
 function renderDayTabs(){
   const tabs = document.getElementById("dayTabs");
   tabs.innerHTML = DAY_PLAN.map(d=>`<button class="${d.id===selectedDayId ? "active" : ""}" data-day="${d.id}">${d.label} · ${d.title.split(" → ")[0]}</button>`).join("");
@@ -1670,6 +1730,7 @@ function renderDayTabs(){
     localStorage.setItem("route66SelectedDay", selectedDayId);
     renderDayView();
     renderLists();
+    if (map) focusSelectedDayRegionOnMap();
   }));
 }
 
@@ -1736,6 +1797,7 @@ async function initMap() {
   applyCategoryOverrides();
   renderMarkers("all");
   renderLists();
+  setTimeout(() => focusSelectedDayRegionOnMap(), 250);
 
   document.querySelectorAll(".filters button").forEach(btn => {
     btn.addEventListener("click", () => {
