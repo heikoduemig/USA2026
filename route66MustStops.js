@@ -1,4 +1,4 @@
-// Route66 v50
+// Route66 v51 expanded Austin cards
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -635,5 +635,60 @@ window.route66MustStops = [
     "type": "highlight",
     "category": "Top Highlights",
     "text": "👽 Weird Austin Klassiker"
+  },
+  {
+    "name": "Covert Park at Mount Bonnell",
+    "city": "Austin",
+    "coords": [
+      -97.7733,
+      30.321
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🌅 Austin Sunset Spot"
+  },
+  {
+    "name": "ACL Live at The Moody Theater",
+    "city": "Austin",
+    "coords": [
+      -97.7473,
+      30.2653
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎶 Legendäre Austin Konzertlocation"
+  },
+  {
+    "name": "Rainey Street",
+    "city": "Austin",
+    "coords": [
+      -97.7381,
+      30.2574
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🍹 Austin Nightlife & Food Trucks"
+  },
+  {
+    "name": "Greetings From Austin Mural",
+    "city": "Austin",
+    "coords": [
+      -97.7625,
+      30.2501
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "📸 Austin Fotospot"
+  },
+  {
+    "name": "Zilker Park",
+    "city": "Austin",
+    "coords": [
+      -97.7726,
+      30.2669
+    ],
+    "type": "highlight",
+    "category": "Top Highlights",
+    "text": "🌳 Austin Chill Spot"
   }
 ];
