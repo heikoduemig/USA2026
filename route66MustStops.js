@@ -1,4 +1,4 @@
-// Route 66 Must Stops v43 · nur Reiseroute Chicago → Austin
+// Route 66 Must Stops v48 · Link-Fix und Chicago Music korrigiert
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -500,5 +500,41 @@ window.route66MustStops = [
     "category": "Essen",
     "text": "🌮 Tex-Mex / Taco Empfehlung",
     "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Veracruz+All+Natural+Austin"
+  },
+  {
+    "name": "Buddy Guy's Legends",
+    "city": "Chicago",
+    "coords": [
+      -87.6307,
+      41.8675
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Chicago Blues Club",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Buddy+Guy%27s+Legends+Chicago"
+  },
+  {
+    "name": "Kingston Mines",
+    "city": "Chicago",
+    "coords": [
+      -87.649,
+      41.9281
+    ],
+    "type": "music",
+    "category": "music",
+    "text": "🎸 Legendärer Blues Club in Chicago",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Kingston+Mines+Chicago"
+  },
+  {
+    "name": "Rosa's Lounge",
+    "city": "Chicago",
+    "coords": [
+      -87.7072,
+      41.9091
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Authentic Chicago Blues",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Rosa%27s+Lounge+Chicago"
   }
 ];

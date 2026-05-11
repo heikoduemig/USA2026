@@ -1340,8 +1340,8 @@ if (Array.isArray(window.musicBars)) {
 let map, service, infoWindow;
 let markers = new Map();
 let resolvedPlaces = [];
-const cacheKey = "route66ResolvedPlacesV35";
-const categoryEditKey = "route66CategoryOverridesV35";
+const cacheKey = "route66ResolvedPlacesV49";
+const categoryEditKey = "route66CategoryOverridesV49";
 
 function getCategoryOverrides() {
   try { return JSON.parse(localStorage.getItem(categoryEditKey) || "{}"); }
@@ -1356,12 +1356,36 @@ function placeKey(p) {
   return `${p.name || ""}__${p.address || ""}`.toLowerCase();
 }
 
+
+function forceKnownCategories(){
+  const forcedMusic = [
+    "kingston mines",
+    "buddy guy's legends",
+    "rosa's lounge",
+    "green mill",
+    "blue chicago",
+    "house of blues chicago",
+    "the hideout",
+    "carol's pub"
+  ];
+  resolvedPlaces.forEach(p => {
+    const n = (p.name || "").toLowerCase().trim();
+    if (forcedMusic.includes(n)) {
+      p.category = "music";
+      p.type = "music";
+      p.note = p.note || "Musik / Bars";
+      p.text = p.text || "Musik / Bars";
+    }
+  });
+}
+
 function applyCategoryOverrides() {
   const overrides = getCategoryOverrides();
   resolvedPlaces.forEach(p => {
     const k = placeKey(p);
     if (overrides[k]) p.category = overrides[k];
   });
+  forceKnownCategories();
 }
 
 function changeCategory(key, category) {
@@ -1535,6 +1559,7 @@ async function resolveAllPlaces() {
   if (cached) {
     try {
       resolvedPlaces = JSON.parse(cached).filter(p => !isExcludedRouteOutlier(p));
+      forceKnownCategories();
       setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`);
       return;
     } catch(e) {}
@@ -1668,106 +1693,88 @@ function row(p) {
 
 
 
+
 const PLACE_ALIASES = {
-  "millennium park": "Millennium Park / Cloud Gate",
+  "360 chicago": "360 CHICAGO Observation Deck",
   "360 chicago observation deck": "360 CHICAGO Observation Deck",
-  "wicker park": "Wicker Park",
-  "logan square": "Logan Square",
+  "millennium park": "Millennium Park / Cloud Gate",
+  "cloud gate": "Millennium Park / Cloud Gate",
+  "the bean": "Millennium Park / Cloud Gate",
+  "wicker park logan square": "Wicker Park",
+  "lou mitchells als route 66 fruhstuck": "Lou Mitchell's",
   "lou mitchells": "Lou Mitchell's",
+  "buddy guys legends": "Buddy Guy's Legends",
+  "kingston mines": "Kingston Mines",
+  "rosas lounge": "Rosa's Lounge",
   "route 66 begin sign": "Route 66 Begin Sign",
   "chicago music exchange": "Chicago Music Exchange",
-  "kingston mines": "Kingston Mines",
-  "buddy guys legends": "Buddy Guy's Legends",
-  "rosas lounge": "Rosa's Lounge",
   "gateway arch": "Gateway Arch",
   "citygarden": "Citygarden",
-  "soulard": "Soulard",
+  "cherokee street": "Cherokee Street",
   "bbs jazz blues and soups": "BB's Jazz Blues and Soups",
   "venice cafe": "Venice Cafe",
-  "blue whale": "Blue Whale of Catoosa",
+  "cuba murals": "Cuba Murals",
+  "blue whale of catoosa": "Blue Whale of Catoosa",
   "rock cafe": "Rock Cafe",
   "golden driller": "Golden Driller",
   "pops 66": "Pops 66",
+  "arcadia round barn": "Arcadia Round Barn",
   "cyrus avery plaza": "Cyrus Avery Plaza",
+  "buck atoms cosmic curios": "Buck Atom's Cosmic Curios on 66",
   "woody guthrie center": "Woody Guthrie Center",
+  "drysdales western wear": "Drysdales Western Wear",
   "medicine park": "Medicine Park",
   "south congress": "South Congress",
   "waterloo records": "Waterloo Records",
+  "barton springs": "Barton Springs Pool",
   "congress bridge bats": "Congress Avenue Bridge Bats",
-  "franklin barbecue": "Franklin Barbecue",
-  "veracruz all natural": "Veracruz All Natural"
+  "mount bonnell": "Mount Bonnell",
+  "gruene hall": "Gruene Hall",
+  "continental club": "The Continental Club",
+  "antones": "Antone's",
+  "the white horse": "The White Horse",
+  "broken spoke": "Broken Spoke"
 };
 
 function normalizePlaceName(v){
   return (v || "").toLowerCase()
-    .replace(/observation deck/g,"")
-    .replace(/route\-66/g,"route 66")
-    .replace(/oder/g," ")
-    .replace(/als hauptabend/g,"")
-    .replace(/als alternative/g,"")
-    .replace(/optional/g,"")
-    .replace(/nur wenn noch energie da ist/g,"")
-    .replace(/[^a-z0-9]+/g," ")
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[’']/g, "")
+    .replace(/&/g, " and ")
+    .replace(/route\-66/g, "route 66")
+    .replace(/\boptional\b/g, "")
+    .replace(/\bals hauptabend\b/g, "")
+    .replace(/\bals alternative\b/g, "")
+    .replace(/\bnur wenn noch energie da ist\b/g, "")
+    .replace(/\bnur als lockerer einstieg\b/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
     .trim();
 }
 
-function splitCandidateLabels(label){
-  const clean = (label || "")
-    .replace(/als Hauptabend/gi,"")
-    .replace(/als Alternative/gi,"")
-    .replace(/nur als lockerer Einstieg/gi,"")
-    .replace(/nur optional/gi,"")
-    .replace(/optional/gi,"")
-    .trim();
-
-  return clean
-    .split(/\s+oder\s+|\/|,| und /i)
-    .map(x => x.trim())
-    .filter(Boolean);
+function canonicalPlaceLabel(label){
+  const n = normalizePlaceName(label);
+  return PLACE_ALIASES[n] || label;
 }
 
 function findResolvedPlaceByLabel(label){
-  const candidates = splitCandidateLabels(label);
-  const allCandidates = candidates.length ? candidates : [label];
+  const canonical = canonicalPlaceLabel(label);
+  const n = normalizePlaceName(canonical);
 
-  for (const rawCandidate of allCandidates) {
-    const alias = PLACE_ALIASES[normalizePlaceName(rawCandidate)] || rawCandidate;
-    const n = normalizePlaceName(alias);
-    if (!n) continue;
+  let found = resolvedPlaces.find(p => normalizePlaceName(p.name || "") === n);
+  if (found) return found;
 
-    // exact normalized name
-    let found = resolvedPlaces.find(p =>
-      normalizePlaceName(p.name || "") === n
-    );
-    if (found) return found;
+  found = resolvedPlaces.find(p => {
+    const hay = normalizePlaceName(`${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`);
+    return hay.includes(n);
+  });
+  if (found) return found;
 
-    // exact alias in query/address
-    found = resolvedPlaces.find(p => {
-      const hay = normalizePlaceName(
-        `${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`
-      );
-      return hay.includes(n);
-    });
-    if (found) return found;
-
-    // fuzzy token matching
-    const tokens = n.split(" ").filter(Boolean);
-    found = resolvedPlaces.find(p => {
-      const hay = normalizePlaceName(
-        `${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`
-      );
-      return tokens.every(t => hay.includes(t));
-    });
-    if (found) return found;
-  }
-
-  return null;
-}
-
-function focusPlaceOnMapByIndex(index){
-  const label = window.dayClickTargets && window.dayClickTargets[index];
-  if (!label) return false;
-  return focusPlaceOnMap(label);
+  const tokens = n.split(" ").filter(t => t.length > 2);
+  found = resolvedPlaces.find(p => {
+    const hay = normalizePlaceName(`${p.name || ""} ${p.query || ""} ${p.address || ""} ${p.text || ""}`);
+    return tokens.length && tokens.every(t => hay.includes(t));
+  });
+  return found || null;
 }
 
 function focusPlaceOnMap(label){
@@ -1787,7 +1794,6 @@ function focusPlaceOnMap(label){
 
   const marker = getOrCreateMarker(p);
   marker.setVisible(true);
-
   google.maps.event.trigger(marker, "click");
 
   if (google.maps.Animation) {
@@ -1797,8 +1803,7 @@ function focusPlaceOnMap(label){
 
   setStatus(`Marker fokussiert · ${p.name}`);
   setTimeout(() => {
-    const el = document.getElementById("karte");
-    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    document.getElementById("karte")?.scrollIntoView({behavior:"smooth", block:"start"});
   }, 120);
 
   return true;
@@ -1809,21 +1814,17 @@ function interactiveListHTML(items){
     return `<p class="empty-hint">Für diesen Tag ist hier nichts Fixes hinterlegt.</p>`;
   }
 
-  window.dayClickTargets = window.dayClickTargets || [];
   return `<ul>${
-    items.map(x => {
-      const index = window.dayClickTargets.push(x) - 1;
-      return `
-        <li>
-          <button
-            type="button"
-            class="day-place-link"
-            data-day-target-index="${index}"
-            title="Auf Karte anzeigen"
-          >${x}</button>
-        </li>
-      `;
-    }).join("")
+    items.map(x => `
+      <li>
+        <button
+          type="button"
+          class="day-place-link"
+          data-place-name="${String(x).replace(/"/g, "&quot;")}"
+          title="Auf Karte anzeigen"
+        >${x}</button>
+      </li>
+    `).join("")
   }</ul>`;
 }
 
@@ -1832,7 +1833,7 @@ document.addEventListener("click", function(e){
   if (!btn) return;
   e.preventDefault();
   e.stopPropagation();
-  focusPlaceOnMapByIndex(Number(btn.dataset.dayTargetIndex));
+  focusPlaceOnMap(btn.dataset.placeName || btn.textContent || "");
 }, true);
 
 function listHTML(items){
@@ -1921,7 +1922,6 @@ function renderDayTabs(){
 
 function renderDayView(){
   const day = getSelectedDay();
-  window.dayClickTargets = [];
   renderDayTabs();
   document.getElementById("dayOverview").innerHTML = `
     <div><div class="meta">Gewählter Tag</div><h2>${day.label}.2026 · ${day.title}</h2><p>${day.route}</p><p class="day-note">${day.time}</p></div>

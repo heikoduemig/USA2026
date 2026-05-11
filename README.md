@@ -1,11 +1,12 @@
-# Route66 GitHub Paket v46
+# Route66 GitHub Paket v49
 
 Fix:
-- Klick auf Top Highlights / MusicBars im oberen Tagesbereich funktioniert jetzt robuster.
-- Es wird nicht mehr direkt ein String im onclick verwendet.
-- Stattdessen werden Tagesziele intern indexiert und über Event Delegation geöffnet.
-- Der Marker wird fokussiert, geöffnet, gezoomt und kurz animiert.
-- Bei kombinierten Einträgen wie `Kingston Mines oder Buddy Guy's Legends` wird der erste passende Marker geöffnet.
+- Kingston Mines wird auf der Map jetzt fest als `MusicBars` geführt.
+- Neuer Daten-/Koordinaten-Cache:
+  - `route66ResolvedPlacesV49`
+  - `route66CategoryOverridesV49`
+- Dadurch werden alte lokale Kategorie-Zuordnungen aus früheren Versionen nicht mehr verwendet.
+- Zusätzlich werden bekannte Chicago-Musikspots im Code fest als MusicBars normalisiert.
 
-Cache-Version:
-`route66-trip-v46-click-fix`
+Wichtig:
+Nach Upload bitte einmal Hard Reload machen. Die neue Cache-Version sollte alte Marker-Daten automatisch umgehen.
