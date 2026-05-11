@@ -1272,6 +1272,7 @@ tbody tr:last-child td {
 
 <script src="./routeData.v35.js"></script>
 <script src="./musicBars.js"></script>
+<script src="./route66MustStops.js"></script>
 <script>
 const API_KEY = "AIzaSyA8644C1bG05JivRoEANWGzN4Tir4tnLvY";
 
@@ -1297,10 +1298,29 @@ if (Array.isArray(window.musicBars)) {
   });
 }
 
+if (Array.isArray(window.route66MustStops)) {
+  const existingNames = new Set(RAW_PLACES.map(p => (p.name || "").toLowerCase()));
+  window.route66MustStops.forEach(p => {
+    const key = (p.name || "").toLowerCase();
+    if (!existingNames.has(key)) {
+      const item = {
+        ...p,
+        category: p.category || "sight",
+        query: p.query || `${p.name} ${p.city || ""} ${p.state || ""} Route 66`,
+        note: p.note || "Route66 Stop"
+      };
+      if(!isExcludedRouteOutlier(item)) {
+        RAW_PLACES.push(item);
+        existingNames.add(key);
+      }
+    }
+  });
+}
+
 let map, service, infoWindow;
 let markers = new Map();
 let resolvedPlaces = [];
-const cacheKey = "route66ResolvedPlacesV35";
+const cacheKey = "route66ResolvedPlacesV36";
 const categoryEditKey = "route66CategoryOverridesV35";
 
 function getCategoryOverrides() {

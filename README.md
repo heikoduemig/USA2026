@@ -1,59 +1,25 @@
-# Route 66 Must Stops Pack
+# Route 66 Music Trip · v36 Must Stops
 
-Erweiterungspaket für deine bestehende Route-66-Webapp.
+Dieses Paket enthält die bestehende App plus eingebautes `route66MustStops.js`.
 
-## Inhalt
-- route66MustStops.js
-- zusätzliche Kategorien
-- Highlight-Badges
-- neue ikonische Stops
+## Änderungen
 
-## Empfohlene Kategorien
-- photospot
-- food
-- neon
-- historic_motel
-- americana
-- route66
+- `index.html` lädt jetzt zusätzlich `route66MustStops.js`.
+- Die Must-Stops werden nach `RAW_PLACES` und `musicBars` gemergt.
+- Doppelte Namen werden übersprungen.
+- `service-worker.js` cached die neue Datei.
+- Cache wurde auf `route66-trip-v36-muststops` / `route66ResolvedPlacesV36` erhöht.
 
-## Integration
+## Upload zu GitHub Pages
 
-### 1. Datei einbinden
-In `index.html` ergänzen:
+Alle Dateien aus diesem Ordner ins Repository laden:
 
-```html
-<script src="route66MustStops.js"></script>
-```
+- `index.html`
+- `routeData.v35.js`
+- `musicBars.js`
+- `route66MustStops.js`
+- `service-worker.js`
+- `manifest.webmanifest`
+- `USA 2026.kmz`
 
-### 2. Daten mergen
-Im bestehenden App-Code:
-
-```javascript
-const ALL_PLACES = [
-  ...window.RAW_PLACES,
-  ...window.route66MustStops
-];
-```
-
-### 3. Neue Highlight-Badges
-Empfohlene Labels:
-- 🔥 MUST SEE
-- 🌃 Best at Night
-- 🍔 Food Legend
-- 📸 Photospot
-- 🤠 Weird Americana
-
-## Enthaltene Highlights
-- Cadillac Ranch
-- Blue Whale of Catoosa
-- Wigwam Motel
-- Roy's Motel
-- Pops 66
-- Gemini Giant
-- Santa Monica End Sign
-
-Perfekt für:
-- Mobile Route-66 Apps
-- Google Maps Integration
-- GitHub Pages Deployment
-- PWA Roadtrip Apps
+Danach im Browser einmal hart neu laden oder alte PWA-Daten löschen, damit der neue Service Worker greift.
