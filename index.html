@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Route 66 Music Trip · Mobile Tagesansicht v33</title>
+<title>Route 66 Music Trip · Mobile Tagesansicht v35 optimized</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#071018">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1298,17 +1298,10 @@ if (Array.isArray(window.musicBars)) {
 }
 
 let map, service, infoWindow;
-let markers = [];
+let markers = new Map();
 let resolvedPlaces = [];
-const cacheKey = "route66ResolvedPlacesV33";
-
-try{
-  localStorage.removeItem("route66ResolvedPlacesV33");
-  localStorage.removeItem("route66ResolvedPlacesV34");
-}catch(e){}
-
-
-const categoryEditKey = "route66CategoryOverridesV33";
+const cacheKey = "route66ResolvedPlacesV35";
+const categoryEditKey = "route66CategoryOverridesV35";
 
 function getCategoryOverrides() {
   try { return JSON.parse(localStorage.getItem(categoryEditKey) || "{}"); }
@@ -1439,7 +1432,28 @@ function makeMarkerIcon(color) {
   };
 }
 
+function normalizeKnownCoords(raw) {
+  if (Number.isFinite(raw.lat) && Number.isFinite(raw.lng)) return {lat: raw.lat, lng: raw.lng};
+  if (Array.isArray(raw.coords) && raw.coords.length >= 2) {
+    const lng = Number(raw.coords[0]);
+    const lat = Number(raw.coords[1]);
+    if (Number.isFinite(lat) && Number.isFinite(lng)) return {lat, lng};
+  }
+  return null;
+}
+
 function searchPlace(raw) {
+  const knownCoords = normalizeKnownCoords(raw);
+  if (knownCoords) {
+    return Promise.resolve({
+      ...raw,
+      lat: knownCoords.lat,
+      lng: knownCoords.lng,
+      resolvedName: raw.resolvedName || raw.name,
+      formattedAddress: raw.formattedAddress || raw.address || ""
+    });
+  }
+
   return new Promise(resolve => {
     service.findPlaceFromQuery({
       query: smartUSAQuery(raw),
@@ -1464,23 +1478,47 @@ function searchPlace(raw) {
   });
 }
 
+async function resolveInBatches(items, batchSize = 8) {
+  const output = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    setStatus(`Löse Orte auf… ${Math.min(i + batch.length, items.length)} / ${items.length}`);
+    const resolvedBatch = await Promise.all(batch.map(searchPlace));
+    output.push(...resolvedBatch.filter(p => !isExcludedRouteOutlier(p)));
+    await new Promise(r => setTimeout(r, 180));
+  }
+  return output;
+}
+
 async function resolveAllPlaces() {
   const cached = localStorage.getItem(cacheKey);
   if (cached) {
     try {
       resolvedPlaces = JSON.parse(cached).filter(p => !isExcludedRouteOutlier(p));
-      setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`) ;
+      setStatus(`Geladen aus Cache: ${resolvedPlaces.filter(p=>p.lat).length} Orte`);
       return;
     } catch(e) {}
   }
-  resolvedPlaces = [];
-  for (let i=0; i<RAW_PLACES.length; i++) {
-    setStatus(`Löse Orte auf… ${i+1} / ${RAW_PLACES.length}`);
-    const p = await searchPlace(RAW_PLACES[i]);
-    if(!isExcludedRouteOutlier(p)) resolvedPlaces.push(p);
-    await new Promise(r => setTimeout(r, 110));
-  }
-  localStorage.setItem(cacheKey, JSON.stringify(resolvedPlaces));
+
+  const withKnownCoords = [];
+  const needsLookup = [];
+  RAW_PLACES.forEach(p => normalizeKnownCoords(p) ? withKnownCoords.push(p) : needsLookup.push(p));
+
+  resolvedPlaces = [
+    ...withKnownCoords.map(p => {
+      const coords = normalizeKnownCoords(p);
+      return {
+        ...p,
+        lat: coords.lat,
+        lng: coords.lng,
+        resolvedName: p.resolvedName || p.name,
+        formattedAddress: p.formattedAddress || p.address || ""
+      };
+    }).filter(p => !isExcludedRouteOutlier(p)),
+    ...(await resolveInBatches(needsLookup))
+  ];
+
+  try { localStorage.setItem(cacheKey, JSON.stringify(resolvedPlaces)); } catch(e) {}
   setStatus(`Fertig: ${resolvedPlaces.filter(p=>p.lat).length} Orte gefunden`);
 }
 
@@ -1499,27 +1537,50 @@ function createPopup(p) {
   </div>`;
 }
 
-function renderMarkers(filter="all") {
-  markers.forEach(m => m.setMap(null));
-  markers = [];
-  const bounds = new google.maps.LatLngBounds();
-  const visible = resolvedPlaces.filter(p => p.lat && (filter === "all" || groupForPlace(p) === filter || p.category === filter));
-  visible.forEach(p => {
-    const marker = new google.maps.Marker({
-      position: {lat:p.lat, lng:p.lng},
-      map,
-      title: p.name,
-      icon: makeMarkerIcon(colors[p.category] || colors.other)
-    });
-    marker.addListener("click", () => {
-      infoWindow.setContent(createPopup(p));
-      infoWindow.open(map, marker);
-    });
-    markers.push(marker);
-    bounds.extend(marker.getPosition());
+function markerKey(p) {
+  return `${p.name || ""}__${p.lat || ""}__${p.lng || ""}`.toLowerCase();
+}
+
+function getOrCreateMarker(p) {
+  const key = markerKey(p);
+  if (markers.has(key)) {
+    const marker = markers.get(key);
+    marker.setIcon(makeMarkerIcon(colors[p.category] || colors.other));
+    marker.setTitle(p.name);
+    return marker;
+  }
+
+  const marker = new google.maps.Marker({
+    position: {lat:p.lat, lng:p.lng},
+    map,
+    title: p.name,
+    icon: makeMarkerIcon(colors[p.category] || colors.other)
   });
-  if (markers.length) map.fitBounds(bounds);
-  setStatus(`${markers.length} Marker angezeigt · ${filter === "all" ? "Alle" : groupLabel(filter)}`);
+  marker.addListener("click", () => {
+    infoWindow.setContent(createPopup(p));
+    infoWindow.open(map, marker);
+  });
+  markers.set(key, marker);
+  return marker;
+}
+
+function renderMarkers(filter="all") {
+  const bounds = new google.maps.LatLngBounds();
+  let visibleCount = 0;
+
+  resolvedPlaces.forEach(p => {
+    if (!p.lat || !p.lng) return;
+    const marker = getOrCreateMarker(p);
+    const isVisible = filter === "all" || groupForPlace(p) === filter || p.category === filter;
+    marker.setVisible(isVisible);
+    if (isVisible) {
+      visibleCount++;
+      bounds.extend(marker.getPosition());
+    }
+  });
+
+  if (visibleCount) map.fitBounds(bounds);
+  setStatus(`${visibleCount} Marker angezeigt · ${filter === "all" ? "Alle" : groupLabel(filter)}`);
 }
 
 
