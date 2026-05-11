@@ -1,4 +1,4 @@
-// Route66 v51 expanded Austin cards
+// Route66 v53 · Austin combined + top music
 window.route66MustStops = [
   {
     "name": "360 CHICAGO Observation Deck",
@@ -579,7 +579,8 @@ window.route66MustStops = [
     ],
     "type": "music",
     "category": "Musik / Bars",
-    "text": "🎸 Legendärer Austin Live Music Club"
+    "text": "🎸 Austin Live Music Institution",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+Continental+Club+Austin"
   },
   {
     "name": "Antone's",
@@ -590,7 +591,8 @@ window.route66MustStops = [
     ],
     "type": "music",
     "category": "Musik / Bars",
-    "text": "🎶 Austin Blues Institution"
+    "text": "🎶 Legendärer Blues Club",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Antone's+Austin"
   },
   {
     "name": "The White Horse",
@@ -601,7 +603,8 @@ window.route66MustStops = [
     ],
     "type": "music",
     "category": "Musik / Bars",
-    "text": "🤠 Honky Tonk Geheimtipp"
+    "text": "🤠 Honky Tonk / Country",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=The+White+Horse+Austin"
   },
   {
     "name": "Broken Spoke",
@@ -612,7 +615,8 @@ window.route66MustStops = [
     ],
     "type": "music",
     "category": "Musik / Bars",
-    "text": "💃 Historic Texas Dance Hall"
+    "text": "💃 Historic Texas Dance Hall",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Broken+Spoke+Austin"
   },
   {
     "name": "Peter Pan Mini Golf",
@@ -690,5 +694,77 @@ window.route66MustStops = [
     "type": "highlight",
     "category": "Top Highlights",
     "text": "🌳 Austin Chill Spot"
+  },
+  {
+    "name": "C-Boy's Heart & Soul",
+    "city": "Austin",
+    "coords": [
+      -97.751,
+      30.2458
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎷 Soul / Blues / Rock",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=C-Boy's+Heart+%26+Soul+Austin"
+  },
+  {
+    "name": "Saxon Pub",
+    "city": "Austin",
+    "coords": [
+      -97.7621,
+      30.2505
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎤 Singer-Songwriter Klassiker",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Saxon+Pub+Austin"
+  },
+  {
+    "name": "Mohawk Austin",
+    "city": "Austin",
+    "coords": [
+      -97.7399,
+      30.2669
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Indie / Rock Venue",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Mohawk+Austin+Austin"
+  },
+  {
+    "name": "Stubb's Bar-B-Q",
+    "city": "Austin",
+    "coords": [
+      -97.7365,
+      30.2685
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🍖 BBQ + Outdoor Concert Venue",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Stubb's+Bar-B-Q+Austin"
+  },
+  {
+    "name": "Hole in the Wall",
+    "city": "Austin",
+    "coords": [
+      -97.7268,
+      30.2963
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🎸 Classic Austin Dive Bar",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Hole+in+the+Wall+Austin"
+  },
+  {
+    "name": "Gruene Hall",
+    "city": "New Braunfels",
+    "coords": [
+      -98.1047,
+      29.7382
+    ],
+    "type": "music",
+    "category": "Musik / Bars",
+    "text": "🤠 Legendäre Texas Dance Hall · Ausflug",
+    "googleMapsUrl": "https://www.google.com/maps/search/?api=1&query=Gruene+Hall+New+Braunfels"
   }
 ];

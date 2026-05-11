@@ -1734,6 +1734,11 @@ const PLACE_ALIASES = {
   "antones": "Antone's",
   "the white horse": "The White Horse",
   "broken spoke": "Broken Spoke",
+  "hole in the wall": "Hole in the Wall",
+  "stubbs bar b q": "Stubb's Bar-B-Q",
+  "mohawk austin": "Mohawk Austin",
+  "saxon pub": "Saxon Pub",
+  "c boys heart soul": "C-Boy's Heart & Soul",
   "texas state capitol": "Texas State Capitol",
   "cathedral of junk": "Cathedral of Junk",
   "lady bird lake": "Lady Bird Lake",
@@ -1915,7 +1920,7 @@ function focusSelectedDayRegionOnMap(){
 
 function renderDayTabs(){
   const tabs = document.getElementById("dayTabs");
-  tabs.innerHTML = DAY_PLAN.map(d=>`<button class="${d.id===selectedDayId ? "active" : ""}" data-day="${d.id}">${d.label} · ${d.title.split(" → ")[0]}</button>`).join("");
+  tabs.innerHTML = DAY_PLAN.map(d=>`<button class="${d.id===selectedDayId ? "active" : ""}" data-day="${d.id}">${d.label || ""} · ${(d.title || "").split(" → ")[0]}</button>`).join("");
   tabs.querySelectorAll("button").forEach(btn=>btn.addEventListener("click",()=>{
     selectedDayId = btn.dataset.day;
     localStorage.setItem("route66SelectedDay", selectedDayId);
@@ -1929,7 +1934,7 @@ function renderDayView(){
   const day = getSelectedDay();
   renderDayTabs();
   document.getElementById("dayOverview").innerHTML = `
-    <div><div class="meta">Gewählter Tag</div><h2>${day.label}.2026 · ${day.title}</h2><p>${day.route}</p><p class="day-note">${day.time}</p></div>
+    <div><div class="meta">Gewählter Tag</div><h2>${day.label || ""} · ${day.title || ""}</h2><p>${day.route || ""}</p><p class="day-note">${day.time || ""}</p></div>
     <div class="today-facts"><div class="fact"><b>Strecke</b><span>${day.route}</span></div><div class="fact"><b>Distanz</b><span>${day.km}</span></div><div class="fact"><b>Fokus</b><span>${day.city}</span></div></div>`;
   document.getElementById("todayHighlights").innerHTML = interactiveListHTML(day.highlights);
   document.getElementById("todayMusic").innerHTML = interactiveListHTML(day.music);
