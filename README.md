@@ -1,16 +1,11 @@
-# Route66 GitHub Paket v56
+# Route66 GitHub Paket v57
 
 Neu:
-- Chicago wurde wie Austin zu einem gemeinsamen Tagesblock zusammengeführt:
-  `14.–15.05 · Chicago`
-- Dadurch wirkt die Navigation kompakter und übersichtlicher.
-- Chicago enthält jetzt gesammelt:
-  - Top Highlights
-  - Route 66 Start
-  - Architektur-Spots
-  - Blues Clubs
-  - Food Highlights
-- Header bleibt bei Top 5 / unten Top 10.
+- Chicago wurde jetzt vollständig zusammengeführt:
+  `14.–16.05 · Chicago`
+- Der frühere 16.05-Tab wurde integriert.
+- Navigation dadurch nochmals kompakter.
+- Alle Chicago Highlights, Route-66-Starts und Blues Bars bleiben enthalten.
 
 Cache-Version:
-route66-trip-v56-chicago-combined
+route66-trip-v57-chicago-3days
